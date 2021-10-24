@@ -89,5 +89,10 @@ module.exports = class Field {
     return sutehai;
   }
 
-  tsumogiri(player, pai) {}
+  tsumogiri(player, pai) {
+    const tsumo = this.playerField[player].tsumo;
+    this.playerField[player].kawa.push(tsumo);
+    this.playerField[player].tsumo = undefined;
+    return tsumo;
+  }
 };
