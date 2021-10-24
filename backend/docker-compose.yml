@@ -8,6 +8,7 @@ services:
     tty: true
     volumes:
       - ./app/serve.js:/app/serve.js
+      - ./app/socket.js:/app/socket.js
   db:
     image: mongo:5.0.2
     env_file: ./.env
