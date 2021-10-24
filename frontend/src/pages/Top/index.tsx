@@ -1,6 +1,13 @@
 import React from "react";
-function Top() {
-  return <h2>aaa</h2>;
-}
+import { BigButton } from "./_components/BigButton";
+type Prop = {};
+export const Top: React.FC<Prop> = () => {
+  return (
+    <span>
+      <h2>aaa</h2>
+      <BigButton text="aaa"></BigButton>
+    </span>
+  );
+};
 
 export default Top;
