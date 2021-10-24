@@ -1,8 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
-const server = require("server").Server(app);
-require("dotenv").config();
-const io = require("socket.io")(server);
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 const PORT = process.env.APP_PORT || 8080;
 
 app.get("/", function (req, res) {
@@ -13,6 +13,6 @@ io.on("connection", function (socket) {
   console.log("connected");
 });
 
-server.listen(PORT, function () {
-  console.log("server listening. Port:" + PORT);
+http.listen(PORT, function () {
+  console.log("http listening. Port:" + PORT);
 });

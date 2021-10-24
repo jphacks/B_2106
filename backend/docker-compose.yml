@@ -7,7 +7,7 @@ services:
       - "8080:8080"
     tty: true
     volumes:
-      - ./app:/app
+      - ./app/serve.js:/app/serve.js
   db:
     image: mongo:5.0.2
     env_file: ./.env
