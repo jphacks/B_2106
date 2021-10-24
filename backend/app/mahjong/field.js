@@ -47,19 +47,47 @@ module.exports = class Field {
     this.yama = all.slice(14, 136);
     this.wanpai = all.slice(0, 14);
     this.dora = [this.wanpai[0]];
-    this.playerTehai = [[], [], [], []];
+    this.playerField = [];
+    for (let i = 0; i < 4; i++) {
+      this.playerField.push({
+        tehai: [],
+        tsumo: undefined,
+        furo: [],
+        kawa: [],
+      });
+    }
   }
-  tsumo() {
-    return this.yama.pop();
+  pop() {
+    const tsumo = this.yama.pop();
+    return tsumo;
   }
+  tsumo(player) {
+    const tsumo = this.pop();
+    this.playerField[player].tsumo = tsumo;
+    return tsumo;
+  }
+
   haipai() {
     for (let i = 0; i < 13; i++) {
       for (let j = 0; j < 4; j++)
         //四麻想定
-        this.playerTehai[j].push(this.tsumo());
+        this.playerField[j].tehai.push(this.pop());
     }
   }
   getPlayerTehai() {
     return this.playerTehai;
   }
+
+  dahai(player, pai) {
+    const tehai = this.playerField[player].tehai;
+    const index = tehai.indexOf(pai);
+    if (index == -1) throw "手牌に無い牌が指定されています:" + pai;
+    const sutehai = tehai.splice(index, 1);
+    this.playerField[player].kawa.push(sutehai);
+    tehai.push(this.playerField[player].tsumo);
+    this.playerField[player].tsumo = undefined;
+    return sutehai;
+  }
+
+  tsumogiri(player, pai) {}
 };

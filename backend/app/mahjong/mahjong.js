@@ -1,8 +1,8 @@
-const Config = require("./config.js");
-console.log(Config);
+const Config = require("./config");
 const Field = require("./field");
 const Player = require("./player");
 const State = require("./state");
+
 class Game {
   constructor(config = new Config()) {
     this.playerList = [
@@ -16,7 +16,8 @@ class Game {
     this.isFinished = false;
     this.config = config;
     this.state = new State();
-    this.oya_player = 0;
+    this.oyaPlayer = 0;
+    this.turnPlayer = this.oyaPlayer;
   }
 
   isFinished() {
@@ -31,7 +32,7 @@ class Game {
     this.state.transiton("配牌");
     this.field = new Field();
     return {
-      oya_player: this.oya_player,
+      oyaPlayer: this.oyaPlayer,
       kyoku: this.kyokuCount,
       honba: this.honbaCount,
     };
@@ -44,17 +45,35 @@ class Game {
       pai: this.field.getPlayerTehai(),
     };
   }
-  nextActionFuro(actions) {
+  nextActionFuro(action) {
     //行動待ちで行動を選択
     this.state.transiton("開始");
   }
   turnStart() {
     //ターンプレイヤーがツモ
+    const tsumo = this.field.tsumo(this.turnPlayer);
+    //ここにリーチ判定とツモ和了り判定が必要
     this.state.transiton("打牌待ち");
+    return {
+      turnPlayer: this.turnPlayer,
+      players_field: this.field.playerField,
+      riichi_hai: [],
+      can_tsumo: false,
+    };
   }
-  nextActionDahai(actions) {
-    //ターンプレイヤーがツモ
-    this.state.transiton("行動送信");
+  nextActionDahai(response) {
+    //ターンプレイヤーがツモしたあとの行動処理
+    if (response.action == "dahai") {
+      this.field.dahai(this.turnPlayer, response.pai);
+      this.state.transiton("行動送信");
+    } else if (response.action == "tsumogiri") {
+      this.field.tsumogiri(this.turnPlayer, response.pai);
+      this.state.transiton("行動送信");
+    } else if (response.action == "tsumoagari") {
+      this.state.transiton("点数計算");
+    } else {
+      throw "不正なaction!:" + response.action;
+    }
   }
   kyokuFinish() {
     //点数計算
@@ -65,8 +84,18 @@ class Game {
 game = new Game();
 console.log(game);
 console.log(game.kyokuStart());
+
 console.log(game);
+
 console.log(game.haipai());
-//console.log(game.turnStart());
-//console.log(game.nextActionDahai());
+
+console.log(game.turnStart());
+console.log(game.field.playerField);
+console.log(
+  game.nextActionDahai({
+    action: "dahai",
+    pai: "1m",
+  })
+);
+console.log(game.field.playerField);
 //console.log(game.nextActionFuro());
