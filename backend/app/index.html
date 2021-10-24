@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>socket.io chat</title>
+  </head>
+  <body>
+    <script
+      src="https://cdn.socket.io/4.1.2/socket.io.min.js"
+      integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg"
+      crossorigin="anonymous"
+    ></script>
+    <ul id="messages"></ul>
+    <form>
+      <input id="input_msg" autocomplete="off" /><button>Send</button>
+    </form>
+    <script>
+      var socket = io("http://localhost:8080", { transports: ["websocket"] });
+      //   socket.emit("create-room")
+      socket.on("create-room-response", (res) => {
+        console.log(res);
+        console.log("aaaaaaaaaa");
+      });
+
+      // socket.emit("enter-room", {"name": "murakami"})
+      socket.on("enter-room-response", (res) => {
+        console.log(res);
+      });
+
+      // socket.emit("start-game", {})
+      socket.on("start-game-response", (res) => {
+        console.log(res);
+      });
+    </script>
+  </body>
+</html>
