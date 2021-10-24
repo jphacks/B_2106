@@ -15,6 +15,21 @@
     </form>
     <script>
       var socket = io("http://localhost:8080", { transports: ["websocket"] });
+      //   socket.emit("create-room")
+      socket.on("create-room-response", (res) => {
+        console.log(res);
+        console.log("aaaaaaaaaa");
+      });
+
+      // socket.emit("enter-room", {"name": "murakami"})
+      socket.on("enter-room-response", (res) => {
+        console.log(res);
+      });
+
+      // socket.emit("start-game", {})
+      socket.on("start-game-response", (res) => {
+        console.log(res);
+      });
     </script>
   </body>
 </html>
