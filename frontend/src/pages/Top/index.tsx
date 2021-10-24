@@ -5,7 +5,7 @@ export const Top: React.FC<Prop> = () => {
   return (
     <span>
       <h2>aaa</h2>
-      <BigButton text="aaa"></BigButton>
+      <BigButton text="aaa" />
     </span>
   );
 };
