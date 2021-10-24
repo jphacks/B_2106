@@ -56,9 +56,9 @@ class Game {
     this.state.transiton("打牌待ち");
     return {
       turnPlayer: this.turnPlayer,
-      players_field: this.field.playerField,
-      riichi_hai: [],
-      can_tsumo: false,
+      playersField: this.field.playerField,
+      riichiHai: [],
+      canTsumo: false,
     };
   }
   nextActionDahai(response) {
@@ -82,6 +82,7 @@ class Game {
 }
 
 game = new Game();
+
 console.log(game);
 console.log(game.kyokuStart());
 
@@ -98,4 +99,4 @@ console.log(
   })
 );
 console.log(game.field.playerField);
-//console.log(game.nextActionFuro());
+console.log(game.nextActionFuro());

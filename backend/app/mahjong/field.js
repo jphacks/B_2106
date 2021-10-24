@@ -83,7 +83,7 @@ module.exports = class Field {
     const index = tehai.indexOf(pai);
     if (index == -1) throw "手牌に無い牌が指定されています:" + pai;
     const sutehai = tehai.splice(index, 1);
-    this.playerField[player].kawa.push(sutehai);
+    this.playerField[player].kawa.push(sutehai[0]);
     tehai.push(this.playerField[player].tsumo);
     this.playerField[player].tsumo = undefined;
     return sutehai;
