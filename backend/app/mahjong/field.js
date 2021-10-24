@@ -56,6 +56,7 @@ module.exports = class Field {
         kawa: [],
       });
     }
+    this.prevTrash = "dummy";
   }
   pop() {
     const tsumo = this.yama.pop();
@@ -86,6 +87,7 @@ module.exports = class Field {
     this.playerField[player].kawa.push(sutehai[0]);
     tehai.push(this.playerField[player].tsumo);
     this.playerField[player].tsumo = undefined;
+    this.prevTrash = sutehai;
     return sutehai;
   }
 
@@ -93,6 +95,7 @@ module.exports = class Field {
     const tsumo = this.playerField[player].tsumo;
     this.playerField[player].kawa.push(tsumo);
     this.playerField[player].tsumo = undefined;
+    this.prevTrash = tsumo;
     return tsumo;
   }
 };

@@ -45,22 +45,47 @@ class Game {
       pai: this.field.getPlayerTehai(),
     };
   }
-  nextActionFuro(action) {
-    //行動待ちで行動を選択
-    this.state.transiton("開始");
-  }
-  turnStart() {
-    //ターンプレイヤーがツモ
-    const tsumo = this.field.tsumo(this.turnPlayer);
-    //ここにリーチ判定とツモ和了り判定が必要
-    this.state.transiton("打牌待ち");
+  makeAction(actions) {
     return {
-      turnPlayer: this.turnPlayer,
-      playersField: this.field.playerField,
-      riichiHai: [],
-      canTsumo: false,
+      actions,
     };
   }
+  sendTurnStart() {
+    //ターンプレイヤーがツモ
+    const tsumo = this.field.tsumo(this.turnPlayer);
+
+    //各プレイヤーが取れる行動リスト
+
+    const players = [
+      this.makeAction(["pass"]),
+      this.makeAction(["pass"]),
+      this.makeAction(["pass"]),
+      this.makeAction(["pass"]),
+    ];
+
+    const tablet = this.makeAction(["pass"]);
+    const turnPlayersAction = this.makeAction(["dahai"]);
+
+    //後で実装
+    if (false && this.canRiichi(turnPlayer)) {
+      turnPlayersAction.action.push("riichi");
+      turnPlayersActions["riichiPai"] = riichiPai(turnPlayer);
+      tablet.action.push("riichi");
+    }
+    if (false && this.canTsumoAgari(turnPlayer)) {
+      turnPlayersAction.action.push("tsumoAgari");
+    }
+    players[this.turnPlayer] = turnPlayersAction;
+
+    this.state.transiton("打牌待ち");
+
+    return {
+      turnPlayer: this.turnPlayer,
+      players,
+      tablet,
+    };
+  }
+
   nextActionDahai(response) {
     //ターンプレイヤーがツモしたあとの行動処理
     if (response.action == "dahai") {
@@ -75,6 +100,32 @@ class Game {
       throw "不正なaction!:" + response.action;
     }
   }
+  sendNextAction() {
+    const players = [
+      this.makeAction(["pass", "ron"]),
+      this.makeAction(["pass", "ron"]),
+      this.makeAction(["pass", "ron"]),
+      this.makeAction(["pass", "ron"]),
+    ];
+    const tablet = this.makeAction(["tsumo"]);
+    this.state.transiton("行動待ち");
+
+    return {
+      turnPlayer: this.turnPlayer,
+      players,
+      tablet,
+    };
+  }
+  nextActionFuro(response) {
+    //行動待ちで行動を選択
+    if (response.action == "ron") {
+      this.state.transiton("点数計算");
+    } else if (response.action == "tsumo") {
+      this.turnPlayer = (this.turnPlayer + 1) % 4; //四麻想定
+      this.state.transiton("開始");
+    }
+  }
+
   kyokuFinish() {
     //点数計算
     this.state.transiton("局開始前");
@@ -83,20 +134,20 @@ class Game {
 
 game = new Game();
 
-console.log(game);
+//game test;
 console.log(game.kyokuStart());
-
-console.log(game);
-
 console.log(game.haipai());
-
-console.log(game.turnStart());
-console.log(game.field.playerField);
+console.log(game.sendTurnStart());
 console.log(
   game.nextActionDahai({
-    action: "dahai",
-    pai: "1m",
+    action: "tsumogiri",
+    pai: "?",
   })
 );
 console.log(game.field.playerField);
-console.log(game.nextActionFuro());
+console.log(game.sendNextAction());
+console.log(game.nextActionFuro({ action: "tsumo" }));
+
+console.log(game.sendTurnStart());
+
+console.log(game.field.playerField);
