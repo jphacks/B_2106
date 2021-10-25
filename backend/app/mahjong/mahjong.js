@@ -67,12 +67,12 @@ class Game {
     const turnPlayersAction = this.makeAction(["dahai"]);
 
     if (this.field.canRiichi(this.turnPlayer)) {
-      turnPlayersAction.action.push("riichi");
-      turnPlayersActions["riichiPai"] = riichiPai(turnPlayer);
-      tablet.action.push("riichi");
+      turnPlayersAction.actions.push("riichi");
+      turnPlayersAction["riichiPai"] = this.field.riichiPai(this.turnPlayer);
+      tablet.actions.push("riichi");
     }
     if (this.field.canTsumoAgari(this.turnPlayer)) {
-      turnPlayersAction.action.push("tsumoAgari");
+      turnPlayersAction.actions.push("tsumoAgari");
     }
 
     players[this.turnPlayer] = turnPlayersAction;
@@ -118,7 +118,6 @@ class Game {
     }
 
     const tablet = this.makeAction();
-    console.log(this.field.isFinished + " " + ronFlag);
     if (this.field.isFinished) {
       //流局処理に遷移
       //ロンがなければ，kyokufinish()
@@ -159,6 +158,23 @@ game = new Game();
 //game test;
 console.log(game.kyokuStart());
 console.log(game.haipai());
+
+game.field.playerField[0].tehai = [
+  "1m",
+  "1m",
+  "1m",
+  "2m",
+  "3m",
+  "4m",
+  "5m",
+  "6m",
+  "7m",
+  "8m",
+  "9m",
+  "9m",
+  "9m",
+];
+
 console.log(game.sendTurnStart());
 console.log(
   game.nextActionDahai({
@@ -174,9 +190,8 @@ console.log(game.sendTurnStart());
 
 console.log(game.field.playerField);
 for (let i = 0; i < 130; i++) {
-  //console.log(
-  game.sendTurnStart();
-  //);
+  console.log(game.sendTurnStart()["tablet"]);
+
   //console.log(
   game.nextActionDahai({
     action: "tsumogiri",
@@ -185,48 +200,12 @@ for (let i = 0; i < 130; i++) {
   //);
 
   //console.log(
-  game.sendNextAction();
-  console.log(game.getState());
-  if (game.getState() == "流局") {
-    break;
-  }
-  //);
-  //console.log(
-  game.nextActionFuro({ action: "tsumo" });
-  //);
-}
-console.log(game.field.playerField);
+  console.log(
+    game.field.prevSutehai,
+    "->",
+    game.sendNextAction()["players"][0]
+  );
 
-console.log(game.ryukyokuFinish());
-console.log(game.kyokuStart());
-console.log(game.haipai());
-console.log(game.sendTurnStart());
-console.log(
-  game.nextActionDahai({
-    action: "tsumogiri",
-    pai: "?",
-  })
-);
-console.log(game.field.playerField);
-console.log(game.sendNextAction());
-console.log(game.nextActionFuro({ action: "tsumo" }));
-
-console.log(game.sendTurnStart());
-
-console.log(game.field.playerField);
-for (let i = 0; i < 130; i++) {
-  //console.log(
-  game.sendTurnStart();
-  //);
-  //console.log(
-  game.nextActionDahai({
-    action: "tsumogiri",
-    pai: "?",
-  });
-  //);
-
-  //console.log(
-  game.sendNextAction();
   console.log(game.getState());
   if (game.getState() == "流局") {
     break;

@@ -64,7 +64,6 @@ module.exports = class Field {
   pop() {
     if (this.isFinished) throw "もう山無いよ";
     const tsumo = this.yama.pop();
-    console.log("nokori:" + this.yama.length);
     if (this.yama.length == 0) this.isFinished = true;
     return tsumo;
   }
@@ -128,5 +127,20 @@ module.exports = class Field {
       this.playerField[player].tsumo
     );
     return syanten == -1;
+  }
+  riichiPai(player) {
+    const candidate = [
+      ...this.playerField[player].tehai,
+      this.playerField[player].tsumo,
+    ];
+    const riichable = [];
+    for (let i = 0; i < candidate.length; i++) {
+      const syanten = calcSyanten(
+        ...candidate.slice(0, i),
+        ...candidate.slice(i + 1, candidate.length)
+      );
+      if (syanten == 0 || syanten == -1) riichable.push(candidate[i]);
+    }
+    return riichable;
   }
 };
