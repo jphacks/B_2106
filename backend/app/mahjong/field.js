@@ -56,10 +56,15 @@ module.exports = class Field {
         kawa: [],
       });
     }
+
+    this.isFinished = false;
     this.prevTrash = "dummy";
   }
   pop() {
+    if (this.isFinished) throw "もう山無いよ";
     const tsumo = this.yama.pop();
+    console.log("nokori:" + this.yama.length);
+    if (this.yama.length == 0) this.isFinished = true;
     return tsumo;
   }
   tsumo(player) {
@@ -87,7 +92,7 @@ module.exports = class Field {
     this.playerField[player].kawa.push(sutehai[0]);
     tehai.push(this.playerField[player].tsumo);
     this.playerField[player].tsumo = undefined;
-    this.prevTrash = sutehai;
+    this.prevSutehai = sutehai;
     return sutehai;
   }
 
@@ -95,7 +100,20 @@ module.exports = class Field {
     const tsumo = this.playerField[player].tsumo;
     this.playerField[player].kawa.push(tsumo);
     this.playerField[player].tsumo = undefined;
-    this.prevTrash = tsumo;
+    this.prevSutehai = tsumo;
     return tsumo;
+  }
+
+  isAgari() {
+    return true;
+  }
+  canRon(player) {
+    if (this.prevSutehai == undefined) {
+      throw "捨て牌がundefined!!";
+    }
+    //状態チェック入れる？
+    //捨て牌がロンできるかを判定する
+
+    return false;
   }
 };
