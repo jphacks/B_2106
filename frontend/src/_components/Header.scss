@@ -1,0 +1,8 @@
+@import "../variable";
+.header {
+  &__title {
+    color: $color-primary;
+    font-size: 30px;
+    margin: auto;
+  }
+}

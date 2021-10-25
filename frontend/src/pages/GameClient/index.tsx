@@ -1,6 +1,7 @@
 import React from "react";
-function GameClient() {
-  return <h2>GameClient</h2>;
-}
+import { Header } from "../../_components/Header";
 
-export default GameClient;
+type Props = {};
+export const GameClient: React.FC<Props> = () => {
+  return <Header text="Game Client" />;
+};

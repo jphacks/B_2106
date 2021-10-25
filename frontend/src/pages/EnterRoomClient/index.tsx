@@ -1,6 +1,7 @@
 import React from "react";
-function EnterRoomClient() {
-  return <h2>EnterRoomClient</h2>;
-}
+import { Header } from "../../_components/Header";
 
-export default EnterRoomClient;
+type Props = {};
+export const EnterRoomClient: React.FC<Props> = () => {
+  return <Header text="EnterRoomClient" />;
+};

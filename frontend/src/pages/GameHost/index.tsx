@@ -1,6 +1,6 @@
 import React from "react";
-function GameHost() {
-  return <h2>GameHost</h2>;
-}
-
-export default GameHost;
+import { Header } from "../../_components/Header";
+type Props = {};
+export const GameHost: React.FC<Props> = () => {
+  return <Header text="GameHost" />;
+};
