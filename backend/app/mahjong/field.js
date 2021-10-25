@@ -1,3 +1,4 @@
+const calcSyanten = require("./syanten");
 module.exports = class Field {
   constructor() {
     let all = [
@@ -108,12 +109,24 @@ module.exports = class Field {
     return true;
   }
   canRon(player) {
-    if (this.prevSutehai == undefined) {
-      throw "捨て牌がundefined!!";
-    }
-    //状態チェック入れる？
-    //捨て牌がロンできるかを判定する
-
-    return false;
+    const syanten = calcSyanten(
+      this.playerField[player].tehai,
+      this.prevSutehai
+    );
+    return syanten == -1;
+  }
+  canRiichi(player) {
+    const syanten = calcSyanten(
+      this.playerField[player].tehai,
+      this.playerField[player].tsumo
+    );
+    return syanten == 0 || syanten == -1;
+  }
+  canTsumoAgari(player) {
+    const syanten = calcSyanten(
+      this.playerField[player].tehai,
+      this.playerField[player].tsumo
+    );
+    return syanten == -1;
   }
 };

@@ -66,13 +66,12 @@ class Game {
     const tablet = this.makeAction(["pass"]);
     const turnPlayersAction = this.makeAction(["dahai"]);
 
-    //後で実装
-    if (false && this.canRiichi(turnPlayer)) {
+    if (this.field.canRiichi(this.turnPlayer)) {
       turnPlayersAction.action.push("riichi");
       turnPlayersActions["riichiPai"] = riichiPai(turnPlayer);
       tablet.action.push("riichi");
     }
-    if (false && this.canTsumoAgari(turnPlayer)) {
+    if (this.field.canTsumoAgari(this.turnPlayer)) {
       turnPlayersAction.action.push("tsumoAgari");
     }
 
@@ -113,7 +112,6 @@ class Game {
     for (let i = 0; i < 4; i++) {
       if (this.turnPlayer == i) continue;
       if (this.field.canRon(i)) {
-        console.log(players[i]);
         players[i].actions.push("ron");
         ronFlag = true;
       }
