@@ -19,7 +19,7 @@ module.exports = (io) => {
     });
 
     // roomに入る際のAPI
-    socket.on("enter-room", async (req) => {
+    socket.on("enter-room", (req) => {
       console.log("enter-room");
 
       const roomID = req["roomID"].toString();
@@ -39,5 +39,15 @@ module.exports = (io) => {
       console.log(req);
       socket.emit("start-game-response", req);
     });
+
+    socket.on("dahai", (req) => {
+      socket.emit("dahai-response", req);
+    });
+
+    socket.on("ron", (req) => {});
+
+    socket.on("riichi", (req) => {});
+
+    socket.on("tsumo", (req) => {});
   });
 };
