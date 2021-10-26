@@ -1,6 +1,6 @@
 const syanten = require("syanten");
 const extract = (arg) => {
-  const haiList = [];
+  let haiList = [];
   for (let i = 0; i < arg.length; i++) {
     if (Array.isArray(arg[i])) {
       haiList.push(...arg[i]);
@@ -8,6 +8,9 @@ const extract = (arg) => {
       haiList.push(arg[i]);
     }
   }
+  haiList = haiList.filter((hai) => {
+    return hai != undefined;
+  });
   return haiList;
 };
 
