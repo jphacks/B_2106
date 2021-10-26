@@ -9,6 +9,7 @@ module.exports = class State {
     行動送信: 6,
     ゲーム終了: 7,
     点数計算: 8,
+    流局: 9,
   };
   constructor() {
     this.state = 0;
@@ -29,6 +30,7 @@ module.exports = class State {
       "行動送信",
       "ゲーム終了",
       "点数計算",
+      "流局",
     ][this.state];
   }
 };
