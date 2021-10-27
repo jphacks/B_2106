@@ -1,11 +1,12 @@
 import React from "react";
 import classNames from "classnames";
 import "./Hai.scss";
+import { DirectionType } from "../../_type";
 import { imageEnum } from "../../data/ImageEnum";
 
 interface Props {
   name: string;
-  direction: "up" | "right" | "left" | "down";
+  direction: DirectionType;
   is3d: boolean;
   styles?: any;
 }
@@ -44,7 +45,11 @@ const Hai: React.FC<Props> = (props) => {
           <img src={url} style={{ transform: "rotate(" + angle + "deg)" }} />
         </div>
       ) : (
-        <img src={url} style={{ transform: "rotate(" + angle + "deg)" }} />
+        <img
+          src={url}
+          className={`Hai__img--${props.direction}`}
+          style={{ transform: "rotate(" + angle + "deg)" }}
+        />
       )}
     </div>
   );

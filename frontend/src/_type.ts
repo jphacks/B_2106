@@ -1,0 +1,1 @@
+export type DirectionType = "up" | "right" | "left" | "down";
