@@ -3,9 +3,19 @@ $radius: 5px;
 .Hai {
   display: inline-block;
 
-    img {
-      border-radius: $radius;
-    }
+  img {
+    border-radius: $radius;
+  }
+
+  &__img--up,
+  &__img--down {
+    width: calc(32vh / 6);
+  }
+
+  &__img--right,
+  &__img--left {
+    height: calc(32vh / 6);
+  }
 }
 
 .Hai-3d {
