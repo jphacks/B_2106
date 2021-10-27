@@ -1,0 +1,21 @@
+.center-field {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 32vh;
+  height: 32vh;
+  background-color: #fff;
+  margin: auto;
+
+  &__tsumo-button {
+    width: 30%;
+    height: 30%;
+    background-color: #005;
+  }
+
+  // &__point {
+  //     background-color: red;
+  // }
+}
