@@ -37,6 +37,7 @@ class Game {
       honba: this.honbaCount,
     };
   }
+
   haipai() {
     //配牌に遷移
     this.state.transiton("開始");
@@ -45,7 +46,7 @@ class Game {
       pai: this.field.getPlayerTehai(),
     };
   }
-  makeAction(actions) {
+  makeAction(actions = []) {
     return {
       actions,
     };
@@ -64,17 +65,22 @@ class Game {
     ];
 
     const tablet = this.makeAction(["pass"]);
-    const turnPlayersAction = this.makeAction(["dahai"]);
+    const turnPlayersAction = this.makeAction(["tsumogiri"]);
 
-    //後で実装
-    if (false && this.canRiichi(turnPlayer)) {
-      turnPlayersAction.action.push("riichi");
-      turnPlayersActions["riichiPai"] = riichiPai(turnPlayer);
-      tablet.action.push("riichi");
+    if (!this.field.playerField[this.turnPlayer].flag.riichi) {
+      turnPlayersAction.actions.push("dahai");
+
+      if (this.field.canRiichi(this.turnPlayer)) {
+        turnPlayersAction.actions.push("riichi");
+        turnPlayersAction["riichiPai"] = this.field.riichiPai(this.turnPlayer);
+        tablet.actions.push("riichi");
+      }
     }
-    if (false && this.canTsumoAgari(turnPlayer)) {
-      turnPlayersAction.action.push("tsumoAgari");
+
+    if (this.field.canTsumoAgari(this.turnPlayer)) {
+      turnPlayersAction.actions.push("tsumoagari");
     }
+
     players[this.turnPlayer] = turnPlayersAction;
 
     this.state.transiton("打牌待ち");
@@ -86,8 +92,9 @@ class Game {
     };
   }
 
-  nextActionDahai(response) {
+  nextActionDahai(response, riichi = false) {
     //ターンプレイヤーがツモしたあとの行動処理
+
     if (response.action == "dahai") {
       this.field.dahai(this.turnPlayer, response.pai);
       this.state.transiton("行動送信");
@@ -99,17 +106,45 @@ class Game {
     } else {
       throw "不正なaction!:" + response.action;
     }
+    if (riichi) {
+      if (this.field.canRiichi(this.turnPlayer)) {
+        this.field.playerField[this.turnPlayer].flag.riichi = true;
+      }
+    }
   }
   sendNextAction() {
     const players = [
-      this.makeAction(["pass", "ron"]),
-      this.makeAction(["pass", "ron"]),
-      this.makeAction(["pass", "ron"]),
-      this.makeAction(["pass", "ron"]),
+      this.makeAction(),
+      this.makeAction(),
+      this.makeAction(),
+      this.makeAction(),
     ];
-    const tablet = this.makeAction(["tsumo"]);
-    this.state.transiton("行動待ち");
+    //ロンができるか判定して"ron"を加える
+    let ronFlag = false;
+    for (let i = 0; i < 4; i++) {
+      if (this.turnPlayer == i) continue;
+      if (this.field.canRon(i)) {
+        players[i].actions.push("ron");
+        ronFlag = true;
+      }
+    }
 
+    const tablet = this.makeAction();
+    if (this.field.isFinished) {
+      //流局処理に遷移
+      //ロンがなければ，kyokufinish()
+      if (ronFlag) {
+        tablet.actions.push("ryukyoku");
+        this.state.transiton("行動待ち");
+      } else this.state.transiton("流局");
+    } else {
+      tablet.actions.push(["tsumo"]);
+      this.state.transiton("行動待ち");
+    }
+    tablet["sutehai"] = {
+      turnPlayer: this.turnPlayer,
+      pai: this.field.prevSutehai,
+    };
     return {
       turnPlayer: this.turnPlayer,
       players,
@@ -125,29 +160,20 @@ class Game {
       this.state.transiton("開始");
     }
   }
-
+  ryukyokuFinish() {
+    //流局処理
+    this.kyokuFinish();
+  }
+  agariFinish() {
+    this.kyokuFinish();
+  }
   kyokuFinish() {
-    //点数計算
-    this.state.transiton("局開始前");
+    this.oyaPlayer = (this.oyaPlayer + 1) % 4; //四麻想定
+    this.field = undefined;
+    this.kyokuCount++;
+    if (this.config.maxKyoku > this.kyokuCount)
+      this.state.transiton("ゲーム終了");
+    else this.state.transiton("局開始前");
   }
 }
-
-game = new Game();
-
-//game test;
-console.log(game.kyokuStart());
-console.log(game.haipai());
-console.log(game.sendTurnStart());
-console.log(
-  game.nextActionDahai({
-    action: "tsumogiri",
-    pai: "?",
-  })
-);
-console.log(game.field.playerField);
-console.log(game.sendNextAction());
-console.log(game.nextActionFuro({ action: "tsumo" }));
-
-console.log(game.sendTurnStart());
-
-console.log(game.field.playerField);
+module.exports = Game;

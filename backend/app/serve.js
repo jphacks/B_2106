@@ -7,6 +7,8 @@ const PORT = process.env.APP_PORT || 8080;
 
 const socket = require("./socket");
 
+const rooms = {};
+
 app.get("/", function (req, res) {
   res.send("hello world");
 });
@@ -15,4 +17,4 @@ http.listen(PORT, function () {
   console.log("http listening. Port:" + PORT);
 });
 
-socket(io);
+socket(io, rooms);
