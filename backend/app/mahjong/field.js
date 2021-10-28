@@ -1,3 +1,4 @@
+const calcSyanten = require("./syanten");
 module.exports = class Field {
   constructor() {
     let all = [
@@ -54,12 +55,19 @@ module.exports = class Field {
         tsumo: undefined,
         furo: [],
         kawa: [],
+        flag: {
+          riichi: false,
+        },
       });
     }
+
+    this.isFinished = false;
     this.prevTrash = "dummy";
   }
   pop() {
+    if (this.isFinished) throw "もう山無いよ";
     const tsumo = this.yama.pop();
+    if (this.yama.length == 0) this.isFinished = true;
     return tsumo;
   }
   tsumo(player) {
@@ -87,7 +95,7 @@ module.exports = class Field {
     this.playerField[player].kawa.push(sutehai[0]);
     tehai.push(this.playerField[player].tsumo);
     this.playerField[player].tsumo = undefined;
-    this.prevTrash = sutehai;
+    this.prevSutehai = sutehai;
     return sutehai;
   }
 
@@ -95,7 +103,47 @@ module.exports = class Field {
     const tsumo = this.playerField[player].tsumo;
     this.playerField[player].kawa.push(tsumo);
     this.playerField[player].tsumo = undefined;
-    this.prevTrash = tsumo;
+    this.prevSutehai = tsumo;
     return tsumo;
+  }
+
+  isAgari() {
+    return true;
+  }
+  canRon(player) {
+    const syanten = calcSyanten(
+      this.playerField[player].tehai,
+      this.prevSutehai
+    );
+    return syanten == -1;
+  }
+  canRiichi(player) {
+    const syanten = calcSyanten(
+      this.playerField[player].tehai,
+      this.playerField[player].tsumo
+    );
+    return syanten == 0 || syanten == -1;
+  }
+  canTsumoAgari(player) {
+    const syanten = calcSyanten(
+      this.playerField[player].tehai,
+      this.playerField[player].tsumo
+    );
+    return syanten == -1;
+  }
+  riichiPai(player) {
+    const candidate = [
+      ...this.playerField[player].tehai,
+      this.playerField[player].tsumo,
+    ];
+    const riichable = [];
+    for (let i = 0; i < candidate.length; i++) {
+      const syanten = calcSyanten(
+        ...candidate.slice(0, i),
+        ...candidate.slice(i + 1, candidate.length)
+      );
+      if (syanten == 0 || syanten == -1) riichable.push(candidate[i]);
+    }
+    return riichable;
   }
 };

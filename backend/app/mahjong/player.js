@@ -1,6 +1,6 @@
 module.exports = class Player {
-  constructor(score) {
+  constructor(score, name = "nanashi") {
     this.score = score;
-    this.tehai = [];
+    this.name = name;
   }
 };
