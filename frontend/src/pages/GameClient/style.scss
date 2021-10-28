@@ -1,0 +1,25 @@
+.ClientView__Hai{
+    display:inline-block;
+
+    &--float{
+        vertical-align:5vh
+    }
+
+}
+.ClientView{
+    &__hougaku{
+        position:absolute;
+        top:5vh;
+        left:5vh;
+    }
+    &__buttons{
+        position:absolute;
+        top:5vh;
+        right:5vh;
+    }
+    &__hai_container{
+        position:absolute;
+        bottom:40vh;
+        right:5vh;
+    }
+}
