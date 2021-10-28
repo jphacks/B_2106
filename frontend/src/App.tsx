@@ -6,8 +6,8 @@ import { GameClient } from "./pages/GameClient";
 import { GameHost } from "./pages/GameHost";
 import { RoomHost } from "./pages/RoomHost";
 import { EnterRoomClient } from "./pages/EnterRoomClient";
-
-function App() {
+type Prop = {};
+export const App: React.FC<Prop> = () => {
   return (
     <div className="App">
       <BrowserRouter>
@@ -21,6 +21,4 @@ function App() {
       </BrowserRouter>
     </div>
   );
-}
-
-export default App;
+};

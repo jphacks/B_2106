@@ -16,5 +16,3 @@ export const Top: React.FC<Prop> = () => {
     </div>
   );
 };
-
-export default Top;
