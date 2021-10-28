@@ -7,6 +7,7 @@ import Hai from "../../../../_components/Hai/Hai";
 interface Props {
   sutehaiList: string[];
   direction: DirectionType;
+  haiDirection: DirectionType;
 }
 
 const DropField: React.FC<Props> = (props) => {
@@ -36,7 +37,7 @@ const DropField: React.FC<Props> = (props) => {
                   <Hai
                     key={`${i}-${j}`}
                     name={sutehai}
-                    direction={props.direction}
+                    direction={props.haiDirection}
                     is3d={false}
                   />
                 );

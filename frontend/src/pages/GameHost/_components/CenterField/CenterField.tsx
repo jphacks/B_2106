@@ -1,8 +1,11 @@
-import React, { ReactElement } from "react";
-import { useSelector } from "react-redux";
+import React, { ReactElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { KazeType } from "../../../../_type";
 import "./CenterField.scss";
-import { selectCenterFieldState } from "./CenterFieldSlice";
+import {
+  selectCenterFieldState,
+  setCenterFieldState,
+} from "./CenterFieldSlice";
 import { DirectionType } from "../../../../_type";
 import classNames from "classnames";
 
@@ -12,6 +15,24 @@ interface Props {
 
 const CenterField: React.FC<Props> = (props) => {
   const centerFieldState = useSelector(selectCenterFieldState);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("CenterField: useEffect");
+    dispatch(
+      setCenterFieldState({
+        oya: 0,
+        player: [
+          { score: 21000 },
+          { score: 27000 },
+          { score: 16000 },
+          { score: 18000 },
+        ],
+        turnPlayer: 1,
+        riichiPlayer: 3,
+      })
+    );
+  }, []);
 
   interface Fields {
     point: ReactElement[];
@@ -50,14 +71,14 @@ const CenterField: React.FC<Props> = (props) => {
           `center-field__kaze--${direction}`
         )}
       >
-        {getKazeName(i)}
+        {getKazeName(i, centerFieldState.oya)}
       </div>
     );
   }
 
   const centerField = (
     <div className="center-field" style={props.styles}>
-      <div className="center-field__tsumo-button" />
+      <button className="center-field__tsumo-button">ツモ</button>
       {fields.point}
       {fields.kaze}
     </div>
@@ -68,9 +89,7 @@ const CenterField: React.FC<Props> = (props) => {
 
 export default CenterField;
 
-function getKazeName(kazenum: number): KazeType {
-  const oya = useSelector(selectCenterFieldState).oya;
-
+function getKazeName(kazenum: number, oya: number): KazeType {
   if (kazenum - oya < 0) {
     kazenum += 4;
   }

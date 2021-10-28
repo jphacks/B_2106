@@ -4,32 +4,32 @@ import "./Table.scss";
 import { DirectionType } from "../../../../_type";
 import CenterField from "../CenterField/CenterField";
 import DropField from "../DropField/DropField";
-import { dahai } from "./TableSlice";
-import { selectTableState } from "./TableSlice";
+import { dahai, selectTableState } from "./TableSlice";
 
 const Table: React.FC = () => {
-  const dispatch = useDispatch();
   const tableState = useSelector(selectTableState);
+  const dispatch = useDispatch();
 
-  // テスト用
-  // TODO: socket.jsにsocketの受信イベントハンドラを作成して、そこの中に移動）
   useEffect(() => {
-    dispatch(dahai(getTestData()));
+    console.log("Table: useEffect");
+
+    dispatch(
+      dahai({
+        sutehai: getTestData(),
+        canRiichi: true,
+      })
+    );
   }, []);
 
   const kawaList = [];
-  let direction: DirectionType = "up";
 
   for (let i = 0; i < 4; i++) {
-    if (i == 1) direction = "left";
-    else if (i == 2) direction = "down";
-    else if (i == 3) direction = "right";
-
     kawaList.push(
       <DropField
         key={i}
-        sutehaiList={tableState.sutehai[0]}
-        direction={direction}
+        sutehaiList={tableState.sutehai[i]}
+        direction={getDirection(i)}
+        haiDirection={getDirection(i, tableState.canRiichi)}
       />
     );
   }
@@ -50,13 +50,39 @@ function getTestData() {
   let sutehai: string[][] = [[], [], [], []];
 
   for (let i = 0; i < 4; i++) {
-    for (let j = 1; j < 10; j++) {
+    for (let j = 1; j < 8; j++) {
       sutehai[i].push(`${j}m`);
     }
-    for (let j = 1; j < 10; j++) {
+    for (let j = 1; j < 8; j++) {
       sutehai[i].push(`${j}p`);
     }
   }
 
   return sutehai;
+}
+
+function getDirection(
+  directionNum: number,
+  canRiichi?: boolean
+): DirectionType {
+  if (canRiichi) {
+    directionNum += 1;
+
+    if (directionNum > 3) {
+      directionNum -= 4;
+    }
+  }
+
+  switch (directionNum) {
+    case 0:
+      return "up";
+    case 1:
+      return "left";
+    case 2:
+      return "down";
+    case 3:
+      return "right";
+    default:
+      throw new Error("directionNum is invalid");
+  }
 }

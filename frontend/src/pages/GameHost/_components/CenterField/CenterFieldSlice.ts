@@ -28,7 +28,7 @@ export const centerFieldSlice = createSlice({
         },
         /**
          * 呼び出し例
-         * setDecoderState({ oya: 0, dora: 0, player: [{score: 125000}, ...], turnPlayer: 0 }) }));
+         * setDecoderState({ oya: 0, player: [{score: 25000}, ...], turnPlayer: 0, riichiPlayer: 0 });
          */
         setCenterFieldState: (state, action: PayloadAction<CenterFieldState>) => {
             return Object.assign({}, state, action.payload);
