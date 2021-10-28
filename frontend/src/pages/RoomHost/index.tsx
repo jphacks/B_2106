@@ -17,12 +17,8 @@ type RoomProps = {
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
 export const RoomHost: React.FC<Props> = () => {
-  const [players, setPlayers] = useState<PlayerProps[]>([
-    { name: "hoge", id: "hoge1" },
-    { name: "hoge1", id: "hoge2" },
-    { name: "hoge2", id: "hoge2" },
-  ]);
-  const [roomId, setRoomId] = useState<RoomProps>();
+  const [players, setPlayers] = useState<PlayerProps[]>([]);
+  const [roomID, setRoomId] = useState<RoomProps>();
 
   const history = useHistory();
 
@@ -46,12 +42,12 @@ export const RoomHost: React.FC<Props> = () => {
       console.log([...players, res]);
       setPlayers([...players, res]);
       console.log(players);
-      console.log(roomId);
+      console.log(roomID);
       console.log(setPlayers);
     });
     // eslint-disable-next-line no-unused-vars
     socket.on("start-game-response", (res) => {
-      console.log("start game");
+      console.log("start-game-response");
       history.push("/game_host");
     });
 
@@ -63,9 +59,12 @@ export const RoomHost: React.FC<Props> = () => {
         })
       );
     });
-  }, [roomId, players]);
+  }, [roomID, players]);
 
-  const startGame = () => {};
+  const startGame = () => {
+    console.log("startGame");
+    socket.emit("start-game", { roomID: roomID });
+  };
   console.log(players);
   return (
     <div className="roomHost">
@@ -73,7 +72,7 @@ export const RoomHost: React.FC<Props> = () => {
         <Header text="Room Host" />
       </div>
       <div className="roomHost__container">
-        <div className="roomHost__container__id">Room ID:{roomId}</div>
+        <div className="roomHost__container__id">Room ID:{roomID}</div>
         <p>プレイヤー一覧</p>
         <div className="roomHost__container__players">
           {players.map((player, id) => {

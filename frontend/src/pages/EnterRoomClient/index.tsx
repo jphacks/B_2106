@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
 
 type Props = {};
-type Inputs = { roomId: number; name: string };
+type Inputs = { roomID: number; name: string };
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
@@ -37,7 +37,9 @@ export const EnterRoomClient: React.FC<Props> = () => {
   );
   const [isWaiting, setIsWaiting] = React.useState(false);
 
-  const { roomId, name } = watch(); // これで監視できる
+  const { roomID, name } = watch(); // これで監視できる
+
+  const history = useHistory();
 
   useEffect(() => {
     socket = io("http://localhost:8080", {
@@ -58,23 +60,22 @@ export const EnterRoomClient: React.FC<Props> = () => {
       }
     });
 
-    socket.on("start-game", (res) => {
-      console.log("start-game" + res);
-      const history = useHistory();
+    socket.on("start-game-response", (res) => {
+      console.log("start-game-response" + res);
       history.push("/game_client");
     });
 
     register("name");
-    register("roomId");
+    register("roomID");
   }, []);
 
   const enterRoom = (data: Inputs) => {
     console.log(data);
-    socket.emit("enter-room", { name: data.name, roomID: data.roomId });
+    socket.emit("enter-room", { name: data.name, roomID: data.roomID });
   };
   const exitRoom = () => {
     console.log("exitRoom");
-    socket.emit("exit-room", { roomID: roomId });
+    socket.emit("exit-room", { roomID: roomID });
     setIsWaiting(false);
     setSuccessMessage(undefined);
   };
@@ -87,7 +88,7 @@ export const EnterRoomClient: React.FC<Props> = () => {
       {successMessage && <Alert severity="success"> {successMessage} </Alert>}
       <form onSubmit={handleSubmit(enterRoom)}>
         <p>ルームIDを入力してください</p>
-        <Input type="number" {...register("roomId", { required: true })} />
+        <Input type="number" {...register("roomID", { required: true })} />
         <p>名前を入力してね</p>
         <Input {...register("name", { required: true })} />
         <br />
@@ -103,7 +104,7 @@ export const EnterRoomClient: React.FC<Props> = () => {
         >
           <Box sx={style}>
             <p>対戦が始まるのを待っています</p>
-            <p>あなたのルームID: {roomId}</p>
+            <p>あなたのルームID: {roomID}</p>
             <p>あなたのユーザー名: {name}</p>
             <Button variant="contained" disableElevation onClick={exitRoom}>
               ルームID入力に戻る
