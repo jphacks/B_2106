@@ -18,8 +18,11 @@ class Game {
     this.state = new State();
     this.oyaPlayer = 0;
     this.turnPlayer = this.oyaPlayer;
+    this.riichi = false;
   }
-
+  setRiichi(riichi) {
+    this.riichi = riichi;
+  }
   isFinished() {
     return this.isFinished;
   }
@@ -31,20 +34,51 @@ class Game {
     //局開始に遷移
     this.state.transiton("配牌");
     this.field = new Field();
-    return {
-      oyaPlayer: this.oyaPlayer,
-      kyoku: this.kyokuCount,
-      honba: this.honbaCount,
+
+    const ret = { players: [], tablet: undefined };
+    ret.tablet = {
+      endpoint: "tablet-kyokustart",
+      arg: {
+        kyoku: this.kyokuCount,
+        honba: this.honbaCount,
+        player: [
+          { score: 25000, name: "hoge" },
+          { score: 25000, name: "hoge" },
+          { score: 25000, name: "hoge" },
+          { score: 25000, name: "hoge" },
+        ],
+        oya: this.oyaPlayer,
+        dora: this.field.dora,
+      },
     };
+    for (let i = 0; i < 4; i++) {
+      ret.players[i] = {
+        endpoint: "client-kyokustart",
+        arg: { oya: i == this.oyaPlayer },
+      };
+    }
+    return ret;
   }
 
   haipai() {
     //配牌に遷移
+
     this.state.transiton("開始");
+
     this.field.haipai();
-    return {
-      pai: this.field.getPlayerTehai(),
+
+    const ret = { players: [], tablet: undefined };
+    ret.tablet = {
+      endpoint: "tablet-haipai",
+      arg: {},
     };
+    for (let i = 0; i < 4; i++) {
+      ret.players[i] = {
+        endpoint: "client-haipai",
+        arg: { tehai: this.field.playerField[i].tehai },
+      };
+    }
+    return ret;
   }
   makeAction(actions = []) {
     return {
@@ -56,45 +90,54 @@ class Game {
     const tsumo = this.field.tsumo(this.turnPlayer);
 
     //各プレイヤーが取れる行動リスト
-
-    const players = [
-      this.makeAction(["pass"]),
-      this.makeAction(["pass"]),
-      this.makeAction(["pass"]),
-      this.makeAction(["pass"]),
-    ];
-
-    const tablet = this.makeAction(["pass"]);
-    const turnPlayersAction = this.makeAction(["tsumogiri"]);
-
+    let riichiFlag = false;
+    let tsumoAgariFlag = false;
+    let dahaiFlag = false;
+    let riichiPai = [];
     if (!this.field.playerField[this.turnPlayer].flag.riichi) {
-      turnPlayersAction.actions.push("dahai");
+      dahaiFlag = true;
 
       if (this.field.canRiichi(this.turnPlayer)) {
-        turnPlayersAction.actions.push("riichi");
-        turnPlayersAction["riichiPai"] = this.field.riichiPai(this.turnPlayer);
-        tablet.actions.push("riichi");
+        riichiFlag = true;
+        riichiPai = this.field.riichiPai(this.turnPlayer);
       }
     }
 
     if (this.field.canTsumoAgari(this.turnPlayer)) {
-      turnPlayersAction.actions.push("tsumoagari");
+      tsumoagariFlag = true;
     }
-
-    players[this.turnPlayer] = turnPlayersAction;
 
     this.state.transiton("打牌待ち");
 
-    return {
-      turnPlayer: this.turnPlayer,
-      players,
-      tablet,
+    const ret = { players: [], tablet: undefined };
+    ret.tablet = {
+      endpoint: "tablet-reset",
+      arg: {},
     };
+    for (let i = 0; i < 4; i++) {
+      if (this.turnPlayer == i) {
+        ret.players[i] = {
+          endpoint: "client-turnstart",
+          arg: {
+            turnplayer: true,
+            canTsumoagari: true,
+            canRiichi: true,
+            pai: tsumo,
+          },
+        };
+      } else {
+        ret.players[i] = {
+          endpoint: "client-turnstart",
+          arg: { turnplayer: false },
+        };
+      }
+    }
+    return ret;
   }
 
-  nextActionDahai(response, riichi = false) {
+  nextActionDahai(response) {
     //ターンプレイヤーがツモしたあとの行動処理
-
+    const riichi = this.riichi;
     if (response.action == "dahai") {
       this.field.dahai(this.turnPlayer, response.pai);
       this.state.transiton("行動送信");
@@ -145,11 +188,30 @@ class Game {
       turnPlayer: this.turnPlayer,
       pai: this.field.prevSutehai,
     };
-    return {
-      turnPlayer: this.turnPlayer,
-      players,
-      tablet,
+
+    const ret = { players: [], tablet: undefined };
+    ret.tablet = {
+      endpoint: "tablet-dahai",
+      arg: {
+        pai: this.field.prevSutehai,
+        playerId: this.turnPlayer,
+        isRiichi: this.riichi,
+      },
     };
+    for (let i = 0; i < 4; i++) {
+      if (this.turnPlayer == i) {
+        ret.players[i] = {
+          endpoint: "client-nextAction",
+          arg: { canRon: false },
+        };
+      } else {
+        ret.players[i] = {
+          endpoint: "client-nextAction",
+          arg: { canRon: this.field.canRon(i) },
+        };
+      }
+    }
+    return ret;
   }
   nextActionFuro(response) {
     //行動待ちで行動を選択
@@ -162,10 +224,10 @@ class Game {
   }
   ryukyokuFinish() {
     //流局処理
-    this.kyokuFinish();
+    return this.kyokuFinish();
   }
   agariFinish() {
-    this.kyokuFinish();
+    return this.kyokuFinish();
   }
   kyokuFinish() {
     this.oyaPlayer = (this.oyaPlayer + 1) % 4; //四麻想定
@@ -174,6 +236,26 @@ class Game {
     if (this.config.maxKyoku > this.kyokuCount)
       this.state.transiton("ゲーム終了");
     else this.state.transiton("局開始前");
+
+    const ret = { players: [], tablet: undefined };
+    ret.tablet = {
+      endpoint: "tablet-end",
+      arg: {
+        player: [
+          { score: 25000, name: "hoge" },
+          { score: 25000, name: "hoge" },
+          { score: 25000, name: "hoge" },
+          { score: 25000, name: "hoge" },
+        ],
+      },
+    };
+    for (let i = 0; i < 4; i++) {
+      ret.players[i] = {
+        endpoint: "client-end",
+        arg: {},
+      };
+    }
+    return ret;
   }
 }
 module.exports = Game;
