@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Header } from "../../_components/Header";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import Alert from "@mui/material/Alert";
@@ -8,6 +7,7 @@ import io, { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { useHistory } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 type Props = {};
 type Inputs = { roomID: number; name: string };
@@ -19,11 +19,55 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "60%",
+  height: "80%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  fontSize: "20px",
+};
+
+const inputIdStyle = {
+  position: "absolute" as "absolute",
+  top: "30%",
+  left: "30%",
+  transform: "translate(-50%, -50%)",
+  width: 200,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  fontSize: "20px",
+};
+
+const inputNameStyle = {
+  position: "absolute" as "absolute",
+  top: "30%",
+  left: "70%",
+  transform: "translate(-50%, -50%)",
+  width: 200,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  fontSize: "20px",
+};
+
+const buttonStyle = {
+  position: "absolute" as "absolute",
+  top: "70%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 200,
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  fontSize: "20px",
+};
+
+const bigText = {
+  fontSize: "40px",
 };
 
 export const EnterRoomClient: React.FC<Props> = () => {
@@ -82,18 +126,30 @@ export const EnterRoomClient: React.FC<Props> = () => {
 
   return (
     <div className="enterRoomClient">
-      <Header text="EnterRoomClient" />
       {errorMessage && <Alert severity="error"> {errorMessage} </Alert>}
-
       {successMessage && <Alert severity="success"> {successMessage} </Alert>}
       <form onSubmit={handleSubmit(enterRoom)}>
-        <p>ルームIDを入力してください</p>
-        <Input type="number" {...register("roomID", { required: true })} />
-        <p>名前を入力してね</p>
-        <Input {...register("name", { required: true })} />
+        <Input
+          sx={inputIdStyle}
+          color="success"
+          type="number"
+          placeholder="ルームID"
+          {...register("roomID", { required: true })}
+        />
+        <Input
+          sx={inputNameStyle}
+          color="success"
+          placeholder="ユーザー名"
+          {...register("name", { required: true })}
+        />
         <br />
-        <Button type="submit" variant="contained">
-          Submit
+        <Button
+          sx={buttonStyle}
+          color="success"
+          type="submit"
+          variant="contained"
+        >
+          ルームに入る
         </Button>
 
         <Modal
@@ -104,9 +160,26 @@ export const EnterRoomClient: React.FC<Props> = () => {
         >
           <Box sx={style}>
             <p>対戦が始まるのを待っています</p>
-            <p>あなたのルームID: {roomID}</p>
-            <p>あなたのユーザー名: {name}</p>
-            <Button variant="contained" disableElevation onClick={exitRoom}>
+            <br></br>
+            <p>
+              <span>あなたのルームID: </span>
+              <span style={bigText}>{roomID}</span>
+            </p>
+
+            <br></br>
+            <p>
+              <span>あなたのユーザー名:</span>
+              <span style={bigText}> {name}</span>
+            </p>
+
+            <br></br>
+            <Button
+              color="success"
+              variant="contained"
+              disableElevation
+              onClick={exitRoom}
+              startIcon={<ArrowBackIcon />}
+            >
               ルームID入力に戻る
             </Button>
           </Box>
