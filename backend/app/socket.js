@@ -10,14 +10,12 @@ module.exports = (io, rooms) => {
     socket.on('create-room', () => {
       console.log('create-room');
       const roomID = Math.floor(Math.random() * 10000).toString();
-
       // 重複するIDの際はerrorを返す
       if (io.sockets.adapter.rooms.get(roomID)) {
         console.log('error: create-room', roomID, io.sockets.adapter.rooms);
         socket.emit('create-room-response', { error: "can't create roomID" });
         return;
       }
-
       let r = new Room(socket.id);
       rooms[roomID] = r;
 
@@ -56,9 +54,9 @@ module.exports = (io, rooms) => {
 
     // 退出するとき用の_API
     socket.on('exit-room', (req) => {
-      console.log('exit-room:' + req['roomID'] + ':' + req['id']);
+      console.log('exit-room:' + req['roomID'] + ':' + socket.id);
       socket.leave(req['roomID']);
-      rooms[req['roomID']].leavePlayer(req['id']);
+      rooms[req['roomID']].leavePlayer(socket.id);
       io.in(req['roomID']).emit('exit-room-response', {
         name: req['name'],
         id: socket.id,
@@ -69,7 +67,7 @@ module.exports = (io, rooms) => {
     socket.on('start-game', (req) => {
       console.log('start-game');
       console.log(req);
-      socket.emit('start-game-response', req);
+      io.in(req['roomID']).emit('start-game-response', room);
     });
 
     socket.on('dahai', (req) => {
