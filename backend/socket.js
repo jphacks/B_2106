@@ -94,7 +94,7 @@ module.exports = (io, rooms) => {
       sendMessage(roomID(socket), arg);
     });
 
-    socket.on("riichi", (req) => {
+    socket.on("tablet-riichi-pushed", (req) => {
       const game = getGame(roomID(socket));
       game.setRiichi(true); //リーチフラグにtrueをセット
     });
@@ -229,8 +229,8 @@ module.exports = (io, rooms) => {
     return id;
   }
   function sendMessage(roomID, clients) {
+    console.log(roomID, clients);
     const room = rooms[roomID];
-    console.log(rooms);
     if (!room) {
       console.log("no such room");
       console.log(`room : ${room}`);
@@ -238,7 +238,12 @@ module.exports = (io, rooms) => {
     }
 
     const tablet = clients["tablet"];
-    io.to(room.takuID).emit(tablet["endpoint"], tablet["arg"]);
+
+    if (Array.isArray(tablet)) {
+      tablet.forEach((t) => io.to(room.takuID).emit(t["endpoint"], t["arg"]));
+    } else {
+      io.to(room.takuID).emit(tablet["endpoint"], tablet["arg"]);
+    }
 
     const players = clients["players"];
     for (let i = 0; i < Math.min(room["players"].length, players.length); i++) {
