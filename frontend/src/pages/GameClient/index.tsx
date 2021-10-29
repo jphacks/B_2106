@@ -17,16 +17,6 @@ export const GameClient = () => {
   const { canRon, canTsumoagari, canDahai, isMyturn } =
     useSelector(selectClientFlag);
   const [selectIdx, setSelectIdx] = useState<number>(-1);
-  const dispatch = store.dispatch;
-  useEffect(() => {
-    dispatch(tsumoAction("3m"));
-    dispatch(haipai(["1m", "1m", "1m", "1m", "1m", "1m", "1m", "2m"]));
-    dispatch(dahai(6));
-    dispatch(tsumoAction("4m"));
-    dispatch(tsumogiri());
-    dispatch(setTurn({ isMyturn: true, canTsumoagari: true, canDahai: true }));
-    dispatch(setFuro({ canRon: true }));
-  }, []);
 
   const haiClick = (index: number) => {
     if (index == selectIdx) {
