@@ -17,9 +17,11 @@ import {
   emitRon,
   emitTsumoagari,
 } from "../../services/socket";
+import { KazeType } from "../../_type";
+
 export const GameClient = () => {
   //将来的にはreduxで管理する変数
-  const { tsumo, tehai } = useSelector(selectTehai);
+  const { kaze, tsumo, tehai } = useSelector(selectTehai);
   const { canRon, canTsumoagari, canDahai, isMyturn } =
     useSelector(selectClientFlag);
   const [selectIdx, setSelectIdx] = useState<number>(-1);
@@ -62,7 +64,7 @@ export const GameClient = () => {
       <div className="ClientView__hougaku">
         <Hougaku
           {...{
-            text: "北",
+            text: ["東", "南", "西", "北"][kaze] as KazeType,
             device: "client",
             direction: "down",
             isLighting: isMyturn,
