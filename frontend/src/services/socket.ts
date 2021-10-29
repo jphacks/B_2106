@@ -1,6 +1,5 @@
 import process from "process";
 import io, { Socket } from "socket.io-client";
-import { store } from "../store";
 
 // import { dahai } from "../pages/GameHost/_components/Table/TableSlice";
 
@@ -13,11 +12,12 @@ declare global {
 function initSocket() {
   const API_URL = process.env.REACT_APP_API_URL
     ? process.env.REACT_APP_API_URL
-    : "https://localhost:8080";
+    : "http://localhost:8080";
   window.socket = io(API_URL, {
     transports: ["websocket"],
   });
   console.log("initSocket");
+  console.log(API_URL);
   console.log(window.socket);
   setupGameHost();
 }
