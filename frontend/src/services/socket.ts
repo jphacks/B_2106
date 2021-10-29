@@ -29,7 +29,7 @@ declare global {
 function initSocket() {
   const API_URL = process.env.REACT_APP_API_URL
     ? process.env.REACT_APP_API_URL
-    : "http://localhost:8080";
+    : "http://localhost";
   window.socket = io(API_URL, {
     transports: ["websocket"],
   });
