@@ -10,14 +10,12 @@ module.exports = (io, rooms) => {
     socket.on("create-room", () => {
       console.log("create-room");
       const roomID = Math.floor(Math.random() * 10000).toString();
-
       // 重複するIDの際はerrorを返す
       if (io.sockets.adapter.rooms.get(roomID)) {
         console.log("error: create-room", roomID, io.sockets.adapter.rooms);
         socket.emit("create-room-response", { error: "can't create roomID" });
         return;
       }
-
       let r = new Room(socket.id);
       rooms[roomID] = r;
 
@@ -51,6 +49,18 @@ module.exports = (io, rooms) => {
         name: req["name"] || "no name",
         id: socket.id,
       });
+
+    });
+
+    // 退出するとき用の_API
+    socket.on("exit-room", (req) => {
+      console.log("exit-room:" + req["roomID"] + ":" + socket.id);
+      socket.leave(req["roomID"]);
+      rooms[req["roomID"]].leavePlayer(socket.id);
+      io.in(req["roomID"]).emit("exit-room-response", {
+        name: req["name"],
+        id: socket.id,
+      });
     });
 
     // gameを始める際のAPI
@@ -74,6 +84,7 @@ module.exports = (io, rooms) => {
       sendMessage(roomID(socket), arg);
       arg = game.sendTurnStart(); //最初のツモを受け取って送信
       sendMessage(roomID(socket), arg);
+
     });
 
     socket.on("dahai", (req) => {
