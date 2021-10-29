@@ -18,14 +18,36 @@ import {
   emitTsumoagari,
 } from "../../services/socket";
 import { KazeType } from "../../_type";
-
 export const GameClient = () => {
   //将来的にはreduxで管理する変数
   const { kaze, tsumo, tehai } = useSelector(selectTehai);
   const { canRon, canTsumoagari, canDahai, isMyturn } =
     useSelector(selectClientFlag);
   const [selectIdx, setSelectIdx] = useState<number>(-1);
+  const [orderList, setOrderList] = useState<number[]>([
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const compare = (a: string, b: string) => {
+      const dict = { m: "0", p: "1", s: "2", z: "3" };
+      const a1: "m" | "p" | "s" | "z" = a[1] as "m" | "p" | "s" | "z";
+      const b1: "m" | "p" | "s" | "z" = b[1] as "m" | "p" | "s" | "z";
+      return dict[a1] + a[0] > dict[b1] + b[0];
+    };
+    function sortIndex(tehai: string[]) {
+      return tehai.map((hai) => {
+        let count = 0;
+        for (let i = 0; i < tehai.length; i++) {
+          count += compare(hai, tehai[i]) ? 1 : 0;
+        }
+        return count;
+      });
+    }
+    setOrderList(sortIndex(tehai));
+  }, [tehai]);
+
   const buttonClick = (action: string) => {
     if (action == "ron") {
       emitRon();
@@ -78,6 +100,7 @@ export const GameClient = () => {
             className={classNames("ClientView__Hai", {
               "ClientView__Hai--float": index == selectIdx,
             })}
+            style={{ order: orderList[index] }}
             onClick={() => haiClick(index)}
           >
             <Hai {...{ name: hai, is3d: true, direction: "up" }} />
@@ -88,11 +111,12 @@ export const GameClient = () => {
             "ClientView__Hai--float": 14 == selectIdx,
           })}
           onClick={() => haiClick(14)}
+          style={{ order: 14 }}
         >
           {tsumo ? (
             <Hai {...{ name: tsumo, is3d: true, direction: "up" }} />
           ) : (
-            <></>
+            <div className="dummy"></div>
           )}
         </div>
       </div>

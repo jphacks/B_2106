@@ -106,6 +106,7 @@ function setupGameClient() {
     );
   });
   window.socket.on("client-nextaction", (req) => {
+    console.log(req);
     store.dispatch(setFuro({ canRon: req.canRon }));
   });
   window.socket.on("client-end", (req) => {});
@@ -113,7 +114,7 @@ function setupGameClient() {
 /*
 "client-kyokustart"で{oya:bool}がtrueなら方角(自風)の表示を光らせる
 "client-haipai"で{tehai:string[]}の手牌をセット
-"client-turnstart"で{turnplayer:bool, canTsumoagari: bool, canRiichi: bool}に従ってそれらのボタン表示したり，切れるようにする．
+"client-turnstart"で{turnplayer:bool, canTsumoagari: bool, canRiichi: bool}5に従ってそれらのボタン表示したり，切れるようにする．
 "client-nextaction"で{canRon:bool}にあわせてボタンを表示
 "client-end"で終了
  */
