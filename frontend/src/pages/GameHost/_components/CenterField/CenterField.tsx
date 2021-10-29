@@ -24,6 +24,11 @@ const CenterField: React.FC<Props> = (props) => {
     score: [],
     kaze: [],
   };
+  console.log(
+    "compoonet",
+    centerFieldState.shouldDisableRiichi,
+    centerFieldState.riichiPlayer
+  );
 
   for (let i = 0; i < 4; i++) {
     let direction: DirectionType = "up";
@@ -55,8 +60,10 @@ const CenterField: React.FC<Props> = (props) => {
           `center-field__contents__score--${direction}`
         )}
         disabled={
+          /*
           centerFieldState.shouldDisableRiichi ||
-          centerFieldState.riichiPlayer !== i
+          centerFieldState.riichiPlayer !== i*/
+          false
         }
       >
         <span>{centerFieldState.player[i].score}</span>

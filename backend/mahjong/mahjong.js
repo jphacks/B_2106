@@ -68,6 +68,22 @@ class Game {
 
     this.field.haipai();
 
+    this.field.playerField[0].tehai = [
+      "1m",
+      "1m",
+      "1m",
+      "2m",
+      "3m",
+      "4m",
+      "5m",
+      "6m",
+      "7m",
+      "8m",
+      "9m",
+      "9m",
+      "9m",
+    ];
+
     const ret = { players: [], tablet: undefined };
     ret.tablet = {
       endpoint: "tablet-haipai",
@@ -88,8 +104,9 @@ class Game {
   }
   sendTurnStart() {
     //ターンプレイヤーがツモ
-    const tsumo = this.field.tsumo(this.turnPlayer);
-
+    let tsumo = this.field.tsumo(this.turnPlayer);
+    //デバッグ
+    tsumo = this.field.playerField[this.turnPlayer].tsumo = "1m";
     //各プレイヤーが取れる行動リスト
     let riichiFlag = false;
     let tsumoAgariFlag = false;
@@ -105,24 +122,32 @@ class Game {
     }
 
     if (this.field.canTsumoAgari(this.turnPlayer)) {
-      tsumoagariFlag = true;
+      tsumoAgariFlag = true;
     }
 
     this.state.transiton("打牌待ち");
 
     const ret = { players: [], tablet: undefined };
-    ret.tablet = {
-      endpoint: "tablet-reset",
-      arg: {},
-    };
+    ret.tablet = [
+      {
+        endpoint: "tablet-reset",
+        arg: {},
+      },
+    ];
+    if (riichiFlag)
+      ret.tablet.push({
+        endpoint: "tablet-riichi",
+        arg: { playerId: this.turnPlayer },
+      });
     for (let i = 0; i < 4; i++) {
       if (this.turnPlayer == i) {
         ret.players[i] = {
           endpoint: "client-turnstart",
           arg: {
             turnplayer: true,
-            canTsumoagari: true,
+            canTsumoagari: tsumoAgariFlag,
             canRiichi: true,
+            canDahai: dahaiFlag,
             pai: tsumo,
           },
         };
@@ -166,6 +191,8 @@ class Game {
           playerId: this.turnPlayer,
           isRiichi: this.riichi,
         },
+      },
+      {
         endpoint: "tablet-tsumo",
         arg: { actions: "tsumo", turnPlayer: (this.turnPlayer + 1) % 4 },
       },

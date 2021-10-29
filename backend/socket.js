@@ -86,6 +86,7 @@ module.exports = (io, rooms) => {
     });
 
     socket.on("dahai", (req) => {
+      console.log("dahai", req);
       socket.emit("dahai-response", req);
       const game = getGame(roomID(socket));
       game.nextActionDahai(req); //プレイヤーから受け取った打牌を反映
@@ -99,7 +100,7 @@ module.exports = (io, rooms) => {
       game.setRiichi(true); //リーチフラグにtrueをセット
     });
 
-    socket.on("tsumo", (req) => {
+    socket.on("tablet-tsumo", (req) => {
       const game = getGame(roomID(socket));
       let arg;
       game.nextActionFuro(req); //次のツモを引くことをセット
@@ -229,7 +230,7 @@ module.exports = (io, rooms) => {
     return id;
   }
   function sendMessage(roomID, clients) {
-    console.log(roomID, clients);
+    console.log(JSON.stringify({ roomID, clients }, null, "\t"));
     const room = rooms[roomID];
     if (!room) {
       console.log("no such room");

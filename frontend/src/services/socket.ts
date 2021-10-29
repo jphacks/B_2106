@@ -50,6 +50,7 @@ function setupGameHost() {
   });
 
   window.socket.on("tablet-riichi", (data) => {
+    console.log("tablet-riichi",data);
     store.dispatch(setRiichiPlayer(data.playerId));
   });
 
