@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { KazeType } from "../../../../_type";
 import "./CenterField.scss";
-import { centerFieldSlice, selectCenterFieldState } from "./CenterFieldSlice";
+import { selectCenterFieldState } from "./CenterFieldSlice";
 import { DirectionType } from "../../../../_type";
 import classNames from "classnames";
 import Hougaku from "../../../../_components/Hougaku/Hougaku";
