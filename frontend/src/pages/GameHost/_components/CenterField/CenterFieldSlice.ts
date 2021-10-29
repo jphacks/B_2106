@@ -37,7 +37,6 @@ export const centerFieldSlice = createSlice({
             console.log("redux",action.payload);
             state.shouldDisableRiichi = false;
             state.riichiPlayer = action.payload.playerId;
-            return state;
         },
         setupTsumo: (state, action) => {
             state.shouldDisableTsumo = false;
