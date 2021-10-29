@@ -1,11 +1,15 @@
 .ClientView__Hai{
     display:inline-block;
+    padding: 5vh 0 0;
 
     &--float{
-        vertical-align:5vh
+        vertical-align:5vh;
+        padding: 0 0 5vh;
+        
     }
     &--tsumo{
-        margin: 3vw;
+        margin: 0 0 0 2vw;
+        
     }
 
 }
@@ -28,7 +32,12 @@
     }
     &__hai_container{
         position:absolute;
-        bottom:30vh;
-        right:5vh;
+        bottom:20vh;
+        left:50vw;
+        transform:translate(-50%,0);
+        display:flex;
     }
+}
+.dummy{
+    width:6.5vw;
 }
