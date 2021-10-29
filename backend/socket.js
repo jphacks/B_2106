@@ -67,7 +67,7 @@ module.exports = (io, rooms) => {
       console.log("start-game");
       console.log(req);
       console.log(socket.rooms);
-      socket.emit("start-game-response", req);
+      io.to(roomID(socket)).emit("start-game-response", req);
 
       const playerNames = getPlayerNames(roomID(socket));
       const config = new Config(25000, "東風戦", playerNames);
