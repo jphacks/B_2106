@@ -6,6 +6,7 @@ import Alert from "@mui/material/Alert";
 import { useHistory } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { SocketContext } from "../../App";
 
 type Props = {};
 type Inputs = { roomID: number; name: string };
@@ -81,9 +82,11 @@ export const EnterRoomClient: React.FC<Props> = () => {
 
   const history = useHistory();
 
+  const socket = React.useContext(SocketContext);
+
   useEffect(() => {
     console.log("connect");
-    window.socket.on("enter-room-response", (res) => {
+    socket.on("enter-room-response", (res) => {
       setErrorMessage(undefined);
       setSuccessMessage(undefined);
       console.log("enter-room-response" + res);
@@ -96,7 +99,7 @@ export const EnterRoomClient: React.FC<Props> = () => {
       }
     });
 
-    window.socket.on("start-game-response", (res) => {
+    socket.on("start-game-response", (res) => {
       console.log("start-game-response" + res);
       history.push("/game_client");
     });
@@ -107,11 +110,11 @@ export const EnterRoomClient: React.FC<Props> = () => {
 
   const enterRoom = (data: Inputs) => {
     console.log(data);
-    window.socket.emit("enter-room", { name: data.name, roomID: data.roomID });
+    socket.emit("enter-room", { name: data.name, roomID: data.roomID });
   };
   const exitRoom = () => {
     console.log("exitRoom");
-    window.socket.emit("exit-room", { roomID: roomID });
+    socket.emit("exit-room", { roomID: roomID });
     setIsWaiting(false);
     setSuccessMessage(undefined);
   };

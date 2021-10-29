@@ -20,6 +20,7 @@ function initSocket() {
   console.log(API_URL);
   console.log(window.socket);
   setupGameHost();
+  return window.socket;
 }
 
 function setupGameHost() {
