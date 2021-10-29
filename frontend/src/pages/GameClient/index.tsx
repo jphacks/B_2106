@@ -42,9 +42,16 @@ export const GameClient = () => {
         if (index == 14) {
           emitTsumogiri();
           dispatch(tsumogiri());
+          dispatch(
+            setTurn({ canDahai: false, canTsumoagari: false, isMyturn: false })
+          );
         } else if (canDahai) {
+          console.log("dahai!!!!!!!!!!");
           emitDahai(tehai[index]);
           dispatch(dahai(index));
+          dispatch(
+            setTurn({ canDahai: false, canTsumoagari: false, isMyturn: false })
+          );
         }
       }
     } else setSelectIdx(index);

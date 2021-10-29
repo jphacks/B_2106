@@ -11,8 +11,13 @@ import {
   resetButton,
   kyokuStartCenterField,
 } from "../pages/GameHost/_components/CenterField/CenterFieldSlice";
-import { setTurn, setFuro }  from "../pages/GameClient/ClientFlagSlice";
-import { tsumo as tsumoAction, dahai as dahaiAction, tsumogiri,haipai }  from "../pages/GameClient/TehaiSlice";
+import { setTurn, setFuro } from "../pages/GameClient/ClientFlagSlice";
+import {
+  tsumo as tsumoAction,
+  dahai as dahaiAction,
+  tsumogiri,
+  haipai,
+} from "../pages/GameClient/TehaiSlice";
 
 declare global {
   interface Window {
@@ -59,7 +64,7 @@ function setupGameHost() {
 
 function tsumo() {
   console.log("tsumo");
-  window.socket.emit("tablet-tsumo");
+  window.socket.emit("tablet-tsumo", { action: "tsumo" });
 }
 
 function riichi(playerId: number) {
@@ -67,27 +72,37 @@ function riichi(playerId: number) {
   window.socket.emit("tablet-riichi-pushed", { playerId: playerId });
 }
 
-function emitDahai(pai:string){
-  window.socket.emit("dahai",{action:"dahai",pai});
+function emitDahai(pai: string) {
+  window.socket.emit("dahai", { action: "dahai", pai: pai });
 }
-function emitTsumogiri(){
-  window.socket.emit("dahai",{action:"tsumogiri",pai:""});
+function emitTsumogiri() {
+  window.socket.emit("dahai", { action: "tsumogiri", pai: "" });
 }
-function emitRon(){
-  window.socket.emit("ron",{action:"ron"});
+function emitRon() {
+  window.socket.emit("ron", { action: "ron" });
 }
-function emitTsumoagari(){
-  window.socket.emit("tsumoAgari",{action:"tsumoagari"});
+function emitTsumoagari() {
+  window.socket.emit("tsumoAgari", { action: "tsumoagari" });
 }
 
 function setupGameClient() {
   window.socket.on("client-kyokustart", (req) => {});
-  window.socket.on("client-haipai", (req) => {store.dispatch(haipai(req.tehai))});
+  window.socket.on("client-haipai", (req) => {
+    store.dispatch(haipai(req.tehai));
+  });
   window.socket.on("client-turnstart", (req) => {
-  store.dispatch(tsumoAction(req.pai));
-    store.dispatch(setTurn({isMyturn:req.turnplayer,canTsumoagari:req.canTsumoagari,canDahai:req.canDahai}));
-    });
-  window.socket.on("client-nextaction", (req) => {store.dispatch(setFuro({canRon:req.canRon}))});
+    store.dispatch(tsumoAction(req.pai));
+    store.dispatch(
+      setTurn({
+        isMyturn: req.turnplayer,
+        canTsumoagari: req.canTsumoagari,
+        canDahai: req.canDahai,
+      })
+    );
+  });
+  window.socket.on("client-nextaction", (req) => {
+    store.dispatch(setFuro({ canRon: req.canRon }));
+  });
   window.socket.on("client-end", (req) => {});
 }
 /*
@@ -97,7 +112,6 @@ function setupGameClient() {
 "client-nextaction"で{canRon:bool}にあわせてボタンを表示
 "client-end"で終了
  */
-
 
 export { initSocket, setupGameHost, tsumo, riichi };
 export { emitTsumogiri, emitRon, emitDahai, emitTsumoagari };
