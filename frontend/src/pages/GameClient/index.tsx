@@ -22,9 +22,10 @@ function GameClient() {
     "9m",
     "9m",
   ];
+
   const tsumo = "1m";
   const canRon = false;
-  const canTsumo = true;
+  const canTsumoagari = true;
   const turnPlayer = 2;
   const myNumber = 3;
 
