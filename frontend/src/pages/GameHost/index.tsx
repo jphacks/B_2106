@@ -1,6 +1,14 @@
 import React from "react";
-function GameHost() {
-  return <h2>GameHost</h2>;
-}
+import "./index.scss";
+import Table from "./_components/Table/Table";
+
+const GameHost: React.FC = () => {
+  return (
+    <div className="game-host">
+      <Table />
+      {/* <Sidebar /> */}
+    </div>
+  );
+};
 
 export default GameHost;
