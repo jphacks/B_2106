@@ -46,7 +46,18 @@ function riichi() {
   window.socket.emit("tablet-riichi-pushed");
 }
 
-
+function emitDahai(pai:string){
+  window.socket.emit("dahai",{action:"dahai",pai});
+}
+function emitTsumogiri(){
+  window.socket.emit("dahai",{action:"tsumogiri",pai:""});
+}
+function emitRon(){
+  window.socket.emit("ron",{action:"ron"});
+}
+function emitTsumoagari(){
+  window.socket.emit("tsumoAgari",{action:"tsumoagari"});
+}
 
 function setupGameClient() {
   window.socket.on("client-kyokustart", (req) => {});
@@ -68,3 +79,4 @@ function setupGameClient() {
 
 
 export { initSocket, setupGameHost, tsumo, riichi };
+export { emitTsumogiri, emitRon, emitDahai, emitTsumoagari };

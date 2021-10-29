@@ -11,16 +11,42 @@ import { selectTehai } from "./TehaiSlice";
 import { tsumo as tsumoAction, haipai, dahai, tsumogiri } from "./TehaiSlice";
 import { setTurn, setFuro } from "./ClientFlagSlice";
 import Button from "./_components/Button";
+import {
+  emitTsumogiri,
+  emitDahai,
+  emitRon,
+  emitTsumoagari,
+} from "../../services/socket";
 export const GameClient = () => {
   //将来的にはreduxで管理する変数
   const { tsumo, tehai } = useSelector(selectTehai);
   const { canRon, canTsumoagari, canDahai, isMyturn } =
     useSelector(selectClientFlag);
   const [selectIdx, setSelectIdx] = useState<number>(-1);
-
+  const dispatch = useDispatch();
+  const buttonClick = (action: string) => {
+    if (action == "ron") {
+      emitRon();
+      dispatch(setFuro({ canRon: false }));
+    } else if (action == "tsumoagari") {
+      emitTsumoagari();
+      dispatch(
+        setTurn({ canDahai: false, canTsumoagari: false, isMyturn: true })
+      );
+    }
+  };
   const haiClick = (index: number) => {
     if (index == selectIdx) {
       console.log("double tapped!!");
+      if (isMyturn) {
+        if (index == 14) {
+          emitTsumogiri();
+          dispatch(tsumogiri());
+        } else if (canDahai) {
+          emitDahai(tehai[index]);
+          dispatch(dahai(index));
+        }
+      }
     } else setSelectIdx(index);
   };
 
@@ -60,12 +86,22 @@ export const GameClient = () => {
       <div className="ClientView__buttons">
         {canRon && (
           <div className="ClientView__Action">
-            <Button text="ロン" />
+            <Button
+              text="ロン"
+              onClick={() => {
+                buttonClick("ron");
+              }}
+            />
           </div>
         )}
         {canTsumoagari && (
           <div className="ClientView__Action">
-            <Button text="ツモ" />
+            <Button
+              text="ツモ"
+              onClick={() => {
+                buttonClick("tsumoagari");
+              }}
+            />
           </div>
         )}
       </div>
