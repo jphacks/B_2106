@@ -1,14 +1,12 @@
-import React, { ReactElement, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { ReactElement } from "react";
+import { useSelector } from "react-redux";
 import { KazeType } from "../../../../_type";
 import "./CenterField.scss";
-import {
-  selectCenterFieldState,
-  setCenterFieldState,
-} from "./CenterFieldSlice";
+import { selectCenterFieldState } from "./CenterFieldSlice";
 import { DirectionType } from "../../../../_type";
 import classNames from "classnames";
 import Hougaku from "../../../../_components/Hougaku/Hougaku";
+import { tsumo, riichi } from "../../../../services/socket";
 
 interface Props {
   styles?: any;
@@ -16,24 +14,6 @@ interface Props {
 
 const CenterField: React.FC<Props> = (props) => {
   const centerFieldState = useSelector(selectCenterFieldState);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log("CenterField: useEffect");
-    dispatch(
-      setCenterFieldState({
-        oya: 0,
-        player: [
-          { score: 21000 },
-          { score: 27000 },
-          { score: 16000 },
-          { score: 18000 },
-        ],
-        turnPlayer: 1,
-        riichiPlayer: 3,
-      })
-    );
-  }, []);
 
   interface Fields {
     score: ReactElement[];
@@ -64,12 +44,20 @@ const CenterField: React.FC<Props> = (props) => {
       <button
         key={i}
         onClick={() => {
-          console.log(`Riichi!!: Player ${i}`);
+          try {
+            riichi(i);
+          } catch (error) {
+            console.error(error);
+          }
         }}
         className={classNames(
           "center-field__contents__score",
           `center-field__contents__score--${direction}`
         )}
+        disabled={
+          centerFieldState.shouldDisableRiichi ||
+          centerFieldState.riichiPlayer !== i
+        }
       >
         <span>{centerFieldState.player[i].score}</span>
       </button>
@@ -96,7 +84,19 @@ const CenterField: React.FC<Props> = (props) => {
   const centerField = (
     <div className="center-field" style={props.styles}>
       <div className="center-field__contens">
-        <button className="center-field__contents__tsumo-button">ツモ</button>
+        <button
+          onClick={() => {
+            try {
+              tsumo();
+            } catch (error) {
+              console.error(error);
+            }
+          }}
+          className="center-field__contents__tsumo-button"
+          disabled={centerFieldState.shouldDisableTsumo}
+        >
+          ツモ
+        </button>
         {fields.score}
         {fields.kaze}
       </div>

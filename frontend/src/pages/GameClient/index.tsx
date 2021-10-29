@@ -80,7 +80,11 @@ export const GameClient = () => {
           })}
           onClick={() => haiClick(14)}
         >
-          <Hai {...{ name: tsumo, is3d: true, direction: "up" }} />
+          {tsumo ? (
+            <Hai {...{ name: tsumo, is3d: true, direction: "up" }} />
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <div className="ClientView__buttons">
