@@ -1,26 +1,13 @@
-import React, { ReactElement, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { ReactElement } from "react";
+import { useSelector } from "react-redux";
 import "./Table.scss";
 import { DirectionType } from "../../../../_type";
 import CenterField from "../CenterField/CenterField";
 import DropField from "../DropField/DropField";
-import { dahai, selectTableState } from "./TableSlice";
+import { selectTableState } from "./TableSlice";
 
 const Table: React.FC = () => {
   const tableState = useSelector(selectTableState);
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   console.log("Table: useEffect");
-
-  //   dispatch(
-  //     dahai({
-  //       playerId: 0,
-  //       pai: "1m",
-  //       isRiichi: false,
-  //     })
-  //   );
-  // }, []);
 
   const kawaList: ReactElement[][] = [[], [], [], []];
 
@@ -39,6 +26,9 @@ const Table: React.FC = () => {
 
   const table = (
     <div className="table">
+      東{tableState.kyoku}局{tableState.honba}本場
+      <br />
+      ドラ: {tableState.dora}
       <CenterField />
       {kawaList}
     </div>
@@ -48,19 +38,6 @@ const Table: React.FC = () => {
 };
 
 export default Table;
-
-function getTestData() {
-  let sutehai: string[] = [];
-
-  for (let j = 1; j < 8; j++) {
-    sutehai.push(`${j}m`);
-  }
-  for (let j = 1; j < 8; j++) {
-    sutehai.push(`${j}p`);
-  }
-
-  return sutehai;
-}
 
 function getKawaDirection(directionNum: number): DirectionType {
   switch (directionNum) {
