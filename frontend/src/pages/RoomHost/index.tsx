@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { DefaultEventsMap } from "@socket.io/component-emitter";
-import io, { Socket } from "socket.io-client";
 import { Button, Card } from "@mui/material";
 import { useHistory } from "react-router-dom";
 
@@ -56,44 +54,35 @@ type RoomProps = {
   id: string;
 };
 
-let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
-
 export const RoomHost: React.FC<Props> = () => {
   const [players, setPlayers] = useState<PlayerProps[]>([]);
   const [roomID, setRoomId] = useState<RoomProps>();
 
   const history = useHistory();
 
-  const API_URL = process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL
-    : "https://localhost:8080/";
-
   useEffect(() => {
-    socket = io(API_URL, {
-      transports: ["websocket"],
-    });
+    window.socket.emit("create-room");
 
-    socket.emit("create-room");
-
-    socket.on("create-room-response", (res) => {
+    window.socket.on("create-room-response", (res) => {
       console.log("create-room");
       console.log(res);
       setRoomId(res.roomID);
     });
   }, []);
+
   useEffect(() => {
-    socket.on("enter-room-response", (res: PlayerProps) => {
+    window.socket.on("enter-room-response", (res: PlayerProps) => {
       console.log("enter-room-response");
       console.log([...players, res]);
       setPlayers([...players, res]);
     });
     // eslint-disable-next-line no-unused-vars
-    socket.on("start-game-response", (res) => {
+    window.socket.on("start-game-response", (res) => {
       console.log("start-game-response");
       history.push("/game_host");
     });
 
-    socket.on("exit-room-response", (res) => {
+    window.socket.on("exit-room-response", (res) => {
       console.log("exit room response");
       setPlayers(
         players.filter((player) => {
@@ -105,7 +94,7 @@ export const RoomHost: React.FC<Props> = () => {
 
   const startGame = () => {
     console.log("startGame");
-    socket.emit("start-game", { roomID: roomID });
+    window.socket.emit("start-game", { roomID: roomID });
   };
   console.log(players);
   return (

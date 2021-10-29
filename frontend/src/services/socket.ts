@@ -17,7 +17,8 @@ function initSocket() {
   window.socket = io(API_URL, {
     transports: ["websocket"],
   });
-
+  console.log("initSocket");
+  console.log(window.socket);
   setupGameHost();
 }
 
