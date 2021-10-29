@@ -1,7 +1,6 @@
 import React from "react";
 import "./index.scss";
 import { Card, Grid, Typography, Button } from "@mui/material";
-import { useHistory } from "react-router-dom";
 
 type Prop = {};
 
@@ -49,7 +48,7 @@ const titleStyle = {
 };
 
 export const Top: React.FC<Prop> = () => {
-  const history = useHistory();
+  console.log(process.env.REACT_APP_API_URL);
   return (
     <Grid container spacing={2} justifyContent="center">
       <Grid item>

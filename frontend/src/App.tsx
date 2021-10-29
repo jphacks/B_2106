@@ -6,8 +6,11 @@ import { GameClient } from "./pages/GameClient";
 import { GameHost } from "./pages/GameHost";
 import { RoomHost } from "./pages/RoomHost";
 import { EnterRoomClient } from "./pages/EnterRoomClient";
+import { initSocket } from "./services/socket";
+
 type Prop = {};
 export const App: React.FC<Prop> = () => {
+  initSocket();
   return (
     <div className="App">
       <BrowserRouter>
