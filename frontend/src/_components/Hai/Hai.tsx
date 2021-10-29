@@ -42,7 +42,11 @@ const Hai: React.FC<Props> = (props) => {
       {props.is3d ? (
         <div className="Hai-3d__contents">
           <div className="Hai-3d__contents__depth" />
-          <img src={url} style={{ transform: "rotate(" + angle + "deg)" }} />
+          <img
+            src={url}
+            className="Hai__img--sp"
+            style={{ transform: "rotate(" + angle + "deg)" }}
+          />
         </div>
       ) : (
         <img
