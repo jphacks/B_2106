@@ -4,6 +4,9 @@
     &--float{
         vertical-align:5vh
     }
+    &--tsumo{
+        margin: 3vw;
+    }
 
 }
 .ClientView{
@@ -16,10 +19,16 @@
         position:absolute;
         top:5vh;
         right:5vh;
+        width:50vw;
+        display:flex;
+        flex-flow:row-reverse;
+    }
+    &__Action{
+        margin:1vw;
     }
     &__hai_container{
         position:absolute;
-        bottom:40vh;
+        bottom:30vh;
         right:5vh;
     }
 }

@@ -14,21 +14,21 @@ const tehaiSlice = createSlice({
   reducers: {
     tsumo(state,action: PayloadAction<string>) {
       state.tsumo = action.payload
-      return {...state};
+      return state;
     },
     dahai(state,action:PayloadAction<number>) {
         state.tehai = state.tehai.filter((hai,index)=>action.payload!=index);
         state.tehai.push(state.tsumo);
         state.tsumo = "";
-        return {...state};
+        return state;
     },
     tsumogiri(state) {
         state.tsumo = "";
-        return {...state}
+        return state;
     },
     haipai(state,action: PayloadAction<string[]>){
         state.tehai = action.payload;
-        return {...state}
+        return state;
     }
   },
 })
