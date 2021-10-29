@@ -45,7 +45,7 @@ const CenterField: React.FC<Props> = (props) => {
         key={i}
         onClick={() => {
           try {
-            riichi();
+            riichi(i);
           } catch (error) {
             console.error(error);
           }

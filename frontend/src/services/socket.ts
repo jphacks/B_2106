@@ -58,9 +58,9 @@ function tsumo() {
   window.socket.emit("tablet-tsumo");
 }
 
-function riichi() {
-  console.log("riichi");
-  window.socket.emit("tablet-riichi-pushed");
+function riichi(playerId: number) {
+  console.log(`riichi player: ${playerId}`);
+  window.socket.emit("tablet-riichi-pushed", { playerId: playerId });
 }
 
 export { initSocket, setupGameHost, tsumo, riichi };
