@@ -4,7 +4,8 @@ const Player = require("./player");
 const State = require("./state");
 
 class Game {
-  constructor(config = new Config()) {
+  constructor(config) {
+    console.log(config);
     this.playerList = [
       new Player(config.score, config.playerNames[0]),
       new Player(config.score, config.playerNames[1]),

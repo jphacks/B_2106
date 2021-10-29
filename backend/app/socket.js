@@ -61,10 +61,11 @@ module.exports = (io, rooms) => {
       socket.emit("start-game-response", req);
 
       const playerNames = getPlayerNames(roomID(socket));
-      const config = new Config({ playerNames });
+      const config = new Config(25000, "東風戦", playerNames);
 
       const r = rooms[roomID(socket)];
-      r.game = new Game();
+      r.game = new Game(config);
+      console.log(socket.rooms);
       const game = getGame(roomID(socket));
       let arg;
       arg = game.kyokuStart(); //局開始
@@ -200,8 +201,9 @@ module.exports = (io, rooms) => {
   });
   function getPlayerNames(roomID) {
     const names = [];
+
     r = rooms[roomID];
-    r.player.forEach((p) => {
+    r.players.forEach((p) => {
       names.push(p.name);
     });
     return names;
