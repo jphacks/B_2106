@@ -1,7 +1,7 @@
 import process from "process";
 import io, { Socket } from "socket.io-client";
 import { store } from "../store";
-im;
+
 // import { dahai } from "../pages/GameHost/_components/Table/TableSlice";
 
 declare global {
