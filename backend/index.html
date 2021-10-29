@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>socket.io chat</title>
+  </head>
+  <body>
+    <script
+      src="https://cdn.socket.io/4.1.2/socket.io.min.js"
+      integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg"
+      crossorigin="anonymous"
+    ></script>
+    <ul id="messages"></ul>
+    <form><input id="input_msg" autocomplete="off" /><button>Send</button></form>
+    <script>
+      // var socket = io("http://163.221.29.97:8080", { transports: ["websocket"] });
+      var socket = io("http://localhost:8080", { transports: ["websocket"] });
+
+      // roomに作成のrequest, response
+      // socket.emit("create-room")
+      // response = {roomID: "????"}
+      socket.on("create-room-response", (res) => {
+        console.log(res);
+      });
+
+      // roomに参加する際のrequest, response
+      // socket.emit("enter-room", {"name":"murakami", "roomID":"????"})
+      // response = {name: "murakami", id: ???} idは参加した人のID
+      socket.on("enter-room-response", (res) => {
+        console.log(res);
+      });
+
+      // gameを始める際のrequest
+      // socket.emit("start-game", {})
+      socket.on("start-game-response", (res) => {
+        console.log(res);
+      });
+
+      socket.on("debug-send-response", (res) => {
+        console.log(res);
+      });
+      socket.on("tabet-kyokustart", (res) => {
+        console.log("tabet-kyokustart",res);
+      });
+      socket.on("tablet-haipai", (res) => {
+        console.log("tablet-haipai",res);
+      });
+      socket.on("tablet-tsumo", (res) => {
+        console.log("tablet-tsumo",res);
+      });
+      socket.on("tablet-reset", (res) => {
+        console.log(res);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+$radius: 5px;
+
+.Hai {
+  display: inline-block;
+
+  img {
+    border-radius: $radius;
+  }
+
+  &__img--up,
+  &__img--down {
+    width: calc(32vh / 6);
+  }
+
+  &__img--right,
+  &__img--left {
+    height: calc(32vh / 6);
+  }
+
+  &__img--sp {
+    width: 6.5vw;
+  }
+}
+
+.Hai-3d {
+  &__contents {
+    $depth: 15px;
+    $colorDepth: 4px;
+    $slope: 1px;
+
+    position: relative;
+    padding-top: $depth;
+
+    &__depth {
+      display: block;
+      position: absolute;
+      top: $colorDepth;
+      width: 100%;
+      height: $depth;
+      border-bottom: $depth solid #ddd;
+      border-right: $slope solid transparent;
+      border-left: $slope solid transparent;
+      box-sizing: border-box;
+    }
+
+    &::before {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      width: calc(100% - $slope * 2);
+      height: $colorDepth;
+      margin: auto;
+      border-bottom: $colorDepth solid #dbaa00;
+      border-left: 1px solid transparent;
+      border-right: 1px solid transparent;
+      border-radius: $radius $radius 0 0;
+      box-sizing: border-box;
+      content: "";
+    }
+
+    &::after {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: calc(100% - $depth);
+      border: 2px solid #eee;
+      border-radius: $radius;
+      content: "";
+    }
+  }
+}

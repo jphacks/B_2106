@@ -1,0 +1,11 @@
+@import "../../../variable";
+.big-button {
+  width: 50%;
+  height: 100%;
+  &__btn {
+    color: $color-primary;
+    width: 80%;
+    height: 80%;
+    margin: 10%;
+  }
+}
