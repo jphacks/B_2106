@@ -105,7 +105,7 @@ class Game {
     }
 
     if (this.field.canTsumoAgari(this.turnPlayer)) {
-      tsumoagariFlag = true;
+      tsumoAgariFlag = true;
     }
 
     this.state.transiton("打牌待ち");
@@ -121,8 +121,9 @@ class Game {
           endpoint: "client-turnstart",
           arg: {
             turnplayer: true,
-            canTsumoagari: true,
+            canTsumoagari: tsumoAgariFlag,
             canRiichi: true,
+            canDahai:dahaiFlag,
             pai: tsumo,
           },
         };
