@@ -1,6 +1,6 @@
-$client-width: 10vh;
-$client-border-width: 1vh;
-$client-fontsize: 6vh;
+$client-width: 20vh;
+$client-border-width: 2vh;
+$client-fontsize: 14vh;
 $host-width: 5vh;
 $host-border-width: 0.5vh;
 $host-fontsize: 3vh;
@@ -25,7 +25,7 @@ $host-fontsize: 3vh;
     transform: rotate(180deg);
   }
   &--down {
-    //transform: rotate(10deg);
+    transform: rotate(0deg);
   }
   &--left {
     transform: rotate(90deg);
@@ -36,7 +36,9 @@ $host-fontsize: 3vh;
 }
 .Hougaku__container {
   display: table-cell;
+  text-align: center;
   vertical-align: middle;
+  text-align: center;
   background-color: #282d33;
   border-radius: 1vh;
   color: white;
