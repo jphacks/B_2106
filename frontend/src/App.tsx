@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./reset.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Top } from "./pages/Top";

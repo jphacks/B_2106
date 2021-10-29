@@ -4,8 +4,8 @@ import { useHistory } from "react-router-dom";
 
 const buttonStyle = {
   position: "absolute" as "absolute",
-  top: "75%",
-  left: "50%",
+  top: "60%",
+  left: "75%",
   transform: "translate(-50%, -50%)",
   width: "30%",
   p: 4,
@@ -14,7 +14,7 @@ const buttonStyle = {
 const idStyle = {
   position: "absolute" as "absolute",
   top: "40%",
-  left: "25%",
+  left: "75%",
   border: "2px solid #000",
   boxShadow: 24,
   transform: "translate(-50%, -50%)",
@@ -24,13 +24,13 @@ const idStyle = {
 };
 const playersStyle = {
   position: "absolute" as "absolute",
-  top: "40%",
-  left: "75%",
+  top: "50%",
+  left: "33%",
   border: "2px solid #000",
   boxShadow: 24,
   transform: "translate(-50%, -50%)",
   width: "30%",
-  height: "40%",
+  height: 400,
   p: 4,
   fontSize: "3vh",
 };
