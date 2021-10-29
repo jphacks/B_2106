@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '../../store';
 
 interface TehaiState {
   tehai: string[],
@@ -32,5 +33,7 @@ const tehaiSlice = createSlice({
   },
 })
 
-export const { tsumo, dahai, tsumogiri,haipai } = tehaiSlice.actions
-export default tehaiSlice.reducer
+export const { tsumo, dahai, tsumogiri,haipai } = tehaiSlice.actions;
+export default tehaiSlice.reducer;
+
+export const selectTehai = (state: RootState): TehaiState => state.tehai;

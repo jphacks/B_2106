@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+import { RootState } from "../../store";
 interface ClientFlagState {
   canRon:boolean,
   canTsumoagari:boolean,
@@ -24,5 +25,6 @@ const clientFlagSlice = createSlice({
   },
 })
 
-export const { setTurn, setFuro } = clientFlagSlice.actions
-export default clientFlagSlice.reducer
+export const { setTurn, setFuro } = clientFlagSlice.actions;
+export default clientFlagSlice.reducer;
+export const selectClientFlag = (state: RootState): ClientFlagState => state.clientFlag;

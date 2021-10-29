@@ -4,8 +4,7 @@ import Hai from "../../_components/Hai/Hai";
 import Hougaku from "../../_components/Hougaku/Hougaku";
 import "./style.scss";
 import Button from "./_components/Button";
-
-function GameClient() {
+export const GameClient = () => {
   //将来的にはreduxで管理する変数
   const haiList = [
     "1m",
@@ -76,7 +75,7 @@ function GameClient() {
             <Button text="ロン" />
           </div>
         )}
-        {canTsumo && (
+        {canTsumoagari && (
           <div className="ClientView__Action">
             <Button text="ツモ" />
           </div>
@@ -84,5 +83,4 @@ function GameClient() {
       </div>
     </div>
   );
-}
-export default GameClient;
+};
