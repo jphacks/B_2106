@@ -84,13 +84,14 @@ export const EnterRoomClient: React.FC<Props> = () => {
   const { roomID, name } = watch(); // これで監視できる
 
   const history = useHistory();
-
+  const API_URL = process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL
+    : "https://localhost:8080/";
   useEffect(() => {
-    socket = io("http://localhost:8080", {
+    socket = io(API_URL, {
       transports: ["websocket"],
     });
     console.log("connect");
-
     socket.on("enter-room-response", (res) => {
       setErrorMessage(undefined);
       setSuccessMessage(undefined);

@@ -59,18 +59,17 @@ type RoomProps = {
 let socket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
 export const RoomHost: React.FC<Props> = () => {
-  const [players, setPlayers] = useState<PlayerProps[]>([
-    { name: "hoge", id: "hoge" },
-    { name: "hoge1", id: "hoge1" },
-    { name: "hoge2", id: "hoge2" },
-    { name: "hoge3", id: "hoge3" },
-  ]);
+  const [players, setPlayers] = useState<PlayerProps[]>([]);
   const [roomID, setRoomId] = useState<RoomProps>();
 
   const history = useHistory();
 
+  const API_URL = process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL
+    : "https://localhost:8080/";
+
   useEffect(() => {
-    socket = io("http://localhost:8080", {
+    socket = io(API_URL, {
       transports: ["websocket"],
     });
 
