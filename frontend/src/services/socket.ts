@@ -13,6 +13,7 @@ import {
 } from "../pages/GameHost/_components/CenterField/CenterFieldSlice";
 import { setTurn, setFuro } from "../pages/GameClient/ClientFlagSlice";
 import {
+  kyokuStart,
   tsumo as tsumoAction,
   dahai as dahaiAction,
   tsumogiri,
@@ -36,6 +37,7 @@ function initSocket() {
   console.log(API_URL);
   console.log(window.socket);
   setupGameHost();
+  setupGameClient();
   return window.socket;
 }
 
@@ -87,7 +89,9 @@ function emitTsumoagari() {
 }
 
 function setupGameClient() {
-  window.socket.on("client-kyokustart", (req) => {});
+  window.socket.on("client-kyokustart", (req) => {
+    store.dispatch(kyokuStart(req.kaze));
+  });
   window.socket.on("client-haipai", (req) => {
     store.dispatch(haipai(req.tehai));
   });
