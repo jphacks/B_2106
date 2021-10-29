@@ -38,6 +38,18 @@
       socket.on("debug-send-response", (res) => {
         console.log(res);
       });
+      socket.on("tabet-kyokustart", (res) => {
+        console.log("tabet-kyokustart",res);
+      });
+      socket.on("tablet-haipai", (res) => {
+        console.log("tablet-haipai",res);
+      });
+      socket.on("tablet-tsumo", (res) => {
+        console.log("tablet-tsumo",res);
+      });
+      socket.on("tablet-reset", (res) => {
+        console.log(res);
+      });
     </script>
   </body>
 </html>

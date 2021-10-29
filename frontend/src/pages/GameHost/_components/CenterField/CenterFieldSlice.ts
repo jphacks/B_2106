@@ -10,13 +10,17 @@ interface CenterFieldState {
     player: [PlayerState, PlayerState, PlayerState, PlayerState],
     turnPlayer: number;
     riichiPlayer: number;
+    shouldDisableTsumo: boolean;
+    shouldDisableRiichi: boolean;
 }
 
 const initialState: CenterFieldState = {
     oya: 0,
     player: [{score: 25000}, {score: 25000}, {score: 25000}, {score: 25000}],
     turnPlayer: 0,
-    riichiPlayer: 0
+    riichiPlayer: 0,
+    shouldDisableTsumo: true,
+    shouldDisableRiichi: true,
 };
 
 export const centerFieldSlice = createSlice({
@@ -26,17 +30,30 @@ export const centerFieldSlice = createSlice({
         resetCenterFieldState: (state) => {
             return Object.assign({}, state, initialState);
         },
-        /**
-         * 呼び出し例
-         * setDecoderState({ oya: 0, player: [{score: 25000}, ...], turnPlayer: 0, riichiPlayer: 0 });
-         */
         setCenterFieldState: (state, action: PayloadAction<CenterFieldState>) => {
             return Object.assign({}, state, action.payload);
         },
+        setRiichiPlayer: (state, action) => {
+            console.log("redux",action.payload);
+            state.shouldDisableRiichi = false;
+            state.riichiPlayer = action.payload.playerId;
+        },
+        setupTsumo: (state, action) => {
+            state.shouldDisableTsumo = false;
+            state.turnPlayer = action.payload.turnPlayer;
+        },
+        resetButton: (state) => {        
+            state.shouldDisableTsumo = true;
+            state.shouldDisableRiichi = true;
+        },
+        kyokuStartCenterField: (state, action) => {
+            state.oya = action.payload.oya;
+            state.player = action.payload.player;
+        }
     },
 });
 
-export const { resetCenterFieldState, setCenterFieldState } = centerFieldSlice.actions;
+export const { resetCenterFieldState, setCenterFieldState, setRiichiPlayer, setupTsumo, resetButton, kyokuStartCenterField } = centerFieldSlice.actions;
 
 export const selectCenterFieldState = (state: RootState): CenterFieldState =>
     state.centerField;

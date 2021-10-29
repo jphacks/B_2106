@@ -10,5 +10,3 @@ export const GameHost: React.FC = () => {
     </div>
   );
 };
-
-// export default GameHost;
