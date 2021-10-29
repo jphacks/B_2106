@@ -1,0 +1,34 @@
+.ClientView__Hai{
+    display:inline-block;
+
+    &--float{
+        vertical-align:5vh
+    }
+    &--tsumo{
+        margin: 3vw;
+    }
+
+}
+.ClientView{
+    &__hougaku{
+        position:absolute;
+        top:5vh;
+        left:5vh;
+    }
+    &__buttons{
+        position:absolute;
+        top:5vh;
+        right:5vh;
+        width:50vw;
+        display:flex;
+        flex-flow:row-reverse;
+    }
+    &__Action{
+        margin:1vw;
+    }
+    &__hai_container{
+        position:absolute;
+        bottom:30vh;
+        right:5vh;
+    }
+}
