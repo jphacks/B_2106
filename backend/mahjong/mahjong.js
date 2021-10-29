@@ -158,14 +158,18 @@ class Game {
   }
   sendNextAction() {
     const ret = { players: [], tablet: undefined };
-    ret.tablet = {
-      endpoint: "tablet-dahai",
-      arg: {
-        pai: this.field.prevSutehai,
-        playerId: this.turnPlayer,
-        isRiichi: this.riichi,
+    ret.tablet = [
+      {
+        endpoint: "tablet-dahai",
+        arg: {
+          pai: this.field.prevSutehai,
+          playerId: this.turnPlayer,
+          isRiichi: this.riichi,
+        },
+        endpoint: "tablet-tsumo",
+        arg: { actions: "tsumo", turnPlayer: (this.turnPlayer + 1) % 4 },
       },
-    };
+    ];
     for (let i = 0; i < 4; i++) {
       if (this.turnPlayer == i) {
         ret.players[i] = {
