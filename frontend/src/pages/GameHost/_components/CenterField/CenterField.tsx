@@ -60,10 +60,8 @@ const CenterField: React.FC<Props> = (props) => {
           `center-field__contents__score--${direction}`
         )}
         disabled={
-          /*
           centerFieldState.shouldDisableRiichi ||
-          centerFieldState.riichiPlayer !== i*/
-          false
+          centerFieldState.riichiPlayer !== i
         }
       >
         <span>{centerFieldState.player[i].score}</span>
