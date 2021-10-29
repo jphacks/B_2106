@@ -1,0 +1,111 @@
+.center-field {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 32vh;
+  height: 32vh;
+  background-color: #fff;
+  margin: auto;
+
+  &__contents {
+    position: relative;
+
+    &__tsumo-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 10vh;
+      height: 10vh;
+      background-color: #ccc;
+      margin: auto;
+    }
+
+    &__score {
+      $longSide: 20vh;
+      $shortSide: 5vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      font-size: 3vh;
+      border: 1px solid red;
+      margin: auto;
+
+      &--up {
+        width: $longSide;
+        height: $shortSide;
+        right: 0;
+        left: 0;
+        bottom: 5px;
+      }
+
+      &--left {
+        width: $shortSide;
+        height: $longSide;
+        top: 0;
+        right: 5px;
+        bottom: 0;
+
+        span {
+          transform: rotate(180deg);
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+        }
+      }
+
+      &--down {
+        width: $longSide;
+        height: $shortSide;
+        transform: rotate(180deg);
+        top: 5px;
+        right: 0;
+        left: 0;
+      }
+
+      &--right {
+        width: $shortSide;
+        height: $longSide;
+        top: 0;
+        bottom: 0;
+        left: 5px;
+
+        span {
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+        }
+      }
+    }
+
+    &__kaze {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &--up {
+        left: 0;
+        bottom: 0;
+      }
+
+      &--left {
+        right: 0;
+        bottom: 0;
+      }
+
+      &--down {
+        top: 0;
+        right: 0;
+      }
+
+      &--right {
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+}
