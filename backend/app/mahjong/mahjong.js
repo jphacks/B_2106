@@ -6,10 +6,10 @@ const State = require("./state");
 class Game {
   constructor(config = new Config()) {
     this.playerList = [
-      new Player(config.score),
-      new Player(config.score),
-      new Player(config.score),
-      new Player(config.score),
+      new Player(config.score, config.playerNames[0]),
+      new Player(config.score, config.playerNames[1]),
+      new Player(config.score, config.playerNames[2]),
+      new Player(config.score, config.playerNames[3]),
     ];
     this.kyokuCount = 1;
     this.honbaCount = 1;
@@ -156,39 +156,6 @@ class Game {
     }
   }
   sendNextAction() {
-    const players = [
-      this.makeAction(),
-      this.makeAction(),
-      this.makeAction(),
-      this.makeAction(),
-    ];
-    //ロンができるか判定して"ron"を加える
-    let ronFlag = false;
-    for (let i = 0; i < 4; i++) {
-      if (this.turnPlayer == i) continue;
-      if (this.field.canRon(i)) {
-        players[i].actions.push("ron");
-        ronFlag = true;
-      }
-    }
-
-    const tablet = this.makeAction();
-    if (this.field.isFinished) {
-      //流局処理に遷移
-      //ロンがなければ，kyokufinish()
-      if (ronFlag) {
-        tablet.actions.push("ryukyoku");
-        this.state.transiton("行動待ち");
-      } else this.state.transiton("流局");
-    } else {
-      tablet.actions.push(["tsumo"]);
-      this.state.transiton("行動待ち");
-    }
-    tablet["sutehai"] = {
-      turnPlayer: this.turnPlayer,
-      pai: this.field.prevSutehai,
-    };
-
     const ret = { players: [], tablet: undefined };
     ret.tablet = {
       endpoint: "tablet-dahai",
@@ -218,8 +185,12 @@ class Game {
     if (response.action == "ron") {
       this.state.transiton("点数計算");
     } else if (response.action == "tsumo") {
-      this.turnPlayer = (this.turnPlayer + 1) % 4; //四麻想定
-      this.state.transiton("開始");
+      if (this.field.isFinished) {
+        this.state.transiton("流局");
+      } else {
+        this.turnPlayer = (this.turnPlayer + 1) % 4; //四麻想定
+        this.state.transiton("開始");
+      }
     }
   }
   ryukyokuFinish() {

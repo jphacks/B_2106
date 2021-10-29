@@ -1,5 +1,6 @@
 const Room = require("./room");
 const Game = require("./mahjong/mahjong");
+const Config = require("./mahjong/config");
 
 module.exports = (io, rooms) => {
   io.on("connection", function (socket) {
@@ -59,6 +60,9 @@ module.exports = (io, rooms) => {
       console.log(socket.rooms);
       socket.emit("start-game-response", req);
 
+      const playerNames = getPlayerNames(roomID(socket));
+      const config = new Config({ playerNames });
+
       const r = rooms[roomID(socket)];
       r.game = new Game();
       const game = getGame(roomID(socket));
@@ -89,8 +93,24 @@ module.exports = (io, rooms) => {
       const game = getGame(roomID(socket));
       let arg;
       game.nextActionFuro(req); //次のツモを引くことをセット
-      arg = game.sendTurnStart(req); //ツモを引いて牌を送信
-      sendMessage(roomID(socket), arg);
+      if (game.getState == "流局") {
+        //ツモして牌がなければ流局へ
+        arg = game.ryukyokuFinish(req);
+        sendMessage(roomID(socket), arg);
+        if (game.getState() == "ゲーム終了") {
+          io.in(req.roomID).emit("gameover");
+        } else {
+          arg = game.kyokuStart(); //局開始
+          sendMessage(roomID(socket), arg);
+          arg = game.haipai(); //局開始の配牌
+          sendMessage(roomID(socket), arg);
+          arg = game.sendTurnStart(); //最初のツモを受け取って送信
+          sendMessage(roomID(socket), arg);
+        }
+      } else {
+        arg = game.sendTurnStart(req); //ツモを引いて牌を送信
+        sendMessage(roomID(socket), arg);
+      }
     });
     socket.on("tsumoAgari", (req) => {
       const game = getGame(roomID(socket));
@@ -178,8 +198,16 @@ module.exports = (io, rooms) => {
       sendMessage(req["roomID"], clients);
     });
   });
+  function getPlayerNames(roomID) {
+    const names = [];
+    r = rooms[roomID];
+    r.player.forEach((p) => {
+      names.push(p.name);
+    });
+    return names;
+  }
+
   function getGame(roomID) {
-    console.log(roomID, rooms);
     if (!rooms[roomID].game) throw "gameがundefined!!";
     return rooms[roomID].game;
   }
