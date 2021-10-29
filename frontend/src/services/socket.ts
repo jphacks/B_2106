@@ -1,3 +1,4 @@
+import process from "process";
 import io, { Socket } from "socket.io-client";
 import { store } from "../store";
 import {
@@ -18,10 +19,14 @@ declare global {
 }
 
 function initSocket() {
-  window.socket = io("http://localhost:8080", {
+  const API_URL = process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL
+    : "https://localhost:8080";
+  window.socket = io(API_URL, {
     transports: ["websocket"],
   });
-
+  console.log("initSocket");
+  console.log(window.socket);
   setupGameHost();
 }
 
