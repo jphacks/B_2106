@@ -55,7 +55,7 @@ class Game {
     for (let i = 0; i < 4; i++) {
       ret.players[i] = {
         endpoint: "client-kyokustart",
-        arg: { oya: i == this.oyaPlayer },
+        arg: { kaze: (i - this.oyaPlayer + 4) % 4 },
       };
     }
     return ret;
@@ -200,12 +200,12 @@ class Game {
     for (let i = 0; i < 4; i++) {
       if (this.turnPlayer == i) {
         ret.players[i] = {
-          endpoint: "client-nextAction",
+          endpoint: "client-nextaction",
           arg: { canRon: false },
         };
       } else {
         ret.players[i] = {
-          endpoint: "client-nextAction",
+          endpoint: "client-nextaction",
           arg: { canRon: this.field.canRon(i) },
         };
       }
