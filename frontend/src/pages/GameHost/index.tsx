@@ -2,7 +2,7 @@ import React from "react";
 import "./index.scss";
 import Table from "./_components/Table/Table";
 
-const GameHost: React.FC = () => {
+export const GameHost: React.FC = () => {
   return (
     <div className="game-host">
       <Table />
@@ -11,4 +11,4 @@ const GameHost: React.FC = () => {
   );
 };
 
-export default GameHost;
+// export default GameHost;
