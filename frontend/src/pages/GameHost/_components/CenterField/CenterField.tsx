@@ -8,6 +8,7 @@ import {
 } from "./CenterFieldSlice";
 import { DirectionType } from "../../../../_type";
 import classNames from "classnames";
+import Hougaku from "../../../../_components/Hougaku/Hougaku";
 
 interface Props {
   styles?: any;
@@ -35,52 +36,70 @@ const CenterField: React.FC<Props> = (props) => {
   }, []);
 
   interface Fields {
-    point: ReactElement[];
+    score: ReactElement[];
     kaze: ReactElement[];
   }
 
   const fields: Fields = {
-    point: [],
+    score: [],
     kaze: [],
   };
 
   for (let i = 0; i < 4; i++) {
     let direction: DirectionType = "up";
+    let hougakuDirection: DirectionType = "down";
 
-    if (i == 1) direction = "left";
-    else if (i == 2) direction = "down";
-    else if (i == 3) direction = "right";
+    if (i == 1) {
+      direction = "left";
+      hougakuDirection = "right";
+    } else if (i == 2) {
+      direction = "down";
+      hougakuDirection = "up";
+    } else if (i == 3) {
+      direction = "right";
+      hougakuDirection = "left";
+    }
 
-    fields.point.push(
-      <div
+    fields.score.push(
+      <button
         key={i}
+        onClick={() => {
+          console.log(`Riichi!!: Player ${i}`);
+        }}
         className={classNames(
-          "center-field__point",
-          `center-field__point--${direction}`
+          "center-field__contents__score",
+          `center-field__contents__score--${direction}`
         )}
       >
-        {centerFieldState.player[i].score}
-      </div>
+        <span>{centerFieldState.player[i].score}</span>
+      </button>
     );
 
     fields.kaze.push(
       <div
         key={i}
         className={classNames(
-          "center-field__kaze",
-          `center-field__kaze--${direction}`
+          "center-field__contents__kaze",
+          `center-field__contents__kaze--${direction}`
         )}
       >
-        {getKazeName(i, centerFieldState.oya)}
+        <Hougaku
+          text={getKazeName(i, centerFieldState.oya)}
+          isLighting={i == centerFieldState.turnPlayer}
+          direction={hougakuDirection}
+          device="host"
+        />
       </div>
     );
   }
 
   const centerField = (
     <div className="center-field" style={props.styles}>
-      <button className="center-field__tsumo-button">ツモ</button>
-      {fields.point}
-      {fields.kaze}
+      <div className="center-field__contens">
+        <button className="center-field__contents__tsumo-button">ツモ</button>
+        {fields.score}
+        {fields.kaze}
+      </div>
     </div>
   );
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./Table.scss";
 import { DirectionType } from "../../../../_type";
@@ -10,28 +10,31 @@ const Table: React.FC = () => {
   const tableState = useSelector(selectTableState);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("Table: useEffect");
+  // useEffect(() => {
+  //   console.log("Table: useEffect");
 
-    dispatch(
-      dahai({
-        sutehai: getTestData(),
-        canRiichi: true,
-      })
-    );
-  }, []);
+  //   dispatch(
+  //     dahai({
+  //       playerId: 0,
+  //       pai: "1m",
+  //       isRiichi: false,
+  //     })
+  //   );
+  // }, []);
 
-  const kawaList = [];
+  const kawaList: ReactElement[][] = [[], [], [], []];
 
-  for (let i = 0; i < 4; i++) {
-    kawaList.push(
-      <DropField
-        key={i}
-        sutehaiList={tableState.sutehai[i]}
-        direction={getDirection(i)}
-        haiDirection={getDirection(i, tableState.canRiichi)}
-      />
-    );
+  if (tableState.sutehaiList.length > 1) {
+    for (let i = 0; i < 4; i++) {
+      kawaList[i].push(
+        <DropField
+          key={i}
+          playerId={i}
+          sutehaiList={tableState.sutehaiList[i]}
+          direction={getKawaDirection(i)}
+        />
+      );
+    }
   }
 
   const table = (
@@ -47,32 +50,19 @@ const Table: React.FC = () => {
 export default Table;
 
 function getTestData() {
-  let sutehai: string[][] = [[], [], [], []];
+  let sutehai: string[] = [];
 
-  for (let i = 0; i < 4; i++) {
-    for (let j = 1; j < 8; j++) {
-      sutehai[i].push(`${j}m`);
-    }
-    for (let j = 1; j < 8; j++) {
-      sutehai[i].push(`${j}p`);
-    }
+  for (let j = 1; j < 8; j++) {
+    sutehai.push(`${j}m`);
+  }
+  for (let j = 1; j < 8; j++) {
+    sutehai.push(`${j}p`);
   }
 
   return sutehai;
 }
 
-function getDirection(
-  directionNum: number,
-  canRiichi?: boolean
-): DirectionType {
-  if (canRiichi) {
-    directionNum += 1;
-
-    if (directionNum > 3) {
-      directionNum -= 4;
-    }
-  }
-
+function getKawaDirection(directionNum: number): DirectionType {
   switch (directionNum) {
     case 0:
       return "up";

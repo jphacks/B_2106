@@ -1,26 +1,38 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../../../store';
 
+export type Sutehai = {
+        pai: string,
+        isRiichi: boolean,
+}
+
 interface TableState {
-    sutehai: string[][];
-    canRiichi: boolean;
+    sutehaiList: Sutehai[][];
 }
 
 const initialState: TableState = {
-    sutehai: [[]],
-    canRiichi: true
+    sutehaiList: [[], [], [], []],
 };
+
+interface DahaiState {
+    playerId: number;
+    pai: string;
+    isRiichi: boolean;
+}
 
 export const tableSlice = createSlice({
     name: 'table',
     initialState,
     reducers: {
-        /**
-         * 呼び出し例
-         * dahai({ sutehai: [["1m", ...], ...], canRiichi: true });
-         */
-        dahai: (state, action: PayloadAction<TableState>) => {
-            return Object.assign({}, state, action.payload);
+        dahai: (state, action: PayloadAction<DahaiState>) => {
+            const payload = action.payload;
+
+            state.sutehaiList[payload.playerId].push({
+                pai: payload.pai,
+                isRiichi: payload.isRiichi,
+            });
+
+            return state
         },
     },
 });
