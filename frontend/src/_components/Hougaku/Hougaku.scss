@@ -1,0 +1,53 @@
+$client-width: 10vh;
+$client-border-width: 1vh;
+$client-fontsize: 6vh;
+$host-width: 5vh;
+$host-border-width: 0.5vh;
+$host-fontsize: 3vh;
+.Hougaku {
+  display: inline-block;
+  background-color: #708090;
+  border-radius: 1vh;
+  &--host {
+    width: $host-width;
+    height: $host-width;
+    padding: $host-border-width;
+  }
+  &--client {
+    width: $client-width;
+    height: $client-width;
+    padding: $client-border-width;
+  }
+  &--lighting {
+    background: #ffd700;
+  }
+  &--up {
+    transform: rotate(180deg);
+  }
+  &--down {
+    //transform: rotate(10deg);
+  }
+  &--left {
+    transform: rotate(90deg);
+  }
+  &--right {
+    transform: rotate(270deg);
+  }
+}
+.Hougaku__container {
+  display: table-cell;
+  vertical-align: middle;
+  background-color: #282d33;
+  border-radius: 1vh;
+  color: white;
+  &--host {
+    width: calc(#{$host-width} - 2 *#{$host-border-width});
+    height: calc(#{$host-width} - 2 *#{$host-border-width});
+    font-size: $host-fontsize;
+  }
+  &--client {
+    width: calc(#{$client-width} - 2 *#{$client-border-width});
+    height: calc(#{$client-width} - 2 *#{$client-border-width});
+    font-size: $client-fontsize;
+  }
+}
