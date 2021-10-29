@@ -36,7 +36,7 @@ function initSocket() {
   console.log(API_URL);
   console.log(window.socket);
   setupGameHost();
-  setupGameClient();
+  return window.socket;
 }
 
 function setupGameHost() {

@@ -28,7 +28,7 @@ $padding: 10px;
   }
 
   &--down {
-    justify-content: end;
+    justify-content: flex-end;
     top: 0;
     left: 0;
     width: $longSide;
@@ -50,7 +50,7 @@ $padding: 10px;
   }
 
   &--right {
-    justify-content: end;
+    justify-content: flex-end;
     bottom: 0;
     left: 0;
     width: $shortSide;
@@ -73,7 +73,7 @@ $padding: 10px;
   }
 
   &--left {
-    align-items: end;
+    align-items: flex-end;
     top: 0;
     right: 0;
     width: $shortSide;

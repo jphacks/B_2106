@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Card } from "@mui/material";
 import { useHistory } from "react-router-dom";
+import { SocketContext } from "../../App";
 
 const buttonStyle = {
   position: "absolute" as "absolute",
@@ -60,10 +61,12 @@ export const RoomHost: React.FC<Props> = () => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    window.socket.emit("create-room");
+  const socket = React.useContext(SocketContext);
 
-    window.socket.on("create-room-response", (res) => {
+  useEffect(() => {
+    socket.emit("create-room");
+
+    socket.on("create-room-response", (res) => {
       console.log("create-room");
       console.log(res);
       setRoomId(res.roomID);
@@ -71,18 +74,18 @@ export const RoomHost: React.FC<Props> = () => {
   }, []);
 
   useEffect(() => {
-    window.socket.on("enter-room-response", (res: PlayerProps) => {
+    socket.on("enter-room-response", (res: PlayerProps) => {
       console.log("enter-room-response");
       console.log([...players, res]);
       setPlayers([...players, res]);
     });
     // eslint-disable-next-line no-unused-vars
-    window.socket.on("start-game-response", (res) => {
+    socket.on("start-game-response", (res) => {
       console.log("start-game-response");
       history.push("/game_host");
     });
 
-    window.socket.on("exit-room-response", (res) => {
+    socket.on("exit-room-response", (res) => {
       console.log("exit room response");
       setPlayers(
         players.filter((player) => {
@@ -94,7 +97,7 @@ export const RoomHost: React.FC<Props> = () => {
 
   const startGame = () => {
     console.log("startGame");
-    window.socket.emit("start-game", { roomID: roomID });
+    socket.emit("start-game", { roomID: roomID });
   };
   console.log(players);
   return (
