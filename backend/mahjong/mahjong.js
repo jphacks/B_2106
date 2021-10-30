@@ -68,21 +68,21 @@ class Game {
 
     this.field.haipai();
 
-    this.field.playerField[0].tehai = [
-      "1m",
-      "1m",
-      "1m",
-      "2m",
-      "3m",
-      "4m",
-      "5m",
-      "6m",
-      "7m",
-      "8m",
-      "9m",
-      "9m",
-      "9m",
-    ];
+    // this.field.playerField[0].tehai = [
+    //   "1m",
+    //   "1m",
+    //   "1m",
+    //   "2m",
+    //   "3m",
+    //   "4m",
+    //   "5m",
+    //   "6m",
+    //   "7m",
+    //   "8m",
+    //   "9m",
+    //   "9m",
+    //   "9m",
+    // ];
 
     const ret = { players: [], tablet: undefined };
     ret.tablet = {
@@ -106,7 +106,7 @@ class Game {
     //ターンプレイヤーがツモ
     let tsumo = this.field.tsumo(this.turnPlayer);
     //デバッグ
-    tsumo = this.field.playerField[this.turnPlayer].tsumo = "1m";
+    // tsumo = this.field.playerField[this.turnPlayer].tsumo = "1m";
     //各プレイヤーが取れる行動リスト
     let riichiFlag = false;
     let tsumoAgariFlag = false;
