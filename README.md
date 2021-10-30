@@ -1,5 +1,7 @@
 # どこでも麻雀卓
-[![デモ動画](http://img.youtube.com/vi/ucyurqUxzfs/0.jpg)](https://www.youtube.com/watch?v=ucyurqUxzfs)
+<div align="center"><a href="https://www.youtube.com/watch?v=ucyurqUxzfs">
+<img src="http://img.youtube.com/vi/ucyurqUxzfs/0.jpg" alt="デモ動画" title="タイトル"></a>
+</div>
 
 ## 製品概要
 
