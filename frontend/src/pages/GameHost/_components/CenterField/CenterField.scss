@@ -1,11 +1,13 @@
+@use "../../common.scss";
+
 .center-field {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  width: 32vh;
-  height: 32vh;
+  width: common.$center-field-height;
+  height: common.$center-field-height;
   background-color: #fff;
   margin: auto;
 
@@ -28,8 +30,8 @@
     }
 
     &__score {
-      $longSide: 20vh;
-      $shortSide: 5vh;
+      $long-side: 20vh;
+      $short-side: 5vh;
 
       display: flex;
       align-items: center;
@@ -40,16 +42,16 @@
       margin: auto;
 
       &--up {
-        width: $longSide;
-        height: $shortSide;
+        width: $long-side;
+        height: $short-side;
         right: 0;
         left: 0;
         bottom: 5px;
       }
 
       &--left {
-        width: $shortSide;
-        height: $longSide;
+        width: $short-side;
+        height: $long-side;
         top: 0;
         right: 5px;
         bottom: 0;
@@ -62,8 +64,8 @@
       }
 
       &--down {
-        width: $longSide;
-        height: $shortSide;
+        width: $long-side;
+        height: $short-side;
         transform: rotate(180deg);
         top: 5px;
         right: 0;
@@ -71,8 +73,8 @@
       }
 
       &--right {
-        width: $shortSide;
-        height: $longSide;
+        width: $short-side;
+        height: $long-side;
         top: 0;
         bottom: 0;
         left: 5px;
