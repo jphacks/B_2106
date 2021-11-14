@@ -10,7 +10,9 @@
       crossorigin="anonymous"
     ></script>
     <ul id="messages"></ul>
-    <form><input id="input_msg" autocomplete="off" /><button>Send</button></form>
+    <form>
+      <input id="input_msg" autocomplete="off" /><button>Send</button>
+    </form>
     <script>
       // var socket = io("http://163.221.29.97:8080", { transports: ["websocket"] });
       var socket = io("http://localhost:8080", { transports: ["websocket"] });
@@ -39,13 +41,13 @@
         console.log(res);
       });
       socket.on("tabet-kyokustart", (res) => {
-        console.log("tabet-kyokustart",res);
+        console.log("tabet-kyokustart", res);
       });
       socket.on("tablet-haipai", (res) => {
-        console.log("tablet-haipai",res);
+        console.log("tablet-haipai", res);
       });
       socket.on("tablet-tsumo", (res) => {
-        console.log("tablet-tsumo",res);
+        console.log("tablet-tsumo", res);
       });
       socket.on("tablet-reset", (res) => {
         console.log(res);
