@@ -19,6 +19,7 @@ module.exports = (io, rooms) => {
       let r = new Room(socket.id);
       rooms[roomID] = r;
 
+      leaveAllRoom(socket);
       socket.join(roomID);
       socket.emit("create-room-response", { roomID: roomID });
     });
@@ -44,6 +45,7 @@ module.exports = (io, rooms) => {
         return;
       }
 
+      leaveAllRoom(socket);
       socket.join(roomID);
 
       io.in(roomID).emit("enter-room-response", {
@@ -67,6 +69,8 @@ module.exports = (io, rooms) => {
         socket.emit("reconnect-room-response", { error: error.message });
         return;
       }
+
+      leaveAllRoom(socket);
       socket.join(req.roomID);
 
       // ここにreconnectしたときのデータを入れる
@@ -240,6 +244,7 @@ module.exports = (io, rooms) => {
     const id = Array.from(socket.rooms)[1];
     return id;
   }
+
   function sendMessage(roomID, clients) {
     console.log(JSON.stringify({ roomID, clients }, null, "\t"));
     const room = rooms[roomID];
@@ -261,6 +266,15 @@ module.exports = (io, rooms) => {
     for (let i = 0; i < Math.min(room["players"].length, players.length); i++) {
       const player = players[i];
       io.to(room["players"][i]["id"]).emit(player["endpoint"], player["arg"]);
+    }
+  }
+
+  function leaveAllRoom(socket) {
+    for (const room of socket.rooms) {
+      if (socket.id == room) {
+        continue;
+      }
+      socket.leave(room);
     }
   }
 };
