@@ -11,6 +11,7 @@ import {
   resetButton,
   kyokuStartCenterField,
 } from "../pages/GameHost/_components/CenterField/CenterFieldSlice";
+import * as ScoreBoardSlice from "../pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
 import { setTurn, setFuro } from "../pages/GameClient/ClientFlagSlice";
 import {
   kyokuStart,
@@ -63,6 +64,11 @@ function setupGameHost() {
   window.socket.on("tablet-tsumo", (data) => {
     store.dispatch(setupTsumo(data));
   });
+
+  window.socket.on("tablet-agari", (data) => {
+    store.dispatch(ScoreBoardSlice.setResult(data));
+    store.dispatch(ScoreBoardSlice.setOpen(true));
+  });
 }
 
 function tsumo() {
@@ -73,6 +79,11 @@ function tsumo() {
 function riichi(playerId: number) {
   console.log(`riichi player: ${playerId}`);
   window.socket.emit("tablet-riichi-pushed", { playerId: playerId });
+}
+
+function emitTabletSendOk() {
+  window.socket.emit("tablet-send-ok", { action: "tablet-send-ok" });
+  store.dispatch(ScoreBoardSlice.setOpen(false));
 }
 
 function emitDahai(pai: string) {
@@ -119,5 +130,5 @@ function setupGameClient() {
 "client-end"で終了
  */
 
-export { initSocket, setupGameHost, tsumo, riichi };
+export { initSocket, setupGameHost, tsumo, riichi, emitTabletSendOk };
 export { emitTsumogiri, emitRon, emitDahai, emitTsumoagari };

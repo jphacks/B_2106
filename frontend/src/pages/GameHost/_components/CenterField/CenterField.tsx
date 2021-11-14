@@ -113,7 +113,7 @@ const CenterField: React.FC<Props> = (props) => {
 
 export default CenterField;
 
-function getKazeName(kazenum: number, oya: number): KazeType {
+export function getKazeName(kazenum: number, oya: number): KazeType {
   if (kazenum - oya < 0) {
     kazenum += 4;
   }

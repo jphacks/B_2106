@@ -4,6 +4,7 @@ import "./Table.scss";
 import { DirectionType } from "../../../../_type";
 import CenterField from "../CenterField/CenterField";
 import DropField from "../DropField/DropField";
+import ScoreBoard from "../ScoreBoard/ScoreBoard";
 import { selectTableState } from "./TableSlice";
 
 const Table: React.FC = () => {
@@ -31,6 +32,7 @@ const Table: React.FC = () => {
       ドラ: {tableState.dora}
       <CenterField />
       {kawaList}
+      <ScoreBoard />
     </div>
   );
 
