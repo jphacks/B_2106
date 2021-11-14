@@ -2,6 +2,7 @@ const Config = require("./config");
 const Field = require("./field");
 const Player = require("./player");
 const State = require("./state");
+const calclate = require("./calclator");
 
 class Game {
   constructor(config) {
@@ -68,21 +69,21 @@ class Game {
 
     this.field.haipai();
 
-    // this.field.playerField[0].tehai = [
-    //   "1m",
-    //   "1m",
-    //   "1m",
-    //   "2m",
-    //   "3m",
-    //   "4m",
-    //   "5m",
-    //   "6m",
-    //   "7m",
-    //   "8m",
-    //   "9m",
-    //   "9m",
-    //   "9m",
-    // ];
+    this.field.playerField[0].tehai = [
+      "1m",
+      "1m",
+      "1m",
+      "2m",
+      "3m",
+      "4m",
+      "5m",
+      "6m",
+      "7m",
+      "8m",
+      "9m",
+      "9m",
+      "9m",
+    ];
 
     const ret = { players: [], tablet: undefined };
     ret.tablet = {
@@ -170,7 +171,7 @@ class Game {
     } else if (response.action == "tsumogiri") {
       this.field.tsumogiri(this.turnPlayer, response.pai);
       this.state.transiton("行動送信");
-    } else if (response.action == "tsumoagari") {
+    } else if (response.action == "tsumoAgari") {
       this.state.transiton("点数計算");
     } else {
       throw "不正なaction!:" + response.action;
@@ -227,10 +228,41 @@ class Game {
   }
   ryukyokuFinish() {
     //流局処理
-    return this.kyokuFinish();
+    const ret = hoge;
+    this.kyokuFinish();
+    return ret;
   }
-  agariFinish() {
-    return this.kyokuFinish();
+  agariFinish(req) {
+    if (req.action == "tsumoAgari") {
+      const player = [null, null, null, null];
+      player[this.turnPlayer] = "ツモ";
+      const option = this.field.playerField[this.turnPlayer].flag.riichi
+        ? "r"
+        : "";
+      const score = this.playerList.map((p) => p.score);
+      const tabletArg = calclate(
+        this.field.playerField[this.turnPlayer].tehai,
+        this.field.playerField[this.turnPlayer].tsumo,
+        player,
+        this.oyaPlayer,
+        option,
+        score
+      );
+      score.map((s, index) => (this.playerList[index].score = s));
+      this.kyokuFinish();
+      const ret = { players: [], tablet: undefined };
+      ret.tablet = {
+        endpoint: "tablet-agari",
+        arg: tabletArg,
+      };
+      for (let i = 0; i < 4; i++) {
+        ret.players[i] = {
+          endpoint: "client-agari",
+          arg: {},
+        };
+      }
+      return ret;
+    }
   }
   kyokuFinish() {
     this.oyaPlayer = (this.oyaPlayer + 1) % 4; //四麻想定

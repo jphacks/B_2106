@@ -67,8 +67,10 @@ module.exports = (io, rooms) => {
       console.log("start-game");
       console.log(req);
       console.log(socket.rooms);
-      io.to(roomID(socket)).emit("start-game-response", req);
-
+      io.to(roomID(socket)).emit("start-game-response", {
+        players: rooms[roomID(socket)].players.map((p) => p.name),
+      });
+      console.log("ゲームを開始");
       const playerNames = getPlayerNames(roomID(socket));
       const config = new Config(25000, "東風戦", playerNames);
 
@@ -124,12 +126,14 @@ module.exports = (io, rooms) => {
       }
     });
     socket.on("tsumoAgari", (req) => {
+      const room = roomID(socket);
+      console.log("roomID:" + room);
       const game = getGame(roomID(socket));
-      let arg;
-      arg = game.agariFinish(req);
-      sendMessage(roomID(socket), arg);
+      const arg = game.agariFinish(req);
+      sendMessage(room, arg);
+
       //点数表示するならここでとめる？
-      if (game.getState() == "ゲーム終了") {
+      /* if (game.getState() == "ゲーム終了") {
         io.in(roomID(socket)).emit("gameover");
       } else {
         arg = game.kyokuStart(); //局開始
@@ -137,9 +141,8 @@ module.exports = (io, rooms) => {
         arg = game.haipai(); //局開始の配牌
         sendMessage(roomID(socket), arg);
         arg = game.sendTurnStart(); //最初のツモを受け取って送信
-        sendMessage(roomID(socket), arg);
-      }
-      sendMessage(roomID, arg);
+        sendMessage(roomID(socket), arg); 
+      }*/
     });
     socket.on("ryukyoku", (req) => {
       const game = getGame(roomID(socket));
@@ -226,7 +229,6 @@ module.exports = (io, rooms) => {
 
   function roomID(socket) {
     const id = Array.from(socket.rooms)[1];
-    console.log(id);
     return id;
   }
   function sendMessage(roomID, clients) {
