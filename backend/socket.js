@@ -26,6 +26,7 @@ module.exports = (io, rooms) => {
     // roomに入る際のAPI
     socket.on("enter-room", (req) => {
       console.log("enter-room");
+      console.log(req);
       const roomID = req["roomID"].toString();
       if (!io.sockets.adapter.rooms.get(roomID)) {
         console.log("error: enter-room", io.sockets.adapter.rooms.get(roomID));
@@ -49,6 +50,29 @@ module.exports = (io, rooms) => {
         name: req["name"] || "no name",
         id: socket.id,
       });
+    });
+
+    socket.on("reconnect-room", (req) => {
+      console.log("reconnect-room");
+      console.log(req);
+
+      try {
+        const r = rooms[req.roomID];
+        if (!r) {
+          throw new Error("no such roomID");
+        }
+        r.setPlayerIDWithName(req.name, socket.id);
+      } catch (error) {
+        console.log(error);
+        socket.emit("reconnect-room-response", { error: error.message });
+        return;
+      }
+      socket.join(req.roomID);
+
+      // ここにreconnectしたときのデータを入れる
+      res = { id: socket.id };
+
+      socket.emit("reconnect-room-response", res);
     });
 
     // 退出するとき用の_API
