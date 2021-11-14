@@ -49,6 +49,7 @@ export const centerFieldSlice = createSlice({
         kyokuStartCenterField: (state, action) => {
             state.oya = action.payload.oya;
             state.player = action.payload.player;
+            state.turnPlayer= action.payload.oya;
         }
     },
 });

@@ -88,7 +88,7 @@ const CenterField: React.FC<Props> = (props) => {
 
   const centerField = (
     <div className="center-field" style={props.styles}>
-      <div className="center-field__contens">
+      <div className="center-field__contents">
         <button
           onClick={() => {
             try {

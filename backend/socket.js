@@ -134,7 +134,7 @@ module.exports = (io, rooms) => {
       const game = getGame(roomID(socket));
       let arg;
       game.nextActionFuro(req); //次のツモを引くことをセット
-      if (game.getState == "流局") {
+      if (game.getState() == "流局") {
         //ツモして牌がなければ流局へ
         arg = game.ryukyokuFinish(req);
         sendMessage(roomID(socket), arg);
@@ -176,9 +176,9 @@ module.exports = (io, rooms) => {
       const arg = game.agariFinish(req);
       sendMessage(room, arg);
     });
+
     socket.on("tablet-send-ok", (req) => {
       const game = getGame(roomID(socket));
-      const arg = game.agariFinish(req);
       if (game.getState() == "局開始前") {
         arg = game.kyokuStart(); //局開始
         sendMessage(roomID(socket), arg);
@@ -188,6 +188,9 @@ module.exports = (io, rooms) => {
         sendMessage(roomID(socket), arg);
       } else if (game.getState() == "ゲーム終了") {
         io.in(roomID(socket)).emit("game-over");
+        //ここでタブレットに順位を整形して送る
+      } else {
+        throw new Error("不正な状態:" + game.getState());
       }
     });
     // debug用
