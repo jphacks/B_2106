@@ -167,6 +167,8 @@ class Game {
     const riichi = this.riichi;
     if (response.action == "dahai") {
       this.field.dahai(this.turnPlayer, response.pai);
+      //一発消し
+      this.field.playerField[this.turnPlayer].flag.ippatsu = false;
       this.state.transiton("行動送信");
     } else if (response.action == "tsumogiri") {
       this.field.tsumogiri(this.turnPlayer, response.pai);
@@ -179,6 +181,7 @@ class Game {
     if (riichi) {
       if (this.field.canRiichi(this.turnPlayer)) {
         this.field.playerField[this.turnPlayer].flag.riichi = true;
+        this.field.playerField[this.turnPlayer].flag.ippatsu = true;
       }
     }
   }
@@ -243,6 +246,34 @@ class Game {
       const tabletArg = calclate(
         this.field.playerField[this.turnPlayer].tehai,
         this.field.playerField[this.turnPlayer].tsumo,
+        player,
+        this.oyaPlayer,
+        option,
+        score
+      );
+      score.map((s, index) => (this.playerList[index].score = s));
+      this.kyokuFinish();
+      const ret = { players: [], tablet: undefined };
+      ret.tablet = {
+        endpoint: "tablet-agari",
+        arg: tabletArg,
+      };
+      for (let i = 0; i < 4; i++) {
+        ret.players[i] = {
+          endpoint: "client-agari",
+          arg: {},
+        };
+      }
+      return ret;
+    } else if (req.action == "ron") {
+      const player = [null, null, null, null];
+      player[req.player] = "ロン";
+      player[this.turnPlayer] = "放銃";
+      const option = this.field.playerField[req.player].flag.riichi ? "r" : "";
+      const score = this.playerList.map((p) => p.score);
+      const tabletArg = calclate(
+        this.field.playerField[req.player].tehai,
+        this.field.prevSutehai,
         player,
         this.oyaPlayer,
         option,

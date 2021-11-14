@@ -134,16 +134,6 @@ module.exports = (io, rooms) => {
         //ツモして牌がなければ流局へ
         arg = game.ryukyokuFinish(req);
         sendMessage(roomID(socket), arg);
-        if (game.getState() == "ゲーム終了") {
-          io.in(req.roomID).emit("gameover");
-        } else {
-          arg = game.kyokuStart(); //局開始
-          sendMessage(roomID(socket), arg);
-          arg = game.haipai(); //局開始の配牌
-          sendMessage(roomID(socket), arg);
-          arg = game.sendTurnStart(); //最初のツモを受け取って送信
-          sendMessage(roomID(socket), arg);
-        }
       } else {
         arg = game.sendTurnStart(req); //ツモを引いて牌を送信
         sendMessage(roomID(socket), arg);
@@ -173,32 +163,27 @@ module.exports = (io, rooms) => {
       let arg;
       arg = game.ryukyokuFinish(req);
       sendMessage(roomID(socket), arg);
-      if (game.getState() == "ゲーム終了") {
-        io.in(req.roomID).emit("gameover");
-      } else {
-        arg = game.kyokuStart(); //局開始
-        sendMessage(roomID(socket), arg);
-        arg = game.haipai(); //局開始の配牌
-        sendMessage(roomID(socket), arg);
-        arg = game.sendTurnStart(); //最初のツモを受け取って送信
-        sendMessage(roomID(socket), arg);
-      }
     });
 
     socket.on("ron", (req) => {
+      const room = roomID(socket);
+      console.log("roomID:" + room);
       const game = getGame(roomID(socket));
-      let arg;
-      arg = game.agariFinish(req);
-      sendMessage(roomID(socket), arg);
-      if (game.getState() == "ゲーム終了") {
-        io.in(req.roomID).emit("gameover");
-      } else {
+      const arg = game.agariFinish(req);
+      sendMessage(room, arg);
+    });
+    socket.on("tablet-send-ok", (req) => {
+      const game = getGame(roomID(socket));
+      const arg = game.agariFinish(req);
+      if (game.getState() == "局開始前") {
         arg = game.kyokuStart(); //局開始
         sendMessage(roomID(socket), arg);
         arg = game.haipai(); //局開始の配牌
         sendMessage(roomID(socket), arg);
         arg = game.sendTurnStart(); //最初のツモを受け取って送信
         sendMessage(roomID(socket), arg);
+      } else if (game.getState() == "ゲーム終了") {
+        io.in(roomID(socket)).emit("game-over");
       }
     });
     // debug用
