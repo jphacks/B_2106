@@ -162,20 +162,11 @@ module.exports = (io, rooms) => {
     });
 
     socket.on("ron", (req) => {
+      const room = roomID(socket);
+      console.log("roomID:" + room);
       const game = getGame(roomID(socket));
-      let arg;
-      arg = game.agariFinish(req);
-      sendMessage(roomID(socket), arg);
-      if (game.getState() == "ゲーム終了") {
-        io.in(req.roomID).emit("gameover");
-      } else {
-        arg = game.kyokuStart(); //局開始
-        sendMessage(roomID(socket), arg);
-        arg = game.haipai(); //局開始の配牌
-        sendMessage(roomID(socket), arg);
-        arg = game.sendTurnStart(); //最初のツモを受け取って送信
-        sendMessage(roomID(socket), arg);
-      }
+      const arg = game.agariFinish(req);
+      sendMessage(room, arg);
     });
     // debug用
     socket.on("debug-show", (req) => {

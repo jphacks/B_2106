@@ -57,12 +57,13 @@ module.exports = class Field {
         kawa: [],
         flag: {
           riichi: false,
+          ippatsu: false,
         },
       });
     }
 
     this.isFinished = false;
-    this.prevTrash = "dummy";
+    this.prevSutehai = "dummy";
   }
   pop() {
     if (this.isFinished) throw "もう山無いよ";
