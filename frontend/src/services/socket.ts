@@ -29,7 +29,7 @@ declare global {
 function initSocket() {
   const API_URL = process.env.REACT_APP_API_URL
     ? process.env.REACT_APP_API_URL
-    : "http://localhost";
+    : "http://localhost:8080";
   window.socket = io(API_URL, {
     transports: ["websocket"],
   });
@@ -85,7 +85,7 @@ function emitRon() {
   window.socket.emit("ron", { action: "ron" });
 }
 function emitTsumoagari() {
-  window.socket.emit("tsumoAgari", { action: "tsumoagari" });
+  window.socket.emit("tsumoAgari", { action: "tsumoAgari" });
 }
 
 function setupGameClient() {
