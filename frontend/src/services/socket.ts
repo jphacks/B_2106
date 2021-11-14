@@ -4,6 +4,7 @@ import { store } from "../store";
 import {
   dahai,
   kyokuStartTable,
+  resetSutehaiList,
 } from "../pages/GameHost/_components/Table/TableSlice";
 import {
   setRiichiPlayer,
@@ -46,6 +47,7 @@ function setupGameHost() {
   window.socket.on("tablet-kyokustart", (data) => {
     store.dispatch(kyokuStartTable(data));
     store.dispatch(kyokuStartCenterField(data));
+    store.dispatch(resetSutehaiList({}));
   });
 
   window.socket.on("tablet-dahai", (data) => {
@@ -82,6 +84,7 @@ function riichi(playerId: number) {
 }
 
 function emitTabletSendOk() {
+  console.log("send-ok");
   window.socket.emit("tablet-send-ok", { action: "tablet-send-ok" });
   store.dispatch(ScoreBoardSlice.setOpen(false));
 }

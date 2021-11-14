@@ -36,18 +36,19 @@ class Game {
     //局開始に遷移
     this.state.transiton("配牌");
     this.field = new Field();
-
+    this.turnPlayer = this.oyaPlayer;
     const ret = { players: [], tablet: undefined };
+    console.log(this.playerList);
     ret.tablet = {
       endpoint: "tablet-kyokustart",
       arg: {
         kyoku: this.kyokuCount,
         honba: this.honbaCount,
         player: [
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
+          { score: this.playerList[0].score, name: "hoge" },
+          { score: this.playerList[1].score, name: "hoge" },
+          { score: this.playerList[2].score, name: "hoge" },
+          { score: this.playerList[3].score, name: "hoge" },
         ],
         oya: this.oyaPlayer,
         dora: this.field.dora,
@@ -299,7 +300,7 @@ class Game {
     this.oyaPlayer = (this.oyaPlayer + 1) % 4; //四麻想定
     this.field = undefined;
     this.kyokuCount++;
-    if (this.config.maxKyoku > this.kyokuCount)
+    if (this.config.maxKyoku < this.kyokuCount)
       this.state.transiton("ゲーム終了");
     else this.state.transiton("局開始前");
 

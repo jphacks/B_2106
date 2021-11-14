@@ -85,7 +85,10 @@ const ScoreBoard: React.FC = () => {
           <div className="score-board__score-field">{scoreFields}</div>
           <Grid container direction="column" alignItems="center">
             <Button
-              onClick={() => emitTabletSendOk()}
+              onClick={() => {
+                console.log("aaaaaaaa");
+                emitTabletSendOk();
+              }}
               variant="outlined"
               className="score-board__button"
             >

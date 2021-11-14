@@ -10,9 +10,10 @@
   height: common.$center-field-height;
   background-color: #fff;
   margin: auto;
-
+  border-radius: 1vh;
+  box-shadow: 2px 2px 4px -2px gray inset;
   &__contents {
-    position: relative;
+    
 
     &__tsumo-button {
       display: flex;
@@ -30,7 +31,7 @@
     }
 
     &__score {
-      $long-side: 20vh;
+      $long-side: 18vh;
       $short-side: 5vh;
 
       display: flex;
@@ -38,8 +39,9 @@
       justify-content: center;
       position: absolute;
       font-size: 3vh;
-      border: 1px solid red;
+      background-color: #ccc;
       margin: auto;
+      border-radius: 1vh;
 
       &--up {
         width: $long-side;
@@ -93,23 +95,23 @@
       justify-content: center;
 
       &--up {
-        left: 0;
-        bottom: 0;
+        left: 5px;
+        bottom: 5px;
       }
 
       &--left {
-        right: 0;
-        bottom: 0;
+        right: 5px;
+        bottom: 5px;
       }
 
       &--down {
-        top: 0;
-        right: 0;
+        top: 5px;
+        right: 5px;
       }
 
       &--right {
-        top: 0;
-        left: 0;
+        top: 5px;
+        left: 5px;
       }
     }
   }

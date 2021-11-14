@@ -42,11 +42,14 @@ export const tableSlice = createSlice({
             state.kyoku = action.payload.kyoku;
             state.honba = action.payload.honba;
             state.dora = action.payload.dora;
-        }
+        },
+        resetSutehaiList:(state, action) => {
+            state.sutehaiList= [[], [], [], []]
+        },
     },
 });
 
-export const { dahai, kyokuStartTable } = tableSlice.actions;
+export const { dahai, kyokuStartTable,resetSutehaiList } = tableSlice.actions;
 
 export const selectTableState = (state: RootState): TableState =>
     state.table;
