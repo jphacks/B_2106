@@ -69,7 +69,7 @@ class Game {
     this.state.transiton("開始");
 
     this.field.haipai();
-
+    this.field.yama = ["1m"];
     this.field.playerField[0].tehai = [
       "1m",
       "1m",
@@ -232,24 +232,28 @@ class Game {
   }
   ryukyokuFinish() {
     const ret = { players: [], tablet: undefined };
-    let score = playerList.map((p,index)=>p.score);
-    const syanten = playerList.map((p,index)=>this.field.syanten(index));
-    const tenpaiCount =array.filter(function(x){return x===0}).length;
-    let diff=[];
-    if(tenpaiCount==0){
-      diff = [0,0,0,0];
-    }else{
+    let score = this.playerList.map((p, index) => p.score);
+    const syanten = this.playerList.map((p, index) =>
+      this.field.syanten(index)
+    );
+    const tenpaiCount = syanten.filter(function (x) {
+      return x === 0;
+    }).length;
+    let diff = [];
+    if (tenpaiCount == 0 || tenpaiCount==4) {
+      diff = [0, 0, 0, 0];
+    } else {
       const win = 3000 / tenpaiCount;
-      const lose = -(3000 / (4-tenpaiCount))
-      diff = syanten.map(s => s==0?win:lose)
+      const lose = -(3000 / (4 - tenpaiCount));
+      diff = syanten.map((s) => (s == 0 ? win : lose));
     }
-    score = score.map((s,index)=>s+diff[index])
-    this.playerList.map((player,index) => {
-      player.score =  score[index];
-    })
+    score = score.map((s, index) => s + diff[index]);
+    this.playerList.map((player, index) => {
+      player.score = score[index];
+    });
     ret.tablet = {
       endpoint: "tablet-ryukyoku",
-      arg: {score,diff},
+      arg: { score, diff },
     };
     for (let i = 0; i < 4; i++) {
       ret.players[i] = {
@@ -328,10 +332,12 @@ class Game {
       this.state.transiton("ゲーム終了");
     else this.state.transiton("局開始前");
   }
-  gameover(){
+  gameover() {
     const ret = { players: [], tablet: undefined };
-    ranking = this.playerList.map((p)=>{score:p.score,name:p.name})
-    ranking.sort((a,b)=>b.score-a.score)
+    const ranking = this.playerList.map((p) => {
+      return { score: p.score, name: p.name };
+    });
+    ranking.sort((a, b) => b.score - a.score);
     ret.tablet = {
       endpoint: "tablet-gameover",
       arg: {

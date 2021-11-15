@@ -77,6 +77,7 @@ function setupGameHost() {
   });
 
   window.socket.on("tablet-gameover", (data) => {
+    console.log(data);
     store.dispatch(ResultBoardSlice.openResultBoard(data));
   });
 }
