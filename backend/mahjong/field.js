@@ -132,6 +132,10 @@ module.exports = class Field {
     );
     return syanten == -1;
   }
+  syanten(player) {
+    const syanten = calcSyanten(this.playerField[player].tehai);
+    return syanten;
+  }
   riichiPai(player) {
     const candidate = [
       ...this.playerField[player].tehai,

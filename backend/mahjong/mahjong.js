@@ -231,8 +231,32 @@ class Game {
     }
   }
   ryukyokuFinish() {
-    //流局処理
-    const ret = hoge;
+    const ret = { players: [], tablet: undefined };
+    let score = playerList.map((p,index)=>p.score);
+    const syanten = playerList.map((p,index)=>this.field.syanten(index));
+    const tenpaiCount =array.filter(function(x){return x===0}).length;
+    let diff=[];
+    if(tenpaiCount==0){
+      diff = [0,0,0,0];
+    }else{
+      const win = 3000 / tenpaiCount;
+      const lose = -(3000 / (4-tenpaiCount))
+      diff = syanten.map(s => s==0?win:lose)
+    }
+    score = score.map((s,index)=>s+diff[index])
+    this.playerList.map((player,index) => {
+      player.score =  score[index];
+    })
+    ret.tablet = {
+      endpoint: "tablet-ryukyoku",
+      arg: {score,diff},
+    };
+    for (let i = 0; i < 4; i++) {
+      ret.players[i] = {
+        endpoint: "client-ryukyoku",
+        arg: {},
+      };
+    }
     this.kyokuFinish();
     return ret;
   }
@@ -303,22 +327,20 @@ class Game {
     if (this.config.maxKyoku < this.kyokuCount)
       this.state.transiton("ゲーム終了");
     else this.state.transiton("局開始前");
-
+  }
+  gameover(){
     const ret = { players: [], tablet: undefined };
+    ranking = this.playerList.map((p)=>{score:p.score,name:p.name})
+    ranking.sort((a,b)=>b.score-a.score)
     ret.tablet = {
-      endpoint: "tablet-end",
+      endpoint: "tablet-gameover",
       arg: {
-        player: [
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-        ],
+        ranking,
       },
     };
     for (let i = 0; i < 4; i++) {
       ret.players[i] = {
-        endpoint: "client-end",
+        endpoint: "client-gameover",
         arg: {},
       };
     }

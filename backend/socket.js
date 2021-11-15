@@ -149,24 +149,6 @@ module.exports = (io, rooms) => {
       const game = getGame(roomID(socket));
       const arg = game.agariFinish(req);
       sendMessage(room, arg);
-
-      //点数表示するならここでとめる？
-      /* if (game.getState() == "ゲーム終了") {
-        io.in(roomID(socket)).emit("gameover");
-      } else {
-        arg = game.kyokuStart(); //局開始
-        sendMessage(roomID(socket), arg);
-        arg = game.haipai(); //局開始の配牌
-        sendMessage(roomID(socket), arg);
-        arg = game.sendTurnStart(); //最初のツモを受け取って送信
-        sendMessage(roomID(socket), arg); 
-      }*/
-    });
-    socket.on("ryukyoku", (req) => {
-      const game = getGame(roomID(socket));
-      let arg;
-      arg = game.ryukyokuFinish(req);
-      sendMessage(roomID(socket), arg);
     });
 
     socket.on("ron", (req) => {
@@ -187,8 +169,8 @@ module.exports = (io, rooms) => {
         arg = game.sendTurnStart(); //最初のツモを受け取って送信
         sendMessage(roomID(socket), arg);
       } else if (game.getState() == "ゲーム終了") {
-        io.in(roomID(socket)).emit("game-over");
-        //ここでタブレットに順位を整形して送る
+        arg = game.gameover(); //最初のツモを受け取って送信
+        sendMessage(roomID(socket), arg);
       } else {
         throw new Error("不正な状態:" + game.getState());
       }
