@@ -1,24 +1,23 @@
 import React, { ReactElement } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./ScoreBoard.scss";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
-import { selectScoreBoardState, setOpen } from "./ScoreBoardSlice";
+import { selectScoreBoardState, closeScoreBoard } from "./ScoreBoardSlice";
 import classNames from "classnames";
 import Hougaku from "../../../../_components/Hougaku/Hougaku";
 import { getKazeName } from "../CenterField/CenterField";
 import { selectCenterFieldState } from "../CenterField/CenterFieldSlice";
-import Grid from "@mui/material/Grid";
 import { emitTabletSendOk } from "../../../../services/socket";
+import ModalBoard from "../ModalBoard/ModalBoard";
+import { selectRoomHostState } from "../../../RoomHost/RoomHostSlice";
 
 const ScoreBoard: React.FC = () => {
+  const RoomHostState = useSelector(selectRoomHostState);
   const scoreBoardState = useSelector(selectScoreBoardState);
   const centerFieldState = useSelector(selectCenterFieldState);
 
-  const resultState = scoreBoardState.result;
+  const dispatch = useDispatch();
 
-  const handleClose = () => setOpen(false);
+  const resultState = scoreBoardState.result;
 
   const scoreFields: ReactElement[] = [];
 
@@ -31,13 +30,13 @@ const ScoreBoard: React.FC = () => {
           `score-board__score-field__scores--${i}`
         )}
       >
-        <div className="score-board__score-field__scores__username">
+        <div className="score-board__score-field__scores__playername">
           <Hougaku
             text={getKazeName(i, centerFieldState.oya)}
             direction="down"
             device="host"
           />
-          player.name
+          {RoomHostState.playerNames[i]}
         </div>
         <div className="score-board__score-field__scores__score">
           {resultState.score[i]}
@@ -62,42 +61,46 @@ const ScoreBoard: React.FC = () => {
     );
   }
 
+  const title = scoreBoardState.isRyukyoku
+    ? "流局"
+    : `${resultState.details}${resultState.ten}点`;
+
+  const doraField = (
+    <div className="score-board__dora-field">
+      <div className="score-board__dora-field__dora">ドラ</div>
+      <div className="score-board__dora-field__uradora">裏ドラ</div>
+    </div>
+  );
+
+  const contents = (
+    <div className="score-board">
+      <div className="score-board__title">{title}</div>
+      <div className="score-board__yaku">
+        {Object.keys(resultState.yaku).map((key, i) => {
+          return (
+            <div key={i} className="score-board__yaku__item">
+              <div className="score-board__yaku__item__key">{key}</div>
+              <div className="score-board__yaku__item__value">
+                {resultState.yaku[key]}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="score-board__score-field">{scoreFields}</div>
+      {!scoreBoardState.isRyukyoku ? doraField : ""}
+    </div>
+  );
+
   return (
-    <Modal open={scoreBoardState.open} onClose={handleClose}>
-      <>
-        <Box className="score-board">
-          <div className="score-board__ten">
-            {resultState.details}
-            {resultState.ten}点
-          </div>
-          <div className="score-board__yaku">
-            {Object.keys(resultState.yaku).map((key, i) => {
-              return (
-                <div key={i} className="score-board__yaku__item">
-                  <div className="score-board__yaku__item__key">{key}</div>
-                  <div className="score-board__yaku__item__value">
-                    {resultState.yaku[key]}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="score-board__score-field">{scoreFields}</div>
-          <Grid container direction="column" alignItems="center">
-            <Button
-              onClick={() => {
-                console.log("aaaaaaaa");
-                emitTabletSendOk();
-              }}
-              variant="outlined"
-              className="score-board__button"
-            >
-              OK
-            </Button>
-          </Grid>
-        </Box>
-      </>
-    </Modal>
+    <ModalBoard
+      open={scoreBoardState.open}
+      contents={contents}
+      onClickOk={() => {
+        dispatch(closeScoreBoard());
+        emitTabletSendOk();
+      }}
+    />
   );
 };
 

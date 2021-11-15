@@ -3,16 +3,17 @@ import io, { Socket } from "socket.io-client";
 import { store } from "../store";
 import {
   dahai,
-  kyokuStartTable,
+  setupTable,
   resetSutehaiList,
 } from "../pages/GameHost/_components/Table/TableSlice";
 import {
   setRiichiPlayer,
   setupTsumo,
   resetButton,
-  kyokuStartCenterField,
+  setupCenterField,
 } from "../pages/GameHost/_components/CenterField/CenterFieldSlice";
 import * as ScoreBoardSlice from "../pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
+import * as ResultBoardSlice from "../pages/GameHost/_components/ResultBoard/ResultBoardSlice";
 import { setTurn, setFuro } from "../pages/GameClient/ClientFlagSlice";
 import {
   kyokuStart,
@@ -45,9 +46,9 @@ function initSocket() {
 
 function setupGameHost() {
   window.socket.on("tablet-kyokustart", (data) => {
-    store.dispatch(kyokuStartTable(data));
-    store.dispatch(kyokuStartCenterField(data));
-    store.dispatch(resetSutehaiList({}));
+    store.dispatch(setupTable(data));
+    store.dispatch(setupCenterField(data));
+    store.dispatch(resetSutehaiList());
   });
 
   window.socket.on("tablet-dahai", (data) => {
@@ -68,8 +69,15 @@ function setupGameHost() {
   });
 
   window.socket.on("tablet-agari", (data) => {
-    store.dispatch(ScoreBoardSlice.setResult(data));
-    store.dispatch(ScoreBoardSlice.setOpen(true));
+    store.dispatch(ScoreBoardSlice.openScoreBoard(data));
+  });
+
+  window.socket.on("tablet-ryukyoku", (data) => {
+    store.dispatch(ScoreBoardSlice.openRyukyokuScoreBoard(data));
+  });
+
+  window.socket.on("tablet-gameover", (data) => {
+    store.dispatch(ResultBoardSlice.openResultBoard(data));
   });
 }
 
@@ -86,7 +94,6 @@ function riichi(playerId: number) {
 function emitTabletSendOk() {
   console.log("send-ok");
   window.socket.emit("tablet-send-ok", { action: "tablet-send-ok" });
-  store.dispatch(ScoreBoardSlice.setOpen(false));
 }
 
 function emitDahai(pai: string) {

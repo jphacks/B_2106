@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Button, Card } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { SocketContext } from "../../App";
+import { setPlayerNames } from "./RoomHostSlice";
 
 const buttonStyle = {
   position: "absolute" as "absolute",
@@ -82,6 +84,7 @@ export const RoomHost: React.FC<Props> = () => {
     // eslint-disable-next-line no-unused-vars
     socket.on("start-game-response", (res) => {
       console.log("start-game-response");
+      setPlayerNames(res);
       history.push("/game_host");
     });
 
