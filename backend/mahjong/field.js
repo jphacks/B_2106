@@ -111,6 +111,12 @@ module.exports = class Field {
   isAgari() {
     return true;
   }
+  syanten(player){
+    const syanten = calcSyanten(
+      this.playerField[player].tehai
+    );
+    return syanten;
+  }
   canRon(player) {
     const syanten = calcSyanten(
       this.playerField[player].tehai,
