@@ -6,6 +6,7 @@ import CenterField from "../CenterField/CenterField";
 import DropField from "../DropField/DropField";
 import ScoreBoard from "../ScoreBoard/ScoreBoard";
 import { selectTableState } from "./TableSlice";
+import ResultBoard from "../ResultBoard/ResultBoard";
 
 const Table: React.FC = () => {
   const tableState = useSelector(selectTableState);
@@ -33,6 +34,7 @@ const Table: React.FC = () => {
       <CenterField />
       {kawaList}
       <ScoreBoard />
+      <ResultBoard />
     </div>
   );
 

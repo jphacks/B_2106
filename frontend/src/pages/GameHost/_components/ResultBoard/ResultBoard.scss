@@ -1,0 +1,40 @@
+.result-board {
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10vh;
+    font-size: 5vh;
+  }
+
+  &__ranking-field {
+    $height: 50vh;
+    width: 80%;
+    height: $height;
+    margin-left: 10%;
+    padding: 30px 0;
+    font-size: 3vh;
+
+    &__ranking {
+      display: grid;
+      grid-template-columns: 10% 1fr 60% 1fr 20%;
+      min-height: 10vh;
+
+      &__rank {
+        grid-column: 1 / 2;
+        text-align: end;
+      }
+
+      &__username {
+        grid-column: 3 / 4;
+        text-align: center;
+        word-break: break-all;
+      }
+
+      &__score {
+        grid-column: 5 / 6;
+        text-align: end;
+      }
+    }
+  }
+}

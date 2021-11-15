@@ -1,0 +1,25 @@
+.modal-board {
+  $height: 70vh;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 90vh;
+  height: $height;
+  margin: auto;
+  color: #fff;
+  background-color: #111;
+  opacity: 0.9;
+
+  &__contents {
+    width: 100%;
+    height: calc($height - 10vh);
+  }
+
+  &__button {
+    width: 60vh;
+    height: 8vh;
+  }
+}

@@ -16,12 +16,7 @@ interface CenterFieldState {
 
 const initialState: CenterFieldState = {
   oya: 0,
-  player: [
-    { score: 25000 },
-    { score: 25000 },
-    { score: 25000 },
-    { score: 25000 },
-  ],
+  player: [{ score: 0 }, { score: 0 }, { score: 0 }, { score: 0 }],
   turnPlayer: 0,
   riichiPlayer: 0,
   shouldDisableTsumo: true,
@@ -51,7 +46,7 @@ export const centerFieldSlice = createSlice({
       state.shouldDisableTsumo = true;
       state.shouldDisableRiichi = true;
     },
-    kyokuStartCenterField: (state, action) => {
+    setupCenterField: (state, action) => {
       state.oya = action.payload.oya;
       state.player = action.payload.player;
       state.turnPlayer = action.payload.oya;
@@ -65,7 +60,7 @@ export const {
   setRiichiPlayer,
   setupTsumo,
   resetButton,
-  kyokuStartCenterField,
+  setupCenterField,
 } = centerFieldSlice.actions;
 
 export const selectCenterFieldState = (state: RootState): CenterFieldState =>
