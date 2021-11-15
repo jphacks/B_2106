@@ -25,8 +25,9 @@ export const resultBoardSlice = createSlice({
   name: "resultBoard",
   initialState,
   reducers: {
-    openResultBoard: (state: ResultBoardState, action: PayloadAction<[Ranking, Ranking, Ranking, Ranking]>) => {
-      state.ranking = action.payload;
+    openResultBoard: (state: ResultBoardState, action: PayloadAction<{ranking:[Ranking, Ranking, Ranking, Ranking]}>) => {
+      console.log(action.payload)
+      state.ranking = action.payload.ranking;
       state.open = true;
     },
     closeResultBoard: (state: ResultBoardState) => {
