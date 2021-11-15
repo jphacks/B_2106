@@ -240,7 +240,7 @@ class Game {
       return x === 0;
     }).length;
     let diff = [];
-    if (tenpaiCount == 0) {
+    if (tenpaiCount == 0 || tenpaiCount==4) {
       diff = [0, 0, 0, 0];
     } else {
       const win = 3000 / tenpaiCount;
