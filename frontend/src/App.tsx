@@ -29,12 +29,13 @@ export const App: React.FC<Prop> = () => {
             <Route exact path="/" component={Top} />
             <Route exact path="/game_host" component={GameHost} />
             <Route exact path="/room_host" component={RoomHost} />
+            <Route exact path="/game_client" component={GameClient} />
             <Route
               exact
               path="/enter_room_client"
               component={EnterRoomClient}
             />
-            <Route exact path="/game_client" component={GameClient} />
+            <Route path="/enter_room_client/:id" component={EnterRoomClient} />
           </Switch>
         </BrowserRouter>
       </SocketContext.Provider>

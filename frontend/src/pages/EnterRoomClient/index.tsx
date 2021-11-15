@@ -3,12 +3,11 @@ import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import Alert from "@mui/material/Alert";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { SocketContext } from "../../App";
 
-type Props = {};
 type Inputs = { roomID: number; name: string };
 
 const style = {
@@ -67,25 +66,43 @@ const bigText = {
   fontSize: "40px",
 };
 
-export const EnterRoomClient: React.FC<Props> = () => {
-  //react hook form
-  const { register, handleSubmit, watch } = useForm<Inputs>({});
+interface ParamTypes {
+  id: string;
+}
+
+export const EnterRoomClient: React.FC = () => {
+  // socketの呼び出し
+  const socket = React.useContext(SocketContext);
+
+  // successとErrorの定義
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
   const [successMessage, setSuccessMessage] = useState<string | undefined>(
     undefined
   );
-  const [isWaiting, setIsWaiting] = React.useState(false);
 
+  //form周り
+  const { id } = useParams<ParamTypes>();
+  const idInt = Number(id);
+  const { register, handleSubmit, watch } = useForm<Inputs>({
+    defaultValues: {
+      roomID: idInt,
+      name: "",
+    },
+  });
   const { roomID, name } = watch(); // これで監視できる
+  useEffect(() => {
+    if (idInt) {
+      setSuccessMessage("roomIDをQRコードから読み取りました");
+    }
+  }, []);
 
+  //socket周り
+  const [isWaiting, setIsWaiting] = React.useState(false);
   const history = useHistory();
 
-  const socket = React.useContext(SocketContext);
-
   useEffect(() => {
-    console.log("connect");
     socket.on("enter-room-response", (res) => {
       setErrorMessage(undefined);
       setSuccessMessage(undefined);
@@ -98,20 +115,17 @@ export const EnterRoomClient: React.FC<Props> = () => {
         setIsWaiting(true);
       }
     });
-
     socket.on("start-game-response", (res) => {
       console.log("start-game-response" + res);
       history.push("/game_client");
     });
-
-    register("name");
-    register("roomID");
   }, []);
 
   const enterRoom = (data: Inputs) => {
     console.log(data);
     socket.emit("enter-room", { name: data.name, roomID: data.roomID });
   };
+
   const exitRoom = () => {
     console.log("exitRoom");
     socket.emit("exit-room", { roomID: roomID });
