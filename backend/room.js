@@ -36,4 +36,22 @@ module.exports = class Room {
     }
     throw new Error("no such player name");
   }
+
+  getPlayerIndexWithPlayerID(playerID) {
+    for (let i = 0; i < this.players.length; i++) {
+      if (playerID == this.players[i].id) {
+        return i;
+      }
+    }
+    throw new Error("cannot find player index");
+  }
+
+  existPlayerWithName(name) {
+    for (const player of this.players) {
+      if (player.name == name) {
+        return true;
+      }
+    }
+    return false;
+  }
 };

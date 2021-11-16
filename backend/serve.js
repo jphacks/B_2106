@@ -5,6 +5,12 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const PORT = process.env.APP_PORT || 8080;
 
+process.on("uncaughtException", (err) => {
+  console.log("-------------top level raised error-------------");
+  console.error(err);
+  console.log("------------------------------------------------");
+});
+
 const socket = require("./socket");
 
 const rooms = {};
