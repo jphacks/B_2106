@@ -22,6 +22,7 @@
     "classnames": "^2.3.1",
     "dotenv": "^10.0.0",
     "dotenv-webpack": "^7.0.3",
+    "env-cmd": "^10.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.17.5",
@@ -40,6 +41,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:prod": "env-cmd -f .env.production yarn build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --check \"src/**/*.{jsx,js,tsx,ts,css,scss,md,json}\"",
