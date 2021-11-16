@@ -11,5 +11,6 @@ reset:
 
 # docker内のnode-modulesを最新にし、yarn buildし直す
 yarn-build-docker:
+	docker-compose up -d
 	docker-compose exec frontend bash -c "yarn install --no-save"
 	docker-compose exec frontend bash -c "yarn build"
