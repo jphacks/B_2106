@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { KazeType } from "../../../../_type";
 import "./CenterField.scss";
 import { selectCenterFieldState } from "./CenterFieldSlice";
+import { selectRoomHostState } from "../../../RoomHost/RoomHostSlice";
 import { DirectionType } from "../../../../_type";
 import classNames from "classnames";
 import Hougaku from "../../../../_components/Hougaku/Hougaku";
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const CenterField: React.FC<Props> = (props) => {
+  const roomHostState = useSelector(selectRoomHostState);
   const centerFieldState = useSelector(selectCenterFieldState);
 
   interface Fields {
@@ -46,26 +48,35 @@ const CenterField: React.FC<Props> = (props) => {
     }
 
     fields.score.push(
-      <button
-        key={i}
-        onClick={() => {
-          try {
-            riichi(i);
-          } catch (error) {
-            console.error(error);
+      <div key={i}>
+        <div
+          className={classNames(
+            "center-field__contents__playernames",
+            `center-field__contents__playernames--${direction}`
+          )}
+        >
+          {roomHostState.playerNames[i]}
+        </div>
+        <button
+          onClick={() => {
+            try {
+              riichi(i);
+            } catch (error) {
+              console.error(error);
+            }
+          }}
+          className={classNames(
+            "center-field__contents__score",
+            `center-field__contents__score--${direction}`
+          )}
+          disabled={
+            centerFieldState.shouldDisableRiichi ||
+            centerFieldState.riichiPlayer !== i
           }
-        }}
-        className={classNames(
-          "center-field__contents__score",
-          `center-field__contents__score--${direction}`
-        )}
-        disabled={
-          centerFieldState.shouldDisableRiichi ||
-          centerFieldState.riichiPlayer !== i
-        }
-      >
-        <span>{centerFieldState.player[i].score}</span>
-      </button>
+        >
+          <span>{centerFieldState.player[i].score}</span>
+        </button>
+      </div>
     );
 
     fields.kaze.push(
@@ -114,20 +125,7 @@ const CenterField: React.FC<Props> = (props) => {
 export default CenterField;
 
 export function getKazeName(kazenum: number, oya: number): KazeType {
-  if (kazenum - oya < 0) {
-    kazenum += 4;
-  }
+  const kaze = ["東", "南", "西", "北"];
 
-  switch (kazenum - oya) {
-    case 0:
-      return "東";
-    case 1:
-      return "南";
-    case 2:
-      return "西";
-    case 3:
-      return "北";
-    default:
-      throw new Error("invalid kaze number");
-  }
+  return kaze[(kazenum - oya + 4) % 4] as KazeType;
 }
