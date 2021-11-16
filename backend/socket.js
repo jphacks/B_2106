@@ -27,7 +27,7 @@ module.exports = (io, rooms) => {
     // roomに入る際のAPI
     socket.on("enter-room", (req) => {
       console.log("enter-room");
-      console.log(req);
+
       const roomID = req["roomID"].toString();
       if (!io.sockets.adapter.rooms.get(roomID)) {
         console.log("error: enter-room", io.sockets.adapter.rooms.get(roomID));
@@ -36,8 +36,22 @@ module.exports = (io, rooms) => {
       }
 
       try {
+        const r = rooms[roomID];
         const name = req.name;
-        const r = rooms[req.roomID];
+
+        // すでに同名のplayerが参加しているかどうか
+        if (r.existPlayerWithName(name)) {
+          // gameがまだ始まっていないとき
+          if (!rooms[roomID].game) {
+            throw Error("Same name player already join and game haven't started yet.");
+          }
+
+          const res = reconnectRoom(socket, roomID, name);
+          console.log(res);
+          socket.emit("enter-room-response", res);
+          return;
+        }
+
         r.player = { name: name, id: socket.id };
       } catch (error) {
         console.log(error);
@@ -54,35 +68,29 @@ module.exports = (io, rooms) => {
       });
     });
 
-    socket.on("reconnect-room", (req) => {
+    function reconnectRoom(socket, roomID, name) {
       console.log("reconnect-room");
-      console.log(req);
 
       try {
-        const r = rooms[req.roomID];
+        const r = rooms[roomID];
         if (!r) {
           throw new Error("no such roomID");
         }
-        r.setPlayerIDWithName(req.name, socket.id);
+        r.setPlayerIDWithName(name, socket.id);
       } catch (error) {
         console.log(error);
-        socket.emit("reconnect-room-response", { error: error.message });
-        return;
+        return { error: error.message };
       }
 
       leaveAllRoom(socket);
-      socket.join(req.roomID);
+      socket.join(roomID);
 
       // ここにreconnectしたときのデータを入れる
       let game;
       try {
-        game = getGame(roomID(socket));
-      } catch {
-        socket.emit("reconnect-room-response", {
-          name: req.name || "no name",
-          id: socket.id,
-        });
-        return;
+        game = getGame(roomID);
+      } catch (error) {
+        return { error: error.message };
       }
 
       let indexOfPlayer = 0;
@@ -90,8 +98,7 @@ module.exports = (io, rooms) => {
         indexOfPlayer = r.getPlayerIndexWithPlayerID(socket.id);
       } catch (error) {
         console.log(error);
-        socket.emit("reconnect-room-response", { error: error.message });
-        return;
+        return { error: error.message };
       }
 
       res = {
@@ -100,8 +107,8 @@ module.exports = (io, rooms) => {
         tsumo: game.getTsumoWithPlayerIndex(indexOfPlayer),
       };
 
-      socket.emit("reconnect-room-response", res);
-    });
+      return res;
+    }
 
     // 退出するとき用の_API
     socket.on("exit-room", (req) => {
