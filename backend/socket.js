@@ -74,7 +74,31 @@ module.exports = (io, rooms) => {
       socket.join(req.roomID);
 
       // ここにreconnectしたときのデータを入れる
-      res = { id: socket.id };
+      let game;
+      try {
+        game = getGame(roomID(socket));
+      } catch {
+        socket.emit("reconnect-room-response", {
+          name: req.name || "no name",
+          id: socket.id,
+        });
+        return;
+      }
+
+      let indexOfPlayer = 0;
+      try {
+        indexOfPlayer = r.getPlayerIndexWithPlayerID(socket.id);
+      } catch (error) {
+        console.log(error);
+        socket.emit("reconnect-room-response", { error: error.message });
+        return;
+      }
+
+      res = {
+        id: socket.id,
+        tehai: game.getTehaiWithPlayerIndex(indexOfPlayer),
+        tsumo: game.getTsumoWithPlayerIndex(indexOfPlayer),
+      };
 
       socket.emit("reconnect-room-response", res);
     });

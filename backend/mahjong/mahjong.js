@@ -32,6 +32,14 @@ class Game {
     return this.state.getState();
   }
 
+  getTehaiWithPlayerIndex(indexOfPlayer) {
+    return this.field.playerField[indexOfPlayer].tehai;
+  }
+
+  getTsumoWithPlayerIndex(indexOfPlayer) {
+    return this.field.playerField[indexOfPlayer].tsumo;
+  }
+
   kyokuStart() {
     //局開始に遷移
     this.state.transiton("配牌");
@@ -233,14 +241,12 @@ class Game {
   ryukyokuFinish() {
     const ret = { players: [], tablet: undefined };
     let score = this.playerList.map((p, index) => p.score);
-    const syanten = this.playerList.map((p, index) =>
-      this.field.syanten(index)
-    );
+    const syanten = this.playerList.map((p, index) => this.field.syanten(index));
     const tenpaiCount = syanten.filter(function (x) {
       return x === 0;
     }).length;
     let diff = [];
-    if (tenpaiCount == 0 || tenpaiCount==4) {
+    if (tenpaiCount == 0 || tenpaiCount == 4) {
       diff = [0, 0, 0, 0];
     } else {
       const win = 3000 / tenpaiCount;
@@ -268,9 +274,7 @@ class Game {
     if (req.action == "tsumoAgari") {
       const player = [null, null, null, null];
       player[this.turnPlayer] = "ツモ";
-      const option = this.field.playerField[this.turnPlayer].flag.riichi
-        ? "r"
-        : "";
+      const option = this.field.playerField[this.turnPlayer].flag.riichi ? "r" : "";
       const score = this.playerList.map((p) => p.score);
       const tabletArg = calclate(
         this.field.playerField[this.turnPlayer].tehai,
@@ -328,8 +332,7 @@ class Game {
     this.oyaPlayer = (this.oyaPlayer + 1) % 4; //四麻想定
     this.field = undefined;
     this.kyokuCount++;
-    if (this.config.maxKyoku < this.kyokuCount)
-      this.state.transiton("ゲーム終了");
+    if (this.config.maxKyoku < this.kyokuCount) this.state.transiton("ゲーム終了");
     else this.state.transiton("局開始前");
   }
   gameover() {
