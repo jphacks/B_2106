@@ -3,5 +3,5 @@ FROM node:16.12-buster
 WORKDIR /app
 
 COPY ./ ./
-RUN yarn install
-RUN yarn build
+RUN yarn install  --no-save
+RUN yarn build:prod

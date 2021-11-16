@@ -12,8 +12,11 @@ services:
   frontend:
     build: ./frontend
     container_name: frontend
+    tty: true
     volumes:
+      - ./frontend:/app
       - front-build:/app/build
+      - front-node-modules:/app/node_modules
   nginx:
     container_name: proxy
     restart: always
@@ -33,6 +36,8 @@ networks:
     driver: bridge
 volumes:
   front-build:
+    driver: local
+  front-node-modules:
     driver: local
   back-node-modules:
     driver: local
