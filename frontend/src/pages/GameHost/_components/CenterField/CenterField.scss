@@ -28,6 +28,56 @@
       margin: auto;
     }
 
+    &__playernames {
+      $long-side: 18vh;
+      $short-side: 2vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      font-size: 2vh;
+      margin: auto;
+
+      &--up {
+        width: $long-side;
+        height: $short-side;
+        right: 0;
+        left: 0;
+        bottom: calc(5vh + 12px);
+      }
+
+      &--left {
+        width: $short-side;
+        height: $long-side;
+        top: 0;
+        right: calc(5vh + 12px);
+        bottom: 0;
+        transform: rotate(180deg);
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+      }
+
+      &--down {
+        width: $long-side;
+        height: $short-side;
+        transform: rotate(180deg);
+        top: calc(5vh + 12px);
+        right: 0;
+        left: 0;
+      }
+
+      &--right {
+        width: $short-side;
+        height: $long-side;
+        top: 0;
+        bottom: 0;
+        left: calc(5vh + 12px);
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+      }
+    }
+
     &__score {
       $long-side: 18vh;
       $short-side: 5vh;
