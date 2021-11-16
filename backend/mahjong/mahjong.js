@@ -280,7 +280,7 @@ class Game {
         option,
         score
       );
-      score.map((s, index) => (this.playerList[index].score = s));
+      tabletArg.score.map((s, index) => (this.playerList[index].score = s));
       this.kyokuFinish();
       const ret = { players: [], tablet: undefined };
       ret.tablet = {
@@ -308,7 +308,7 @@ class Game {
         option,
         score
       );
-      score.map((s, index) => (this.playerList[index].score = s));
+      tabletArg.score.map((s, index) => (this.playerList[index].score = s));
       this.kyokuFinish();
       const ret = { players: [], tablet: undefined };
       ret.tablet = {
