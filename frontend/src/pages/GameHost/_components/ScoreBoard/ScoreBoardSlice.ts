@@ -44,7 +44,10 @@ export const scoreBoardSlice = createSlice({
       state.isRyukyoku = false;
       state.open = true;
     },
-    openRyukyokuScoreBoard: (state: ScoreBoardState, action: PayloadAction<RyukyokuResult>) => {
+    openRyukyokuScoreBoard: (
+      state: ScoreBoardState,
+      action: PayloadAction<RyukyokuResult>
+    ) => {
       state.result.diff = action.payload.diff;
       state.result.score = action.payload.score;
 
@@ -57,11 +60,8 @@ export const scoreBoardSlice = createSlice({
   },
 });
 
-export const {
-  openScoreBoard,
-  openRyukyokuScoreBoard,
-  closeScoreBoard,
-} = scoreBoardSlice.actions;
+export const { openScoreBoard, openRyukyokuScoreBoard, closeScoreBoard } =
+  scoreBoardSlice.actions;
 
 export const selectScoreBoardState = (state: RootState): ScoreBoardState =>
   state.scoreBoard;
