@@ -31,11 +31,11 @@ declare global {
 }
 
 function initSocket() {
-  window.socket = io(Config.API_URL, {
+  window.socket = io(Config.API_URL + ":" + Config.API_PORT, {
     transports: ["websocket"],
   });
   console.log("initSocket");
-  console.log(Config.API_URL);
+  console.log(Config.API_URL + ":" + Config.API_PORT);
   console.log(window.socket);
   setupGameHost();
   setupGameClient();
