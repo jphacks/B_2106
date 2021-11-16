@@ -153,9 +153,15 @@ module.exports = (io, rooms) => {
 
     socket.on("ron", (req) => {
       const room = roomID(socket);
-      console.log("roomID:" + room);
       const game = getGame(roomID(socket));
+      let pidx = -1;
+      const r = rooms[room];
+      r.players.map((p, index) => {
+        if (p.id == socket.id) pidx = index;
+      });
+      req["player"] = pidx;
       const arg = game.agariFinish(req);
+
       sendMessage(room, arg);
     });
 
