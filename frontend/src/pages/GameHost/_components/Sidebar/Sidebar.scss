@@ -9,6 +9,12 @@
   width: variable.$center-field-height;
   height: 100vh;
 
+  &__logo {
+    position: absolute;
+    top: 10%;
+    width: 50%;
+  }
+
   &__title {
     width: 90%;
     text-align: center;
