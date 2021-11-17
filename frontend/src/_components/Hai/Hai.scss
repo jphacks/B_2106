@@ -1,3 +1,5 @@
+@use "../../variable";
+
 $radius: 5px;
 
 .Hai {
@@ -9,12 +11,12 @@ $radius: 5px;
 
   &__img--up,
   &__img--down {
-    width: calc(32vh / 6);
+    width: calc(variable.$center-field-height / 6);
   }
 
   &__img--right,
   &__img--left {
-    height: calc(32vh / 6);
+    height: calc(variable.$center-field-height / 6);
   }
 
   &__img--sp {

@@ -20,6 +20,7 @@ interface ScoreBoardState {
   open: boolean;
   isRyukyoku: boolean;
   result: Result;
+  uradora: string[];
 }
 
 const initialState: ScoreBoardState = {
@@ -32,6 +33,7 @@ const initialState: ScoreBoardState = {
     diff: [0, 0, 0, 0],
     score: [0, 0, 0, 0],
   },
+  uradora: [],
 };
 
 export const scoreBoardSlice = createSlice({

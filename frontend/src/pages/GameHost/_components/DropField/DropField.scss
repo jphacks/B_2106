@@ -1,4 +1,4 @@
-@use "../../common.scss";
+@use "../../../../variable";
 
 $long-side: 66vh;
 $short-side: 34vh;
@@ -20,12 +20,12 @@ $hai-image-rato: calc(90 / 66);
     &__kawa {
       display: flex;
       flex-wrap: wrap;
-      width: common.$center-field-height;
+      width: variable.$center-field-height;
 
       &__sutehai-line {
         display: flex;
         align-items: flex-end;
-        height: calc(common.$center-field-height / 6 * $hai-image-rato);
+        height: calc(variable.$center-field-height / 6 * $hai-image-rato);
       }
     }
   }
@@ -42,12 +42,12 @@ $hai-image-rato: calc(90 / 66);
       display: flex;
       flex-wrap: wrap-reverse;
       flex-direction: column-reverse;
-      width: common.$center-field-height;
+      width: variable.$center-field-height;
 
       &__sutehai-line {
         display: flex;
         flex-direction: row-reverse;
-        height: calc(common.$center-field-height / 6 * $hai-image-rato);
+        height: calc(variable.$center-field-height / 6 * $hai-image-rato);
       }
     }
   }
@@ -64,13 +64,13 @@ $hai-image-rato: calc(90 / 66);
       display: flex;
       flex-wrap: wrap-reverse;
       flex-direction: column;
-      height: common.$center-field-height;
+      height: variable.$center-field-height;
 
       &__sutehai-line {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        width: calc(common.$center-field-height / 6 * $hai-image-rato);
+        width: calc(variable.$center-field-height / 6 * $hai-image-rato);
       }
     }
   }
@@ -87,13 +87,13 @@ $hai-image-rato: calc(90 / 66);
       display: flex;
       flex-wrap: wrap;
       flex-direction: column-reverse;
-      height: common.$center-field-height;
+      height: variable.$center-field-height;
 
       &__sutehai-line {
         display: flex;
         flex-direction: column-reverse;
         align-items: flex-end;
-        width: calc(common.$center-field-height / 6 * $hai-image-rato);
+        width: calc(variable.$center-field-height / 6 * $hai-image-rato);
       }
     }
   }
