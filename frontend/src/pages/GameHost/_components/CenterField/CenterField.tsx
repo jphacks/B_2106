@@ -45,12 +45,13 @@ const CenterField: React.FC<Props> = (props) => {
       hougakuDirection = "left";
     }
 
-    // 最新の捨て牌によってリーチ可能かどうか
     let isRiichi: boolean = false;
 
-    if (tableState.sutehaiList[i].length > 0) {
-      isRiichi = tableState.sutehaiList[i].slice(-1)[0].isRiichi;
-    }
+    tableState.sutehaiList[i].forEach((sutehai) => {
+      if (sutehai.isRiichi) {
+        isRiichi = true;
+      }
+    });
 
     fields.score.push(
       <div key={i}>
@@ -81,7 +82,6 @@ const CenterField: React.FC<Props> = (props) => {
         >
           <span>{centerFieldState.player[i].score}</span>
         </button>
-        {/* 最新の捨て牌によってリーチ可能なら、1000点棒を表示 */}
         {isRiichi && (
           <div
             className={classNames(
