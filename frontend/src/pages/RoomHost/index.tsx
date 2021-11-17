@@ -4,7 +4,7 @@ import { Button, Card } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { SocketContext } from "../../App";
 import { setPlayerNames } from "./RoomHostSlice";
-
+import { Config } from "../../config";
 import { QRCodeImg } from "@cheprasov/react-qrcode";
 
 const buttonStyle = {
@@ -79,7 +79,11 @@ export const RoomHost: React.FC<Props> = () => {
       console.log(res);
       setRoomId(res.roomID);
       setQrCode(
-        "<QRCodeImg value=https://localhost:3000/enter_room_client/" +
+        "<QRCodeImg value=" +
+          Config.API_URL +
+          ":" +
+          Config.API_PORT +
+          "enter_room_client/" +
           res.roomID +
           " />"
       );
