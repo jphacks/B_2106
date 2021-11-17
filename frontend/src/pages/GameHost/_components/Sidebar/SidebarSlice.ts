@@ -10,7 +10,7 @@ interface SidebarState {
 const initialState: SidebarState = {
   kyoku: 0,
   honba: 0,
-  dora: ["5p", "3s", "8m", "3s", "8m"],
+  dora: [],
 };
 
 export const sidebarSlice = createSlice({
