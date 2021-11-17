@@ -1,6 +1,9 @@
-$longSide: 66vh;
-$shortSide: 34vh;
-$padding: 10px;
+@use "../../../../variable";
+
+$long-side: 66vh;
+$short-side: 34vh;
+$padding: 30px;
+$hai-image-rato: calc(90 / 66);
 
 .drop-field {
   display: flex;
@@ -10,19 +13,19 @@ $padding: 10px;
     align-items: start;
     right: 0;
     bottom: 0;
-    width: $longSide;
-    height: $shortSide;
+    width: $long-side;
+    height: $short-side;
     padding-top: $padding;
 
     &__kawa {
       display: flex;
       flex-wrap: wrap;
-      width: 32vh;
+      width: variable.$center-field-height;
 
       &__sutehai-line {
         display: flex;
         align-items: flex-end;
-        height: calc(32vh / 6 / 66 * 90);
+        height: calc(variable.$center-field-height / 6 * $hai-image-rato);
       }
     }
   }
@@ -31,20 +34,20 @@ $padding: 10px;
     justify-content: flex-end;
     top: 0;
     left: 0;
-    width: $longSide;
-    height: $shortSide;
+    width: $long-side;
+    height: $short-side;
     padding-bottom: $padding;
 
     &__kawa {
       display: flex;
       flex-wrap: wrap-reverse;
       flex-direction: column-reverse;
-      width: 32vh;
+      width: variable.$center-field-height;
 
       &__sutehai-line {
         display: flex;
         flex-direction: row-reverse;
-        height: calc(32vh / 6 / 66 * 90);
+        height: calc(variable.$center-field-height / 6 * $hai-image-rato);
       }
     }
   }
@@ -53,21 +56,21 @@ $padding: 10px;
     justify-content: flex-end;
     bottom: 0;
     left: 0;
-    width: $shortSide;
-    height: $longSide;
+    width: $short-side;
+    height: $long-side;
     padding-right: $padding;
 
     &__kawa {
       display: flex;
       flex-wrap: wrap-reverse;
       flex-direction: column;
-      height: 32vh;
+      height: variable.$center-field-height;
 
       &__sutehai-line {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        width: calc(32vh / 6 / 66 * 90);
+        width: calc(variable.$center-field-height / 6 * $hai-image-rato);
       }
     }
   }
@@ -76,21 +79,21 @@ $padding: 10px;
     align-items: flex-end;
     top: 0;
     right: 0;
-    width: $shortSide;
-    height: $longSide;
+    width: $short-side;
+    height: $long-side;
     padding-left: $padding;
 
     &__kawa {
       display: flex;
       flex-wrap: wrap;
       flex-direction: column-reverse;
-      height: 32vh;
+      height: variable.$center-field-height;
 
       &__sutehai-line {
         display: flex;
         flex-direction: column-reverse;
         align-items: flex-end;
-        width: calc(32vh / 6 / 66 * 90);
+        width: calc(variable.$center-field-height / 6 * $hai-image-rato);
       }
     }
   }

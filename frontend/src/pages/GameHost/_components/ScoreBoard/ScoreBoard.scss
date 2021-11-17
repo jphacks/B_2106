@@ -1,0 +1,123 @@
+.score-board {
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 10vh;
+    margin-left: 10%;
+    font-size: 5vh;
+    border-bottom: 1px solid #333;
+  }
+
+  &__yaku {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 7vh;
+    font-size: 3vh;
+    margin: 2vh 0 5vh 0;
+
+    &__item {
+      display: flex;
+      justify-content: space-between;
+      min-width: 20vh;
+
+      &__key {
+        margin-right: 20px;
+      }
+    }
+  }
+
+  &__score-field {
+    position: relative;
+    height: 26vh;
+    margin-bottom: 4vh;
+
+    &__scores {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: absolute;
+      width: 40%;
+      height: 10vh;
+      padding: 0 20px;
+      margin: auto;
+
+      &--0 {
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      &--1 {
+        top: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      &--2 {
+        top: 0;
+        right: 0;
+        left: 0;
+      }
+
+      &--3 {
+        top: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      &__playername {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        word-break: break-all;
+        width: 100%;
+        font-size: 3vh;
+        margin-bottom: 10px;
+
+        .Hougaku {
+          margin-right: 10px;
+        }
+      }
+
+      &__score {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 50%;
+        font-size: 4vh;
+      }
+
+      &__diff {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 50%;
+        font-size: 4vh;
+
+        &--pos {
+          color: #f55;
+        }
+
+        &--neg {
+          color: #55f;
+        }
+      }
+    }
+  }
+
+  &__dora-field {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    height: 10vh;
+    font-size: 2vh;
+  }
+}

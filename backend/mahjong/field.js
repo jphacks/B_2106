@@ -57,12 +57,13 @@ module.exports = class Field {
         kawa: [],
         flag: {
           riichi: false,
+          ippatsu: false,
         },
       });
     }
 
     this.isFinished = false;
-    this.prevTrash = "dummy";
+    this.prevSutehai = "dummy";
   }
   pop() {
     if (this.isFinished) throw "もう山無いよ";
@@ -130,6 +131,10 @@ module.exports = class Field {
       this.playerField[player].tsumo
     );
     return syanten == -1;
+  }
+  syanten(player) {
+    const syanten = calcSyanten(this.playerField[player].tehai);
+    return syanten;
   }
   riichiPai(player) {
     const candidate = [

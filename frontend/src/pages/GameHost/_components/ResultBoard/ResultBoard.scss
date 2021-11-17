@@ -1,0 +1,47 @@
+.result-board {
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 10vh;
+    margin-left: 10%;
+    font-size: 5vh;
+    border-bottom: 1px solid #333;
+  }
+
+  &__ranking-field {
+    $height: 50vh;
+    width: 80%;
+    height: $height;
+    margin-left: 10%;
+    padding: 30px 0;
+    font-size: 4vh;
+
+    &__ranking {
+      display: grid;
+      grid-template-columns: 10% 1fr 60% 1fr 20%;
+      min-height: 10vh;
+
+      &--0 {
+        font-size: 1.2em;
+      }
+
+      &__rank {
+        grid-column: 1 / 2;
+        text-align: end;
+      }
+
+      &__username {
+        grid-column: 3 / 4;
+        text-align: center;
+        word-break: break-all;
+      }
+
+      &__score {
+        grid-column: 5 / 6;
+        text-align: end;
+      }
+    }
+  }
+}

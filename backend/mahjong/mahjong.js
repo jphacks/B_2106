@@ -2,6 +2,7 @@ const Config = require("./config");
 const Field = require("./field");
 const Player = require("./player");
 const State = require("./state");
+const calclate = require("./calclator");
 
 class Game {
   constructor(config) {
@@ -31,22 +32,31 @@ class Game {
     return this.state.getState();
   }
 
+  getTehaiWithPlayerIndex(indexOfPlayer) {
+    return this.field.playerField[indexOfPlayer].tehai;
+  }
+
+  getTsumoWithPlayerIndex(indexOfPlayer) {
+    return this.field.playerField[indexOfPlayer].tsumo;
+  }
+
   kyokuStart() {
     //局開始に遷移
     this.state.transiton("配牌");
     this.field = new Field();
-
+    this.turnPlayer = this.oyaPlayer;
     const ret = { players: [], tablet: undefined };
+    console.log(this.playerList);
     ret.tablet = {
       endpoint: "tablet-kyokustart",
       arg: {
         kyoku: this.kyokuCount,
         honba: this.honbaCount,
         player: [
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
+          { score: this.playerList[0].score, name: "hoge" },
+          { score: this.playerList[1].score, name: "hoge" },
+          { score: this.playerList[2].score, name: "hoge" },
+          { score: this.playerList[3].score, name: "hoge" },
         ],
         oya: this.oyaPlayer,
         dora: this.field.dora,
@@ -67,22 +77,22 @@ class Game {
     this.state.transiton("開始");
 
     this.field.haipai();
-
-    // this.field.playerField[0].tehai = [
-    //   "1m",
-    //   "1m",
-    //   "1m",
-    //   "2m",
-    //   "3m",
-    //   "4m",
-    //   "5m",
-    //   "6m",
-    //   "7m",
-    //   "8m",
-    //   "9m",
-    //   "9m",
-    //   "9m",
-    // ];
+    this.field.yama = ["1m"];
+    this.field.playerField[0].tehai = [
+      "1m",
+      "1m",
+      "1m",
+      "2m",
+      "3m",
+      "4m",
+      "5m",
+      "6m",
+      "7m",
+      "8m",
+      "9m",
+      "9m",
+      "9m",
+    ];
 
     const ret = { players: [], tablet: undefined };
     ret.tablet = {
@@ -166,11 +176,13 @@ class Game {
     const riichi = this.riichi;
     if (response.action == "dahai") {
       this.field.dahai(this.turnPlayer, response.pai);
+      //一発消し
+      this.field.playerField[this.turnPlayer].flag.ippatsu = false;
       this.state.transiton("行動送信");
     } else if (response.action == "tsumogiri") {
       this.field.tsumogiri(this.turnPlayer, response.pai);
       this.state.transiton("行動送信");
-    } else if (response.action == "tsumoagari") {
+    } else if (response.action == "tsumoAgari") {
       this.state.transiton("点数計算");
     } else {
       throw "不正なaction!:" + response.action;
@@ -178,6 +190,7 @@ class Game {
     if (riichi) {
       if (this.field.canRiichi(this.turnPlayer)) {
         this.field.playerField[this.turnPlayer].flag.riichi = true;
+        this.field.playerField[this.turnPlayer].flag.ippatsu = true;
       }
     }
   }
@@ -226,35 +239,117 @@ class Game {
     }
   }
   ryukyokuFinish() {
-    //流局処理
-    return this.kyokuFinish();
+    const ret = { players: [], tablet: undefined };
+    let score = this.playerList.map((p, index) => p.score);
+    const syanten = this.playerList.map((p, index) => this.field.syanten(index));
+    const tenpaiCount = syanten.filter(function (x) {
+      return x === 0;
+    }).length;
+    let diff = [];
+    if (tenpaiCount == 0 || tenpaiCount == 4) {
+      diff = [0, 0, 0, 0];
+    } else {
+      const win = 3000 / tenpaiCount;
+      const lose = -(3000 / (4 - tenpaiCount));
+      diff = syanten.map((s) => (s == 0 ? win : lose));
+    }
+    score = score.map((s, index) => s + diff[index]);
+    this.playerList.map((player, index) => {
+      player.score = score[index];
+    });
+    ret.tablet = {
+      endpoint: "tablet-ryukyoku",
+      arg: { score, diff },
+    };
+    for (let i = 0; i < 4; i++) {
+      ret.players[i] = {
+        endpoint: "client-ryukyoku",
+        arg: {},
+      };
+    }
+    this.kyokuFinish();
+    return ret;
   }
-  agariFinish() {
-    return this.kyokuFinish();
+  agariFinish(req) {
+    if (req.action == "tsumoAgari") {
+      const player = [null, null, null, null];
+      player[this.turnPlayer] = "ツモ";
+      const option = this.field.playerField[this.turnPlayer].flag.riichi ? "r" : "";
+      const score = this.playerList.map((p) => p.score);
+      const tabletArg = calclate(
+        this.field.playerField[this.turnPlayer].tehai,
+        this.field.playerField[this.turnPlayer].tsumo,
+        player,
+        this.oyaPlayer,
+        option,
+        score
+      );
+      tabletArg.score.map((s, index) => (this.playerList[index].score = s));
+      this.kyokuFinish();
+      const ret = { players: [], tablet: undefined };
+      ret.tablet = {
+        endpoint: "tablet-agari",
+        arg: tabletArg,
+      };
+      for (let i = 0; i < 4; i++) {
+        ret.players[i] = {
+          endpoint: "client-agari",
+          arg: {},
+        };
+      }
+      return ret;
+    } else if (req.action == "ron") {
+      const player = [null, null, null, null];
+      player[req.player] = "ロン";
+      player[this.turnPlayer] = "放銃";
+      const option = this.field.playerField[req.player].flag.riichi ? "r" : "";
+      const score = this.playerList.map((p) => p.score);
+      const tabletArg = calclate(
+        this.field.playerField[req.player].tehai,
+        this.field.prevSutehai,
+        player,
+        this.oyaPlayer,
+        option,
+        score
+      );
+      tabletArg.score.map((s, index) => (this.playerList[index].score = s));
+      this.kyokuFinish();
+      const ret = { players: [], tablet: undefined };
+      ret.tablet = {
+        endpoint: "tablet-agari",
+        arg: tabletArg,
+      };
+      for (let i = 0; i < 4; i++) {
+        ret.players[i] = {
+          endpoint: "client-agari",
+          arg: {},
+        };
+      }
+      return ret;
+    }
   }
   kyokuFinish() {
     this.oyaPlayer = (this.oyaPlayer + 1) % 4; //四麻想定
     this.field = undefined;
     this.kyokuCount++;
-    if (this.config.maxKyoku > this.kyokuCount)
-      this.state.transiton("ゲーム終了");
+    if (this.config.maxKyoku < this.kyokuCount) this.state.transiton("ゲーム終了");
     else this.state.transiton("局開始前");
-
+  }
+  gameover() {
     const ret = { players: [], tablet: undefined };
+    const ranking = this.playerList.map((p) => {
+      return { score: p.score, name: p.name };
+    });
+    ranking.sort((a, b) => b.score - a.score);
     ret.tablet = {
-      endpoint: "tablet-end",
+      endpoint: "tablet-gameover",
       arg: {
-        player: [
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-          { score: 25000, name: "hoge" },
-        ],
+        ranking,
       },
     };
     for (let i = 0; i < 4; i++) {
       ret.players[i] = {
-        endpoint: "client-end",
+        endpoint: "client-gameover",
         arg: {},
       };
     }

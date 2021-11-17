@@ -4,7 +4,9 @@ import "./Table.scss";
 import { DirectionType } from "../../../../_type";
 import CenterField from "../CenterField/CenterField";
 import DropField from "../DropField/DropField";
+import ScoreBoard from "../ScoreBoard/ScoreBoard";
 import { selectTableState } from "./TableSlice";
+import ResultBoard from "../ResultBoard/ResultBoard";
 
 const Table: React.FC = () => {
   const tableState = useSelector(selectTableState);
@@ -26,11 +28,10 @@ const Table: React.FC = () => {
 
   const table = (
     <div className="table">
-      東{tableState.kyoku}局{tableState.honba}本場
-      <br />
-      ドラ: {tableState.dora}
       <CenterField />
       {kawaList}
+      <ScoreBoard />
+      <ResultBoard />
     </div>
   );
 
@@ -40,16 +41,7 @@ const Table: React.FC = () => {
 export default Table;
 
 function getKawaDirection(directionNum: number): DirectionType {
-  switch (directionNum) {
-    case 0:
-      return "up";
-    case 1:
-      return "left";
-    case 2:
-      return "down";
-    case 3:
-      return "right";
-    default:
-      throw new Error("directionNum is invalid");
-  }
+  const direction = ["up", "left", "down", "right"];
+
+  return direction[directionNum] as DirectionType;
 }

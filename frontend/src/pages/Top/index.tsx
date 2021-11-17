@@ -48,7 +48,6 @@ const titleStyle = {
 };
 
 export const Top: React.FC<Prop> = () => {
-  console.log(process.env.REACT_APP_API_URL);
   return (
     <Grid container spacing={2} justifyContent="center">
       <Grid item>

@@ -1,16 +1,23 @@
 import process from "process";
 import io, { Socket } from "socket.io-client";
 import { store } from "../store";
+import { Config } from "../config";
+import { setSidebarState } from "../pages/GameHost/_components/Sidebar/SidebarSlice";
 import {
   dahai,
-  kyokuStartTable,
+  resetSutehaiList,
 } from "../pages/GameHost/_components/Table/TableSlice";
 import {
   setRiichiPlayer,
   setupTsumo,
   resetButton,
-  kyokuStartCenterField,
+  setupCenterField,
 } from "../pages/GameHost/_components/CenterField/CenterFieldSlice";
+import {
+  openScoreBoard,
+  openRyukyokuScoreBoard,
+} from "../pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
+import { openResultBoard } from "../pages/GameHost/_components/ResultBoard/ResultBoardSlice";
 import { setTurn, setFuro } from "../pages/GameClient/ClientFlagSlice";
 import {
   kyokuStart,
@@ -27,14 +34,11 @@ declare global {
 }
 
 function initSocket() {
-  const API_URL = process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL
-    : "http://localhost";
-  window.socket = io(API_URL, {
+  window.socket = io(Config.API_URL + ":" + Config.API_PORT, {
     transports: ["websocket"],
   });
   console.log("initSocket");
-  console.log(API_URL);
+  console.log(Config.API_URL + ":" + Config.API_PORT);
   console.log(window.socket);
   setupGameHost();
   setupGameClient();
@@ -43,8 +47,21 @@ function initSocket() {
 
 function setupGameHost() {
   window.socket.on("tablet-kyokustart", (data) => {
-    store.dispatch(kyokuStartTable(data));
-    store.dispatch(kyokuStartCenterField(data));
+    store.dispatch(
+      setSidebarState({
+        kyoku: data.kyoku,
+        honba: data.honba,
+        dora: data.dora,
+      })
+    );
+    store.dispatch(
+      setupCenterField({
+        oya: data.oya,
+        player: data.player,
+        turnPlayer: data.turnPlayer,
+      })
+    );
+    store.dispatch(resetSutehaiList());
   });
 
   window.socket.on("tablet-dahai", (data) => {
@@ -63,6 +80,19 @@ function setupGameHost() {
   window.socket.on("tablet-tsumo", (data) => {
     store.dispatch(setupTsumo(data));
   });
+
+  window.socket.on("tablet-agari", (data) => {
+    store.dispatch(openScoreBoard(data));
+  });
+
+  window.socket.on("tablet-ryukyoku", (data) => {
+    store.dispatch(openRyukyokuScoreBoard(data));
+  });
+
+  window.socket.on("tablet-gameover", (data) => {
+    console.log(data);
+    store.dispatch(openResultBoard(data));
+  });
 }
 
 function tsumo() {
@@ -75,6 +105,11 @@ function riichi(playerId: number) {
   window.socket.emit("tablet-riichi-pushed", { playerId: playerId });
 }
 
+function emitTabletSendOk() {
+  console.log("send-ok");
+  window.socket.emit("tablet-send-ok", { action: "tablet-send-ok" });
+}
+
 function emitDahai(pai: string) {
   window.socket.emit("dahai", { action: "dahai", pai: pai });
 }
@@ -85,7 +120,7 @@ function emitRon() {
   window.socket.emit("ron", { action: "ron" });
 }
 function emitTsumoagari() {
-  window.socket.emit("tsumoAgari", { action: "tsumoagari" });
+  window.socket.emit("tsumoAgari", { action: "tsumoAgari" });
 }
 
 function setupGameClient() {
@@ -119,5 +154,5 @@ function setupGameClient() {
 "client-end"で終了
  */
 
-export { initSocket, setupGameHost, tsumo, riichi };
+export { initSocket, setupGameHost, tsumo, riichi, emitTabletSendOk };
 export { emitTsumogiri, emitRon, emitDahai, emitTsumoagari };

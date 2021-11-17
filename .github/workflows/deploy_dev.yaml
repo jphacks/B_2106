@@ -1,0 +1,19 @@
+name: Deploy EC2 dev server
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types:
+      - closed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Deploy
+        run: |
+          # sshで接続する
+          echo "${{ secrets.DEV_PRIVATE_KEY}}" > dev_private_key
+          chmod 600 dev_private_key
+          ssh -oStrictHostKeyChecking=no -o ServerAliveInterval=30 ${{ secrets.EC2_DEV_USER_NAME}}@${{ secrets.EC2_DEV_HOST_NAME}} -i dev_private_key "cd ~/ && sh deploy.sh"

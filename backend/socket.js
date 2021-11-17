@@ -19,6 +19,7 @@ module.exports = (io, rooms) => {
       let r = new Room(socket.id);
       rooms[roomID] = r;
 
+      leaveAllRoom(socket);
       socket.join(roomID);
       socket.emit("create-room-response", { roomID: roomID });
     });
@@ -26,6 +27,7 @@ module.exports = (io, rooms) => {
     // roomに入る際のAPI
     socket.on("enter-room", (req) => {
       console.log("enter-room");
+
       const roomID = req["roomID"].toString();
       if (!io.sockets.adapter.rooms.get(roomID)) {
         console.log("error: enter-room", io.sockets.adapter.rooms.get(roomID));
@@ -34,8 +36,22 @@ module.exports = (io, rooms) => {
       }
 
       try {
+        const r = rooms[roomID];
         const name = req.name;
-        const r = rooms[req.roomID];
+
+        // すでに同名のplayerが参加しているかどうか
+        if (r.existPlayerWithName(name)) {
+          // gameがまだ始まっていないとき
+          if (!rooms[roomID].game) {
+            throw Error("Same name player already join and game haven't started yet.");
+          }
+
+          const res = reconnectRoom(socket, roomID, name);
+          console.log(res);
+          socket.emit("enter-room-response", res);
+          return;
+        }
+
         r.player = { name: name, id: socket.id };
       } catch (error) {
         console.log(error);
@@ -43,6 +59,7 @@ module.exports = (io, rooms) => {
         return;
       }
 
+      leaveAllRoom(socket);
       socket.join(roomID);
 
       io.in(roomID).emit("enter-room-response", {
@@ -50,6 +67,48 @@ module.exports = (io, rooms) => {
         id: socket.id,
       });
     });
+
+    function reconnectRoom(socket, roomID, name) {
+      console.log("reconnect-room");
+
+      try {
+        const r = rooms[roomID];
+        if (!r) {
+          throw new Error("no such roomID");
+        }
+        r.setPlayerIDWithName(name, socket.id);
+      } catch (error) {
+        console.log(error);
+        return { error: error.message };
+      }
+
+      leaveAllRoom(socket);
+      socket.join(roomID);
+
+      // ここにreconnectしたときのデータを入れる
+      let game;
+      try {
+        game = getGame(roomID);
+      } catch (error) {
+        return { error: error.message };
+      }
+
+      let indexOfPlayer = 0;
+      try {
+        indexOfPlayer = r.getPlayerIndexWithPlayerID(socket.id);
+      } catch (error) {
+        console.log(error);
+        return { error: error.message };
+      }
+
+      res = {
+        id: socket.id,
+        tehai: game.getTehaiWithPlayerIndex(indexOfPlayer),
+        tsumo: game.getTsumoWithPlayerIndex(indexOfPlayer),
+      };
+
+      return res;
+    }
 
     // 退出するとき用の_API
     socket.on("exit-room", (req) => {
@@ -67,8 +126,10 @@ module.exports = (io, rooms) => {
       console.log("start-game");
       console.log(req);
       console.log(socket.rooms);
-      io.to(roomID(socket)).emit("start-game-response", req);
-
+      io.to(roomID(socket)).emit("start-game-response", {
+        players: rooms[roomID(socket)].players.map((p) => p.name),
+      });
+      console.log("ゲームを開始");
       const playerNames = getPlayerNames(roomID(socket));
       const config = new Config(25000, "東風戦", playerNames);
 
@@ -104,74 +165,51 @@ module.exports = (io, rooms) => {
       const game = getGame(roomID(socket));
       let arg;
       game.nextActionFuro(req); //次のツモを引くことをセット
-      if (game.getState == "流局") {
+      if (game.getState() == "流局") {
         //ツモして牌がなければ流局へ
         arg = game.ryukyokuFinish(req);
         sendMessage(roomID(socket), arg);
-        if (game.getState() == "ゲーム終了") {
-          io.in(req.roomID).emit("gameover");
-        } else {
-          arg = game.kyokuStart(); //局開始
-          sendMessage(roomID(socket), arg);
-          arg = game.haipai(); //局開始の配牌
-          sendMessage(roomID(socket), arg);
-          arg = game.sendTurnStart(); //最初のツモを受け取って送信
-          sendMessage(roomID(socket), arg);
-        }
       } else {
         arg = game.sendTurnStart(req); //ツモを引いて牌を送信
         sendMessage(roomID(socket), arg);
       }
     });
     socket.on("tsumoAgari", (req) => {
+      const room = roomID(socket);
+      console.log("roomID:" + room);
       const game = getGame(roomID(socket));
-      let arg;
-      arg = game.agariFinish(req);
-      sendMessage(roomID(socket), arg);
-      //点数表示するならここでとめる？
-      if (game.getState() == "ゲーム終了") {
-        io.in(roomID(socket)).emit("gameover");
-      } else {
-        arg = game.kyokuStart(); //局開始
-        sendMessage(roomID(socket), arg);
-        arg = game.haipai(); //局開始の配牌
-        sendMessage(roomID(socket), arg);
-        arg = game.sendTurnStart(); //最初のツモを受け取って送信
-        sendMessage(roomID(socket), arg);
-      }
-      sendMessage(roomID, arg);
-    });
-    socket.on("ryukyoku", (req) => {
-      const game = getGame(roomID(socket));
-      let arg;
-      arg = game.ryukyokuFinish(req);
-      sendMessage(roomID(socket), arg);
-      if (game.getState() == "ゲーム終了") {
-        io.in(req.roomID).emit("gameover");
-      } else {
-        arg = game.kyokuStart(); //局開始
-        sendMessage(roomID(socket), arg);
-        arg = game.haipai(); //局開始の配牌
-        sendMessage(roomID(socket), arg);
-        arg = game.sendTurnStart(); //最初のツモを受け取って送信
-        sendMessage(roomID(socket), arg);
-      }
+      const arg = game.agariFinish(req);
+      sendMessage(room, arg);
     });
 
     socket.on("ron", (req) => {
+      const room = roomID(socket);
       const game = getGame(roomID(socket));
-      let arg;
-      arg = game.agariFinish(req);
-      sendMessage(roomID(socket), arg);
-      if (game.getState() == "ゲーム終了") {
-        io.in(req.roomID).emit("gameover");
-      } else {
+      let pidx = -1;
+      const r = rooms[room];
+      r.players.map((p, index) => {
+        if (p.id == socket.id) pidx = index;
+      });
+      req["player"] = pidx;
+      const arg = game.agariFinish(req);
+
+      sendMessage(room, arg);
+    });
+
+    socket.on("tablet-send-ok", (req) => {
+      const game = getGame(roomID(socket));
+      if (game.getState() == "局開始前") {
         arg = game.kyokuStart(); //局開始
         sendMessage(roomID(socket), arg);
         arg = game.haipai(); //局開始の配牌
         sendMessage(roomID(socket), arg);
         arg = game.sendTurnStart(); //最初のツモを受け取って送信
         sendMessage(roomID(socket), arg);
+      } else if (game.getState() == "ゲーム終了") {
+        arg = game.gameover(); //最初のツモを受け取って送信
+        sendMessage(roomID(socket), arg);
+      } else {
+        throw new Error("不正な状態:" + game.getState());
       }
     });
     // debug用
@@ -226,9 +264,9 @@ module.exports = (io, rooms) => {
 
   function roomID(socket) {
     const id = Array.from(socket.rooms)[1];
-    console.log(id);
     return id;
   }
+
   function sendMessage(roomID, clients) {
     console.log(JSON.stringify({ roomID, clients }, null, "\t"));
     const room = rooms[roomID];
@@ -250,6 +288,15 @@ module.exports = (io, rooms) => {
     for (let i = 0; i < Math.min(room["players"].length, players.length); i++) {
       const player = players[i];
       io.to(room["players"][i]["id"]).emit(player["endpoint"], player["arg"]);
+    }
+  }
+
+  function leaveAllRoom(socket) {
+    for (const room of socket.rooms) {
+      if (socket.id == room) {
+        continue;
+      }
+      socket.leave(room);
     }
   }
 };

@@ -1,30 +1,42 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "../../store";
 interface ClientFlagState {
-  canRon:boolean,
-  canTsumoagari:boolean,
-  canDahai:boolean,
-  isMyturn:boolean
+  canRon: boolean;
+  canTsumoagari: boolean;
+  canDahai: boolean;
+  isMyturn: boolean;
 }
-interface Turn{ canTsumoagari:boolean,isMyturn:boolean,canDahai:boolean}
-interface Furo{ canRon:boolean}
+interface Turn {
+  canTsumoagari: boolean;
+  isMyturn: boolean;
+  canDahai: boolean;
+}
+interface Furo {
+  canRon: boolean;
+}
 
-const initialState = { canRon:false,canTsumoagari:false,isMyturn:false ,canDahai:false} as ClientFlagState;
+const initialState = {
+  canRon: false,
+  canTsumoagari: false,
+  isMyturn: false,
+  canDahai: false,
+} as ClientFlagState;
 
 const clientFlagSlice = createSlice({
-  name: 'clientFlag',
+  name: "clientFlag",
   initialState,
   reducers: {
-      setTurn(state,action:PayloadAction<Turn>){
-        return {...state,...action.payload};
-      },
-      setFuro(state,action:PayloadAction<Furo>){
-        return {...state,...action.payload};
+    setTurn(state, action: PayloadAction<Turn>) {
+      return { ...state, ...action.payload };
+    },
+    setFuro(state, action: PayloadAction<Furo>) {
+      return { ...state, ...action.payload };
     },
   },
-})
+});
 
 export const { setTurn, setFuro } = clientFlagSlice.actions;
 export default clientFlagSlice.reducer;
-export const selectClientFlag = (state: RootState): ClientFlagState => state.clientFlag;
+export const selectClientFlag = (state: RootState): ClientFlagState =>
+  state.clientFlag;
