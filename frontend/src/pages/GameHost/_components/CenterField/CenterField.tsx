@@ -126,6 +126,10 @@ const CenterField: React.FC<Props> = (props) => {
           }}
           className={classNames(
             "center-field__contents__tsumo-button",
+            {
+              "center-field__contents__tsumo-button--disabled":
+                centerFieldState.shouldDisableTsumo,
+            },
             `center-field__contents__tsumo-button--${centerFieldState.turnPlayer}`
           )}
           disabled={centerFieldState.shouldDisableTsumo}
