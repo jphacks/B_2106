@@ -3,19 +3,22 @@ import { useSelector } from "react-redux";
 import { KazeType } from "../../../../_type";
 import "./CenterField.scss";
 import { selectCenterFieldState } from "./CenterFieldSlice";
+import { selectTableState } from "../Table/TableSlice";
 import { selectRoomHostState } from "../../../RoomHost/RoomHostSlice";
 import { DirectionType } from "../../../../_type";
 import classNames from "classnames";
 import Hougaku from "../../../../_components/Hougaku/Hougaku";
 import { tsumo, riichi } from "../../../../services/socket";
+import Tenbou from "../../../../_components/Tenbou/Tenbou";
 
 interface Props {
   styles?: any;
 }
 
 const CenterField: React.FC<Props> = (props) => {
-  const roomHostState = useSelector(selectRoomHostState);
   const centerFieldState = useSelector(selectCenterFieldState);
+  const tableState = useSelector(selectTableState);
+  const roomHostState = useSelector(selectRoomHostState);
 
   interface Fields {
     score: ReactElement[];
@@ -26,11 +29,6 @@ const CenterField: React.FC<Props> = (props) => {
     score: [],
     kaze: [],
   };
-  console.log(
-    "compoonet",
-    centerFieldState.shouldDisableRiichi,
-    centerFieldState.riichiPlayer
-  );
 
   for (let i = 0; i < 4; i++) {
     let direction: DirectionType = "up";
@@ -46,6 +44,14 @@ const CenterField: React.FC<Props> = (props) => {
       direction = "right";
       hougakuDirection = "left";
     }
+
+    let isRiichi: boolean = false;
+
+    tableState.sutehaiList[i].forEach((sutehai) => {
+      if (sutehai.isRiichi) {
+        isRiichi = true;
+      }
+    });
 
     fields.score.push(
       <div key={i}>
@@ -76,6 +82,16 @@ const CenterField: React.FC<Props> = (props) => {
         >
           <span>{centerFieldState.player[i].score}</span>
         </button>
+        {isRiichi && (
+          <div
+            className={classNames(
+              "center-field__contents__tenbou",
+              `center-field__contents__tenbou--${getTenbouDirection(i)}`
+            )}
+          >
+            <Tenbou value={1000} direction={getTenbouDirection(i)} />
+          </div>
+        )}
       </div>
     );
 
@@ -128,4 +144,10 @@ export function getKazeName(kazenum: number, oya: number): KazeType {
   const kaze = ["東", "南", "西", "北"];
 
   return kaze[(kazenum - oya + 4) % 4] as KazeType;
+}
+
+function getTenbouDirection(directionNum: number): DirectionType {
+  const direction = ["up", "left", "down", "right"];
+
+  return direction[directionNum] as DirectionType;
 }

@@ -1,0 +1,37 @@
+@use "../../variable";
+
+$imgWidth: 10;
+$imgHeight: 117;
+
+.tenbou {
+  &--up,
+  &--down {
+    $width: calc(variable.$center-field-height * 0.6);
+
+    width: $width;
+    height: calc($width * $imgWidth / $imgHeight);
+  }
+
+  &--left,
+  &--right {
+    $height: calc(variable.$center-field-height * 0.6);
+
+    width: calc($height * $imgWidth / $imgHeight);
+    height: $height;
+  }
+
+  &__img--up,
+  &__img--down {
+    $height: calc(variable.$center-field-height * 0.6);
+    position: relative;
+    height: $height;
+    transform: rotate(90deg);
+    transform-origin: left top;
+    right: calc(-1 * $height);
+  }
+
+  &__img--right,
+  &__img--left {
+    height: calc(variable.$center-field-height * 0.6);
+  }
+}
