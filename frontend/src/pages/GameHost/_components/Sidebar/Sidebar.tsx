@@ -13,6 +13,7 @@ const Sidebar: React.FC = () => {
 
   const sidebar = (
     <div className="sidebar">
+      <img src="./logo192.png" className="sidebar__logo" />
       <div className="sidebar__title">
         東{sidebarState.kyoku}局{sidebarState.honba}本場
       </div>
