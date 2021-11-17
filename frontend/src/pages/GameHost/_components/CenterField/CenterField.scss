@@ -1,4 +1,4 @@
-@use "../../common.scss";
+@use "../../../../variable";
 
 .center-field {
   position: absolute;
@@ -6,12 +6,13 @@
   right: 0;
   bottom: 0;
   left: 0;
-  width: common.$center-field-height;
-  height: common.$center-field-height;
+  width: variable.$center-field-height;
+  height: variable.$center-field-height;
   background-color: #fff;
   margin: auto;
   border-radius: 1vh;
   box-shadow: 2px 2px 4px -2px gray inset;
+
   &__contents {
     &__tsumo-button {
       display: flex;
