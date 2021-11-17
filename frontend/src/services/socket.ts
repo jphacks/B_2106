@@ -1,6 +1,7 @@
 import process from "process";
 import io, { Socket } from "socket.io-client";
 import { store } from "../store";
+import { Config } from "../config";
 import { setSidebarState } from "../pages/GameHost/_components/Sidebar/SidebarSlice";
 import {
   dahai,
@@ -33,14 +34,11 @@ declare global {
 }
 
 function initSocket() {
-  const API_URL = process.env.REACT_APP_API_URL
-    ? process.env.REACT_APP_API_URL
-    : "http://localhost:8080";
-  window.socket = io(API_URL, {
+  window.socket = io(Config.API_URL + ":" + Config.API_PORT, {
     transports: ["websocket"],
   });
   console.log("initSocket");
-  console.log(API_URL);
+  console.log(Config.API_URL + ":" + Config.API_PORT);
   console.log(window.socket);
   setupGameHost();
   setupGameClient();
