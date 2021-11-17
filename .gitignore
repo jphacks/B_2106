@@ -7,3 +7,4 @@ backend/.env
 backend/db
 
 frontend/.env
+frontend/.production
