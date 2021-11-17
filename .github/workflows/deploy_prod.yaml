@@ -1,0 +1,19 @@
+name: Deploy EC2 production server
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Deploy
+        run: |
+          # sshで接続する
+          echo "${{ secrets.PROD_PRIVATE_KEY}}" > prod_private_key
+          chmod 600 prod_private_key
+          ssh -oStrictHostKeyChecking=no -o ServerAliveInterval=30 ${{ secrets.EC2_PROD_USER_NAME}}@${{ secrets.EC2_PROD_HOST_NAME}} -i prod_private_key "cd ~/ && sh deploy.sh"
