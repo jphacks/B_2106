@@ -163,5 +163,41 @@
         left: 5px;
       }
     }
+
+    &__tenbou {
+      $offset: 20px;
+
+      position: absolute;
+      display: flex;
+      margin: auto;
+
+      &--up {
+        justify-content: center;
+        right: 0;
+        bottom: -$offset;
+        left: 0;
+      }
+
+      &--left {
+        align-items: center;
+        top: 0;
+        right: -$offset;
+        bottom: 0;
+      }
+
+      &--down {
+        justify-content: center;
+        right: 0;
+        top: -$offset;
+        left: 0;
+      }
+
+      &--right {
+        align-items: center;
+        top: 0;
+        left: -$offset;
+        bottom: 0;
+      }
+    }
   }
 }
