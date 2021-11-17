@@ -4,4 +4,4 @@ WORKDIR /app
 
 COPY ./ ./
 RUN yarn install  --no-save
-RUN yarn build:prod
+RUN yarn build:docker
