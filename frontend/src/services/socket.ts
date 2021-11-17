@@ -2,9 +2,9 @@ import process from "process";
 import io, { Socket } from "socket.io-client";
 import { store } from "../store";
 import { Config } from "../config";
+import { setSidebarState } from "../pages/GameHost/_components/Sidebar/SidebarSlice";
 import {
   dahai,
-  setupTable,
   resetSutehaiList,
 } from "../pages/GameHost/_components/Table/TableSlice";
 import {
@@ -13,8 +13,11 @@ import {
   resetButton,
   setupCenterField,
 } from "../pages/GameHost/_components/CenterField/CenterFieldSlice";
-import * as ScoreBoardSlice from "../pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
-import * as ResultBoardSlice from "../pages/GameHost/_components/ResultBoard/ResultBoardSlice";
+import {
+  openScoreBoard,
+  openRyukyokuScoreBoard,
+} from "../pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
+import { openResultBoard } from "../pages/GameHost/_components/ResultBoard/ResultBoardSlice";
 import { setTurn, setFuro } from "../pages/GameClient/ClientFlagSlice";
 import {
   kyokuStart,
@@ -44,8 +47,20 @@ function initSocket() {
 
 function setupGameHost() {
   window.socket.on("tablet-kyokustart", (data) => {
-    store.dispatch(setupTable(data));
-    store.dispatch(setupCenterField(data));
+    store.dispatch(
+      setSidebarState({
+        kyoku: data.kyoku,
+        honba: data.honba,
+        dora: data.dora,
+      })
+    );
+    store.dispatch(
+      setupCenterField({
+        oya: data.oya,
+        player: data.player,
+        turnPlayer: data.turnPlayer,
+      })
+    );
     store.dispatch(resetSutehaiList());
   });
 
@@ -67,16 +82,16 @@ function setupGameHost() {
   });
 
   window.socket.on("tablet-agari", (data) => {
-    store.dispatch(ScoreBoardSlice.openScoreBoard(data));
+    store.dispatch(openScoreBoard(data));
   });
 
   window.socket.on("tablet-ryukyoku", (data) => {
-    store.dispatch(ScoreBoardSlice.openRyukyokuScoreBoard(data));
+    store.dispatch(openRyukyokuScoreBoard(data));
   });
 
   window.socket.on("tablet-gameover", (data) => {
     console.log(data);
-    store.dispatch(ResultBoardSlice.openResultBoard(data));
+    store.dispatch(openResultBoard(data));
   });
 }
 
