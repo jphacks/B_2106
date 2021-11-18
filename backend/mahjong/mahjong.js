@@ -314,12 +314,12 @@ class Game {
       player[req.player] = "ロン";
       player[this.turnPlayer] = "放銃";
       const option =
-        (this.field.playerField[this.turnPlayer].flag.riichi ? "r" : "") +
-        (this.field.playerField[this.turnPlayer].flag.ippatsu ? "i" : "");
+        (this.field.playerField[req.player].flag.riichi ? "r" : "") +
+        (this.field.playerField[req.player].flag.ippatsu ? "i" : "");
       const score = this.playerList.map((p) => p.score);
       const dora = this.field.dora;
       const uradora = [];
-      if (this.field.playerField[this.turnPlayer].flag.riichi) {
+      if (this.field.playerField[req.player].flag.riichi) {
         //裏ドラ
         for (let i = 0; i < dora.length; i++)
           uradora.push(this.field.wanpai.pop());
