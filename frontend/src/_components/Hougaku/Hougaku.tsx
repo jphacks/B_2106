@@ -16,9 +16,9 @@ const Hougaku: React.FC<Props> = ({
   direction = "down",
   device,
 }) => {
-  if (direction) {
-    console.log(direction);
-  }
+  // if (direction) {
+  //   console.log(direction);
+  // }
   const hougaku = (
     <div
       className={classNames(
