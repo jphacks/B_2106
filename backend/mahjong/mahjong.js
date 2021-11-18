@@ -189,6 +189,9 @@ class Game {
       if (this.field.canRiichi(this.turnPlayer)) {
         this.field.playerField[this.turnPlayer].flag.riichi = true;
         this.field.playerField[this.turnPlayer].flag.ippatsu = true;
+        //千点払う
+        this.playerList[this.turnPlayer].score -= 1000;
+        this.senten += 1;
       }
     }
   }
@@ -201,6 +204,7 @@ class Game {
           pai: this.field.prevSutehai,
           playerId: this.turnPlayer,
           isRiichi: this.riichi,
+          score: this.playerList[this.turnPlayer].score,
         },
       },
       {
@@ -293,8 +297,10 @@ class Game {
         option,
         score,
         dora,
-        uradora
+        uradora,
+        this.senten
       );
+      this.sentan = 0;
       tabletArg.score.map((s, index) => (this.playerList[index].score = s));
       this.kyokuFinish();
       const ret = { players: [], tablet: undefined };
@@ -332,8 +338,10 @@ class Game {
         option,
         score,
         dora,
-        uradora
+        uradora,
+        this.senten
       );
+      this.sentan = 0;
       tabletArg.score.map((s, index) => (this.playerList[index].score = s));
       this.kyokuFinish();
       const ret = { players: [], tablet: undefined };
