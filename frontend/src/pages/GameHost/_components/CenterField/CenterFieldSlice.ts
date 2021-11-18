@@ -7,7 +7,7 @@ interface PlayerState {
 
 interface CenterFieldState {
   oya: number;
-  player: [PlayerState, PlayerState, PlayerState, PlayerState];
+  player: PlayerState[];
   turnPlayer: number;
   riichiPlayer: number;
   shouldDisableTsumo: boolean;
@@ -51,6 +51,19 @@ export const centerFieldSlice = createSlice({
       state.player = action.payload.player;
       state.turnPlayer = action.payload.oya;
     },
+    setScore: (
+      state: CenterFieldState,
+      action: PayloadAction<{
+        playerId: number;
+        score: number;
+      }>
+    ) => {
+      let player_copy = [...state.player];
+
+      player_copy[action.payload.playerId].score = action.payload.score;
+
+      state.player = player_copy;
+    },
   },
 });
 
@@ -61,6 +74,7 @@ export const {
   setupTsumo,
   resetButton,
   setupCenterField,
+  setScore,
 } = centerFieldSlice.actions;
 
 export const selectCenterFieldState = (state: RootState): CenterFieldState =>

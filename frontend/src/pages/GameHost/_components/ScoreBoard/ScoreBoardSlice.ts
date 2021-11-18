@@ -5,10 +5,13 @@ type NumberList = [number, number, number, number];
 
 interface Result {
   yaku: { [k: string]: string };
+  name: string;
   details: string;
   ten: number;
   diff: NumberList;
   score: NumberList;
+  dora: string[];
+  uradora: string[];
 }
 
 interface RyukyokuResult {
@@ -20,7 +23,6 @@ interface ScoreBoardState {
   open: boolean;
   isRyukyoku: boolean;
   result: Result;
-  uradora: string[];
 }
 
 const initialState: ScoreBoardState = {
@@ -28,12 +30,14 @@ const initialState: ScoreBoardState = {
   isRyukyoku: false,
   result: {
     yaku: {},
+    name: "",
     details: "",
     ten: 0,
     diff: [0, 0, 0, 0],
     score: [0, 0, 0, 0],
+    dora: [],
+    uradora: [],
   },
-  uradora: [],
 };
 
 export const scoreBoardSlice = createSlice({
