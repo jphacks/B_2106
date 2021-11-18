@@ -62,6 +62,10 @@ export const RoomHost: React.FC<Props> = () => {
       console.log(res);
       setRoomId(res.roomID);
     });
+
+    return () => {
+      socket.off("create-room-response");
+    };
   }, []);
 
   //player入退室周りの処理
