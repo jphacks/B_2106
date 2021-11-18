@@ -34,7 +34,7 @@ module.exports = (io, rooms) => {
         socket.emit("enter-room-response", { error: "no such roomID" });
         return;
       }
-
+      
       try {
         const name = req.name;
         const r = rooms[req.roomID];
@@ -100,7 +100,7 @@ module.exports = (io, rooms) => {
       });
       console.log("ゲームを開始");
       const playerNames = getPlayerNames(roomID(socket));
-      const config = new Config(25000, "東風戦", playerNames);
+      const config = new Config(50000, "東風戦", playerNames);
 
       const r = rooms[roomID(socket)];
       r.game = new Game(config);
