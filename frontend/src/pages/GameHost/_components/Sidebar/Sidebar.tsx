@@ -17,6 +17,10 @@ const Sidebar: React.FC = () => {
       <div className="sidebar__title">
         東{sidebarState.kyoku}局{sidebarState.honba}本場
       </div>
+      <div className="sidebar__yama">
+        <div className="sidebar__yama__text">山</div>
+        <div className="sidebar__yama__num">残り{sidebarState.yamaNum}枚</div>
+      </div>
       <div className="sidebar__dora">
         <div className="sidebar__dora__text">ドラ</div>
         <div className="sidebar__dora__hai">{doraHai}</div>

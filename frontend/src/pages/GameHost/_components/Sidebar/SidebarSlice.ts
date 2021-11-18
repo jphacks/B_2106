@@ -5,12 +5,14 @@ interface SidebarState {
   kyoku: number;
   honba: number;
   dora: string[];
+  yamaNum: number;
 }
 
 const initialState: SidebarState = {
   kyoku: 0,
   honba: 0,
   dora: [],
+  yamaNum: 0,
 };
 
 export const sidebarSlice = createSlice({
@@ -19,14 +21,22 @@ export const sidebarSlice = createSlice({
   reducers: {
     setSidebarState: (
       state: SidebarState,
-      action: PayloadAction<SidebarState>
+      action: PayloadAction<{ kyoku: number; honba: number; dora: string[] }>
     ) => {
-      return Object.assign({}, state, action.payload);
+      state.kyoku = action.payload.kyoku;
+      state.honba = action.payload.honba;
+      state.dora = action.payload.dora;
+    },
+    setYamaNum: (
+      state: SidebarState,
+      action: PayloadAction<{ length: number }>
+    ) => {
+      state.yamaNum = action.payload.length;
     },
   },
 });
 
-export const { setSidebarState } = sidebarSlice.actions;
+export const { setSidebarState, setYamaNum } = sidebarSlice.actions;
 
 export const selectSidebarState = (state: RootState): SidebarState =>
   state.sidebar;

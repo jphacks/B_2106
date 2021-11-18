@@ -2,7 +2,10 @@ import process from "process";
 import io, { Socket } from "socket.io-client";
 import { store } from "../store";
 import { Config } from "../config";
-import { setSidebarState } from "../pages/GameHost/_components/Sidebar/SidebarSlice";
+import {
+  setSidebarState,
+  setYamaNum,
+} from "../pages/GameHost/_components/Sidebar/SidebarSlice";
 import {
   dahai,
   resetSutehaiList,
@@ -79,6 +82,10 @@ function setupGameHost() {
 
   window.socket.on("tablet-tsumo", (data) => {
     store.dispatch(setupTsumo(data));
+  });
+
+  window.socket.on("tablet-yama", (data) => {
+    store.dispatch(setYamaNum(data));
   });
 
   window.socket.on("tablet-agari", (data) => {

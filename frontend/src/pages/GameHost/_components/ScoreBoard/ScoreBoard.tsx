@@ -9,12 +9,10 @@ import { selectCenterFieldState } from "../CenterField/CenterFieldSlice";
 import { emitTabletSendOk } from "../../../../services/socket";
 import ModalBoard from "../ModalBoard/ModalBoard";
 import { selectRoomHostState } from "../../../RoomHost/RoomHostSlice";
-import { selectSidebarState } from "../Sidebar/SidebarSlice";
 import Hai from "../../../../_components/Hai/Hai";
 
 const ScoreBoard: React.FC = () => {
   const RoomHostState = useSelector(selectRoomHostState);
-  const sidebarState = useSelector(selectSidebarState);
   const scoreBoardState = useSelector(selectScoreBoardState);
   const centerFieldState = useSelector(selectCenterFieldState);
 
@@ -66,13 +64,13 @@ const ScoreBoard: React.FC = () => {
 
   const title = scoreBoardState.isRyukyoku
     ? "流局"
-    : `${resultState.details} ${resultState.ten}点`;
+    : `${resultState.name} ${resultState.details} ${resultState.ten}点`;
 
-  const doraHai = sidebarState.dora.map((hai, i) => (
+  const doraHai = scoreBoardState.result.dora?.map((hai, i) => (
     <Hai key={i} name={hai} direction="up" is3d={false} />
   ));
 
-  const uradoraHai = scoreBoardState.uradora.map((hai, i) => (
+  const uradoraHai = scoreBoardState.result.uradora?.map((hai, i) => (
     <Hai key={i} name={hai} direction="up" is3d={false} />
   ));
 
