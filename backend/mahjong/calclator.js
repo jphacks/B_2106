@@ -1,6 +1,6 @@
 const Riichi = require("riichi");
 
-const convert = (haiList, alpha, isTsumo, option) => {
+const convertList = (haiList) => {
   manzu = haiList.filter((hai) => hai.charAt(1) == "m").sort();
   pinzu = haiList.filter((hai) => hai.charAt(1) == "p").sort();
   sozu = haiList.filter((hai) => hai.charAt(1) == "s").sort();
@@ -10,11 +10,17 @@ const convert = (haiList, alpha, isTsumo, option) => {
   if (pinzu.length > 0) ret += pinzu.map((hai) => hai.charAt(0)).join("") + "p";
   if (sozu.length > 0) ret += sozu.map((hai) => hai.charAt(0)).join("") + "s";
   if (jihai.length > 0) ret += jihai.map((hai) => hai.charAt(0)).join("") + "z";
-  ret += (isTsumo ? "" : "+") + alpha;
-  if (option) ret += "+" + option;
   return ret;
 };
-const exec = (obj, oyaPlayer, player, scoreOrg) => {
+const convert = (haiList, alpha, isTsumo, option, dora) => {
+  let ret = "";
+  ret += convertList(haiList);
+  ret += (isTsumo ? "" : "+") + alpha;
+  if (option) ret += "+" + option;
+  ret += "+d" + convertList(dora);
+  return ret;
+};
+const exec = (obj, oyaPlayer, player, scoreOrg, dora, uradora) => {
   const isOya =
     Math.max(player.indexOf("ロン"), player.indexOf("ツモ")) == oyaPlayer;
   score = isOya ? obj.oya : obj.ko;
@@ -53,14 +59,31 @@ const exec = (obj, oyaPlayer, player, scoreOrg) => {
     ten,
     diff,
     score: scoreOrg,
+    dora,
+    uradora,
   };
   return ret;
 };
-const calclate = (haiList, alpha, player, oyaPlayer, option, score) => {
-  const tehai = convert(haiList, alpha, player.includes("ツモ"), option);
+const calclate = (
+  haiList,
+  alpha,
+  player,
+  oyaPlayer,
+  option,
+  score,
+  dora,
+  uradora
+) => {
+  const tehai = convert(
+    haiList,
+    alpha,
+    player.includes("ツモ"),
+    option,
+    dora.concat(uradora)
+  );
   const riichi = new Riichi(tehai);
   const ret = riichi.calc();
-  return exec(ret, oyaPlayer, player, score);
+  return exec(ret, oyaPlayer, player, score, dora, uradora);
 };
 
 module.exports = calclate;
