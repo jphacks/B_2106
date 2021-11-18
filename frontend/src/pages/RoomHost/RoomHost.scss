@@ -1,0 +1,81 @@
+@use "../../variable";
+
+.roomHost {
+  &__id {
+    z-index: 1;
+
+    span {
+      margin-left: 10px;
+    }
+  }
+
+  &__container {
+    position: relative;
+    display: grid;
+    grid-template-rows: 2fr 20% 1fr 20vh 1fr 20% 2fr;
+    grid-template-columns: 1fr 20vh 1fr;
+    width: 100vw;
+    height: 100vh;
+
+    &__players {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-self: center;
+      justify-self: center;
+      width: 30vw;
+
+      &--0 {
+        grid-row: 6 / 7;
+        grid-column: 2 / 3;
+      }
+
+      &--1 {
+        grid-row: 4 / 5;
+        grid-column: 3 / 4;
+      }
+
+      &--2 {
+        grid-row: 2 / 3;
+        grid-column: 2 / 3;
+      }
+
+      &--3 {
+        grid-row: 4 / 5;
+        grid-column: 1 / 2;
+      }
+
+      .Hougaku {
+        position: absolute;
+        top: 0;
+        left: 10px;
+        bottom: 0;
+        margin: auto;
+      }
+
+      &__name {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 15vh;
+        padding-left: calc(4vh + 30px);
+      }
+    }
+
+    &__qrcode {
+      grid-row: 4 / 5;
+      grid-column: 2 / 3;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    &__button {
+      grid-row: 4 / 5;
+      grid-column: 2 / 3;
+      text-align: center;
+    }
+  }
+}

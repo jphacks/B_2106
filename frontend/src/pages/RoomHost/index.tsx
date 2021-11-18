@@ -1,53 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactElement } from "react";
 import { useDispatch } from "react-redux";
+import "./RoomHost.scss";
+import classNames from "classnames";
 import { Button, Card } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { SocketContext } from "../../App";
 import { setPlayerNames } from "./RoomHostSlice";
+import { KazeType } from "../../_type";
+import Hougaku from "../../_components/Hougaku/Hougaku";
 
 import { QRCodeImg } from "@cheprasov/react-qrcode";
 
 const buttonStyle = {
-  position: "absolute" as "absolute",
-  top: "60%",
-  left: "75%",
-  transform: "translate(-50%, -50%)",
-  width: "30%",
-  p: 4,
-  fontSize: "4vh",
-};
-const idStyle = {
-  position: "absolute" as "absolute",
-  top: "40%",
-  left: "75%",
   border: "2px solid #000",
   boxShadow: 24,
-  transform: "translate(-50%, -50%)",
-  width: "30%",
   p: 4,
-  fontSize: "3vh",
-};
-const playersStyle = {
-  position: "absolute" as "absolute",
-  top: "60%",
-  left: "33%",
-  border: "2px solid #000",
-  boxShadow: 24,
-  transform: "translate(-50%, -50%)",
-  width: "30%",
-  height: 400,
-  p: 4,
-  fontSize: "3vh",
-};
-const playerStyle = {
   fontSize: "4vh",
-  margin: "26px",
-  alignItems: "center",
-  justifyContent: "center",
-  display: "flex",
 };
 
-const qrStyle = { position: "absolute" };
+const idStyle = {
+  position: "absolute" as "absolute",
+  top: "3%",
+  left: "3%",
+  boxShadow: 24,
+  width: "25%",
+  p: 3,
+  fontSize: "3vh",
+};
+
+const playersStyle = {
+  border: "2px solid #000",
+  fontSize: "3vh",
+};
 
 const bigText = { fontSize: "5vh" };
 
@@ -70,7 +54,6 @@ export const RoomHost: React.FC<Props> = () => {
   };
 
   const [roomID, setRoomId] = useState<RoomProps>();
-  const [qrCode, setQrCode] = useState<String>();
 
   useEffect(() => {
     socket.emit("create-room");
@@ -78,11 +61,6 @@ export const RoomHost: React.FC<Props> = () => {
       console.log("create-room");
       console.log(res);
       setRoomId(res.roomID);
-      setQrCode(
-        "<QRCodeImg value=https://localhost:3000/enter_room_client/" +
-          res.roomID +
-          " />"
-      );
     });
   }, []);
 
@@ -92,6 +70,7 @@ export const RoomHost: React.FC<Props> = () => {
     id: string;
   };
   const [players, setPlayers] = useState<PlayerProps[]>([]);
+
   useEffect(() => {
     socket.on("enter-room-response", (res: PlayerProps) => {
       console.log("enter-room-response");
@@ -106,12 +85,14 @@ export const RoomHost: React.FC<Props> = () => {
     });
     socket.on("exit-room-response", (res) => {
       console.log("exit room response");
-      setPlayers(
-        players.filter((player) => {
-          player.id != res.id;
-        })
-      );
+      setPlayers(players.filter((player) => player.id != res.id));
     });
+
+    return () => {
+      socket.off("enter-room-response");
+      socket.off("start-game-response");
+      socket.off("exit-room-response");
+    };
   }, [players]);
 
   const startGame = () => {
@@ -119,35 +100,62 @@ export const RoomHost: React.FC<Props> = () => {
     socket.emit("start-game", { roomID: roomID });
   };
   console.log(players);
+
+  const playerElements: ReactElement[] = [];
+
+  for (let i = 0; i < 4; i++) {
+    playerElements.push(
+      <div
+        key={i}
+        className={classNames(
+          "roomHost__container__players",
+          `roomHost__container__players--${i}`
+        )}
+      >
+        <Hougaku text={getKazeName(i, 0)} direction="down" device="host" />
+        <Card
+          sx={{ ...playersStyle, boxShadow: players[i] ? 24 : 0 }}
+          className="roomHost__container__players__name"
+        >
+          {players[i]?.name}
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="roomHost">
-      <Card sx={idStyle}>
+      <Card sx={idStyle} className="roomHost__id">
         ルームID <span style={bigText}>{roomID}</span>
       </Card>
-      <Card sx={playersStyle} className="roomHost__container__players">
-        参加者一覧
-        {players.map((player, id) => {
-          // eslint-disable-next-line react/jsx-key
-          return (
-            <p style={playerStyle} key={id}>
-              {" "}
-              {player.name}{" "}
-            </p>
-          );
-        })}
-      </Card>
-      <Button
-        // eslint-disable-next-line no-constant-condition
-        sx={buttonStyle}
-        color="success"
-        disabled={players.length != 4}
-        variant="contained"
-        disableElevation
-        onClick={startGame}
-      >
-        StartGame
-      </Button>
-      <QRCodeImg value={"https://localhost:3000/enter_room_client/" + roomID} />
+      <div className="roomHost__container">
+        {playerElements}
+        {players.length < 4 ? (
+          <div className="roomHost__container__qrcode">
+            <QRCodeImg
+              value={"https://localhost:3000/enter_room_client/" + roomID}
+            />
+          </div>
+        ) : (
+          <Button
+            // eslint-disable-next-line no-constant-condition
+            className="roomHost__container__button"
+            sx={buttonStyle}
+            color="success"
+            variant="contained"
+            disableElevation
+            onClick={startGame}
+          >
+            Start Game
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
+
+function getKazeName(kazenum: number, oya: number): KazeType {
+  const kaze = ["東", "南", "西", "北"];
+
+  return kaze[(kazenum - oya + 4) % 4] as KazeType;
+}
