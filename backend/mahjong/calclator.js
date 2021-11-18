@@ -20,7 +20,7 @@ const convert = (haiList, alpha, isTsumo, option, dora) => {
   ret += "+d" + convertList(dora);
   return ret;
 };
-const exec = (obj, oyaPlayer, player, scoreOrg, dora, uradora) => {
+const exec = (obj, oyaPlayer, player, scoreOrg, dora, uradora, senten) => {
   const isOya =
     Math.max(player.indexOf("ロン"), player.indexOf("ツモ")) == oyaPlayer;
   score = isOya ? obj.oya : obj.ko;
@@ -32,11 +32,11 @@ const exec = (obj, oyaPlayer, player, scoreOrg, dora, uradora) => {
         if (index == oyaPlayer) return -score[0];
         else return -score[1];
       }
-      return ten;
+      return ten + senten * 1000;
     });
   } else {
     diff = player.map((item) =>
-      "ロン" == item ? ten : "放銃" == item ? -ten : 0
+      "ロン" == item ? ten + senten * 1000 : "放銃" == item ? -ten : 0
     );
   }
   scoreOrg = scoreOrg.map((i, index) => i + diff[index]);
@@ -61,6 +61,7 @@ const exec = (obj, oyaPlayer, player, scoreOrg, dora, uradora) => {
     score: scoreOrg,
     dora,
     uradora,
+    name: obj.name,
   };
   return ret;
 };
@@ -72,7 +73,8 @@ const calclate = (
   option,
   score,
   dora,
-  uradora
+  uradora,
+  senten
 ) => {
   const tehai = convert(
     haiList,
@@ -83,11 +85,12 @@ const calclate = (
   );
   const riichi = new Riichi(tehai);
   const ret = riichi.calc();
-  return exec(ret, oyaPlayer, player, score, dora, uradora);
+  console.log(ret);
+  return exec(ret, oyaPlayer, player, score, dora, uradora, senten);
 };
 
 module.exports = calclate;
-/*
+
 //test
 player = ["ツモ", null, null, null];
 list = [
@@ -106,25 +109,15 @@ list = [
   "9s",
 ];
 console.log(
-  calclate(list, "7s", player, 1, "ri", [25000, 25000, 25000, 25000])
+  calclate(
+    list,
+    "7s",
+    player,
+    1,
+    "ri",
+    [25000, 25000, 25000, 25000],
+    ["1m"],
+    [],
+    0
+  )
 );
-player = ["ツモ", null, null, null];
-list = [
-  "1m",
-  "9m",
-  "1p",
-  "9p",
-  "1s",
-  "9s",
-  "1z",
-  "2z",
-  "3z",
-  "4z",
-  "5z",
-  "6z",
-  "7z",
-];
-console.log(
-  calclate(list, "1z", player, 1, "ri", [25000, 25000, 25000, 25000])
-);
-*/
