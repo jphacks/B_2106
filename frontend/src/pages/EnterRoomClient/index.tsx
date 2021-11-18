@@ -119,6 +119,11 @@ export const EnterRoomClient: React.FC = () => {
       console.log("start-game-response" + res);
       history.push("/game_client");
     });
+
+    return () => {
+      socket.off("enter-room-response");
+      socket.off("start-game-response");
+    };
   }, []);
 
   const enterRoom = (data: Inputs) => {
