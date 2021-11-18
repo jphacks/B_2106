@@ -29,7 +29,6 @@ export const resultBoardSlice = createSlice({
       state: ResultBoardState,
       action: PayloadAction<{ ranking: [Ranking, Ranking, Ranking, Ranking] }>
     ) => {
-      console.log(action.payload);
       state.ranking = action.payload.ranking;
       state.open = true;
     },
