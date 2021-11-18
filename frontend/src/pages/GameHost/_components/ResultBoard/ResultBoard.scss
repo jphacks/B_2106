@@ -3,8 +3,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 80%;
     height: 10vh;
+    margin-left: 10%;
     font-size: 5vh;
+    border-bottom: 1px solid #333;
   }
 
   &__ranking-field {
@@ -13,12 +16,16 @@
     height: $height;
     margin-left: 10%;
     padding: 30px 0;
-    font-size: 3vh;
+    font-size: 4vh;
 
     &__ranking {
       display: grid;
       grid-template-columns: 10% 1fr 60% 1fr 20%;
       min-height: 10vh;
+
+      &--0 {
+        font-size: 1.2em;
+      }
 
       &__rank {
         grid-column: 1 / 2;

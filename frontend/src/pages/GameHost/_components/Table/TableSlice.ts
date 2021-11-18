@@ -7,17 +7,11 @@ export type Sutehai = {
 };
 
 interface TableState {
-  kyoku: number;
-  honba: number;
   sutehaiList: Sutehai[][];
-  dora: string[];
 }
 
 const initialState: TableState = {
-  kyoku: 1,
-  honba: 1,
   sutehaiList: [[], [], [], []],
-  dora: [],
 };
 
 interface DahaiState {
@@ -38,18 +32,13 @@ export const tableSlice = createSlice({
         isRiichi: payload.isRiichi,
       });
     },
-    setupTable: (state, action) => {
-      state.kyoku = action.payload.kyoku;
-      state.honba = action.payload.honba;
-      state.dora = action.payload.dora;
-    },
     resetSutehaiList: (state) => {
       state.sutehaiList = [[], [], [], []];
     },
   },
 });
 
-export const { dahai, setupTable, resetSutehaiList } = tableSlice.actions;
+export const { dahai, resetSutehaiList } = tableSlice.actions;
 
 export const selectTableState = (state: RootState): TableState => state.table;
 

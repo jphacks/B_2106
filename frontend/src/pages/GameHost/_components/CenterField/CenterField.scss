@@ -1,4 +1,4 @@
-@use "../../common.scss";
+@use "../../../../variable";
 
 .center-field {
   position: absolute;
@@ -6,12 +6,13 @@
   right: 0;
   bottom: 0;
   left: 0;
-  width: common.$center-field-height;
-  height: common.$center-field-height;
+  width: variable.$center-field-height;
+  height: variable.$center-field-height;
   background-color: #fff;
   margin: auto;
   border-radius: 1vh;
-  box-shadow: 2px 2px 4px -2px gray inset;
+  box-shadow: 0 0 5px #333 inset;
+
   &__contents {
     &__tsumo-button {
       display: flex;
@@ -24,8 +25,88 @@
       left: 0;
       width: 10vh;
       height: 10vh;
-      background-color: #ccc;
+      background-color: #FF770D;
+      border: 1px solid #555;
+      font-size: 3vh;
+      color: #fff;
+      border-radius: 1vh;
       margin: auto;
+
+      &--disabled {
+        opacity: 0.2;
+        border: 0;
+      }
+
+      &--1 {
+        span {
+          transform: rotate(180deg);
+          writing-mode: vertical-rl;
+          text-orientation: sideways;
+        }
+      }
+
+      &--2 {
+        span {
+          transform: rotate(180deg);
+        }
+      }
+
+      &--3 {
+        span {
+          writing-mode: vertical-rl;
+          text-orientation: sideways;
+        }
+      }
+    }
+
+    &__playernames {
+      $long-side: 18vh;
+      $short-side: 2vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      font-size: 2vh;
+      margin: auto;
+
+      &--up {
+        width: $long-side;
+        height: $short-side;
+        right: 0;
+        left: 0;
+        bottom: calc(5vh + 12px);
+      }
+
+      &--left {
+        width: $short-side;
+        height: $long-side;
+        top: 0;
+        right: calc(5vh + 12px);
+        bottom: 0;
+        transform: rotate(180deg);
+        writing-mode: vertical-rl;
+        text-orientation: sideways;
+      }
+
+      &--down {
+        width: $long-side;
+        height: $short-side;
+        transform: rotate(180deg);
+        top: calc(5vh + 12px);
+        right: 0;
+        left: 0;
+      }
+
+      &--right {
+        width: $short-side;
+        height: $long-side;
+        top: 0;
+        bottom: 0;
+        left: calc(5vh + 12px);
+        writing-mode: vertical-rl;
+        text-orientation: sideways;
+      }
     }
 
     &__score {
@@ -37,7 +118,9 @@
       justify-content: center;
       position: absolute;
       font-size: 3vh;
-      background-color: #ccc;
+      color: #000;
+      background-color: #e5e5e5;
+      border: 1px solid #555;
       margin: auto;
       border-radius: 1vh;
 
@@ -59,7 +142,7 @@
         span {
           transform: rotate(180deg);
           writing-mode: vertical-rl;
-          text-orientation: mixed;
+          text-orientation: sideways;
         }
       }
 
@@ -81,7 +164,7 @@
 
         span {
           writing-mode: vertical-rl;
-          text-orientation: mixed;
+          text-orientation: sideways;
         }
       }
     }
@@ -110,6 +193,42 @@
       &--right {
         top: 5px;
         left: 5px;
+      }
+    }
+
+    &__tenbou {
+      $offset: 20px;
+
+      position: absolute;
+      display: flex;
+      margin: auto;
+
+      &--up {
+        justify-content: center;
+        right: 0;
+        bottom: -$offset;
+        left: 0;
+      }
+
+      &--left {
+        align-items: center;
+        top: 0;
+        right: -$offset;
+        bottom: 0;
+      }
+
+      &--down {
+        justify-content: center;
+        right: 0;
+        top: -$offset;
+        left: 0;
+      }
+
+      &--right {
+        align-items: center;
+        top: 0;
+        left: -$offset;
+        bottom: 0;
       }
     }
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import "./reset.css";
+import "./App.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Top } from "./pages/Top";
 import { GameClient } from "./pages/GameClient";

@@ -32,6 +32,14 @@ class Game {
     return this.state.getState();
   }
 
+  getTehaiWithPlayerIndex(indexOfPlayer) {
+    return this.field.playerField[indexOfPlayer].tehai;
+  }
+
+  getTsumoWithPlayerIndex(indexOfPlayer) {
+    return this.field.playerField[indexOfPlayer].tsumo;
+  }
+
   kyokuStart() {
     //局開始に遷移
     this.state.transiton("配牌");
@@ -239,9 +247,7 @@ class Game {
   ryukyokuFinish() {
     const ret = { players: [], tablet: undefined };
     let score = this.playerList.map((p, index) => p.score);
-    const syanten = this.playerList.map((p, index) =>
-      this.field.syanten(index)
-    );
+    const syanten = this.playerList.map((p, index) => this.field.syanten(index));
     const tenpaiCount = syanten.filter(function (x) {
       return x === 0;
     }).length;
