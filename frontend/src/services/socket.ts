@@ -15,6 +15,7 @@ import {
   setupTsumo,
   resetButton,
   setupCenterField,
+  setScore,
 } from "../pages/GameHost/_components/CenterField/CenterFieldSlice";
 import {
   openScoreBoard,
@@ -68,7 +69,20 @@ function setupGameHost() {
   });
 
   window.socket.on("tablet-dahai", (data) => {
-    store.dispatch(dahai(data));
+    store.dispatch(
+      dahai({
+        playerId: data.playerId,
+        pai: data.pai,
+        isRiichi: data.isRiichi,
+      })
+    );
+
+    store.dispatch(
+      setScore({
+        playerId: data.playerId,
+        score: data.score,
+      })
+    );
   });
 
   window.socket.on("tablet-riichi", (data) => {
