@@ -77,16 +77,7 @@ function getHaiDirection(
     }
   }
 
-  switch (directionNum) {
-    case 0:
-      return "up";
-    case 1:
-      return "left";
-    case 2:
-      return "down";
-    case 3:
-      return "right";
-    default:
-      throw new Error("directionNum is invalid");
-  }
+  const direction = ["up", "left", "down", "right"];
+
+  return direction[directionNum] as DirectionType;
 }

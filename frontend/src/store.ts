@@ -6,6 +6,7 @@ import clientFlagReducer from "./pages/GameClient/ClientFlagSlice";
 import tehaiReducer from "./pages/GameClient/TehaiSlice";
 import scoreBoardReducer from "./pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
 import resultBoardReducer from "./pages/GameHost/_components/ResultBoard/ResultBoardSlice";
+import sidebarReducer from "./pages/GameHost/_components/Sidebar/SidebarSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     tehai: tehaiReducer,
     scoreBoard: scoreBoardReducer,
     resultBoard: resultBoardReducer,
+    sidebar: sidebarReducer,
   },
 });
 
