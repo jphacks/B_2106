@@ -1,5 +1,5 @@
 # <img style="width:50px" src="./frontend/public/logo192.png"> どこでも麻雀卓
-<div align="center"><a href="https://www.youtube.com/watch?v=FmputuHSra0">
+<div align="center"><a href="https://www.youtube.com/watch?v=CbltadOrfak&feature=youtu.be">
 <img src="https://user-images.githubusercontent.com/15964431/142654081-7ff76835-cbd5-469a-a6a6-feb3bac822ed.png" alt="デモ動画" title="タイトル"></a>
 </div>
 
