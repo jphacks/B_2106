@@ -1,12 +1,16 @@
 import React, { useState, useEffect, ReactElement } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Config } from "../../config";
 import "./RoomHost.scss";
 import classNames from "classnames";
 import { Button, Card } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import { SocketContext } from "../../App";
-import { setPlayerNames } from "./RoomHostSlice";
+import {
+  setPlayerNames,
+  setRoomId,
+  selectRoomHostState,
+} from "./RoomHostSlice";
 import { KazeType } from "../../_type";
 import Hougaku from "../../_components/Hougaku/Hougaku";
 
@@ -40,14 +44,13 @@ type Props = {
 };
 
 export const RoomHost: React.FC<Props> = () => {
+  const roomHostState = useSelector(selectRoomHostState);
   const dispatch = useDispatch();
   const history = useHistory();
   const socket = React.useContext(SocketContext);
 
   //起動時に実行される room周りの処理
   //https://github.com/cheprasov/ts-react-qrcode
-
-  const [roomID, setRoomId] = useState<string>();
   const [qrCode, setQrCode] = useState<ReactElement>();
 
   useEffect(() => {
@@ -59,7 +62,7 @@ export const RoomHost: React.FC<Props> = () => {
         "QR code URL:",
         `${Config.API_URL}:${Config.API_PORT}/enter_room_client/` + res.roomID
       );
-      setRoomId(res.roomID);
+      dispatch(setRoomId(res.roomID));
       setQrCode(
         <QRCodeImg
           value={
@@ -108,7 +111,7 @@ export const RoomHost: React.FC<Props> = () => {
 
   const startGame = () => {
     console.log("startGame");
-    socket.emit("start-game", { roomID: roomID });
+    socket.emit("start-game", { roomID: roomHostState.roomId });
   };
   console.log(players);
 
@@ -140,7 +143,7 @@ export const RoomHost: React.FC<Props> = () => {
   return (
     <div className="roomHost">
       <Card sx={idStyle} className="roomHost__id">
-        ルームID <span style={bigText}>{roomID}</span>
+        ルームID <span style={bigText}>{roomHostState.roomId}</span>
       </Card>
       <div className="roomHost__container">
         {playerElements}

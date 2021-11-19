@@ -34,10 +34,13 @@ const tehaiSlice = createSlice({
       state.tehai = action.payload;
       return state;
     },
+    setTehaiState(state, action: PayloadAction<TehaiState>) {
+      return Object.assign({}, state, action.payload);
+    },
   },
 });
 
-export const { kyokuStart, tsumo, dahai, tsumogiri, haipai } =
+export const { kyokuStart, tsumo, dahai, tsumogiri, haipai, setTehaiState } =
   tehaiSlice.actions;
 export default tehaiSlice.reducer;
 
