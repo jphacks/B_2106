@@ -3,7 +3,7 @@
 <img src="http://img.youtube.com/vi/FmputuHSra0/0.jpg" alt="デモ動画" title="タイトル"></a>
 </div>
 
-# どこでも麻雀卓URL
+## どこでも麻雀卓URL
 
 http://mahjongtaku.com
 
