@@ -32,7 +32,10 @@ jobs:
           node-version: "16"
           cache: "yarn"
           cache-dependency-path: frontend/yarn.lock
-      - run: yarn install
-      - run: ls
-      - run: yarn build
-      - run: ls
+      - run: |
+          cd frontend
+          ls
+          yarn install
+          ls
+          yarn build
+          ls
