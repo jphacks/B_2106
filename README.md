@@ -5,9 +5,9 @@
 
 ## どこでも麻雀卓URL
 実際に下記URLでゲームを遊ぶことが可能です。  
+
 http://mahjongtaku.com
 
-<br>
 
 ## 製品概要
 
@@ -25,9 +25,14 @@ http://mahjongtaku.com
 ![image](https://user-images.githubusercontent.com/53958213/142645004-b40743a6-8f51-47b0-9f87-709fbeacc2ce.jpg)
 
 
-### 製品説明（具体的な製品の説明）
-私達のアプリケーションでは，公開情報である河などの盤面をタブレット上で、プレイヤー個人の情報である手牌をスマホ上に表示することで、アプリの手軽さとオフラインの一体感のいいとこ取りを可能とします。麻雀の複雑なルールをそのまま実装できなかったため，簡素化したルールを実装している．
+### 製品説明
+公開情報である河などの盤面をタブレット上で、プレイヤー個人の情報である手牌をスマホ上に表示することで、アプリの手軽さとオフラインの一体感のいいとこ取りを可能とします。麻雀の複雑なルールをそのまま実装できなかったため，簡素化したルールを実装している．
 
+#### タブレットの画面
+<img width="1315" alt="タブレットの画面" src="https://user-images.githubusercontent.com/53958213/142666628-4e687625-af07-4bca-a259-cfdcd2370ff6.png">
+
+#### スマホの画面
+<img width="1308" alt="スマホの画面" src="https://user-images.githubusercontent.com/53958213/142666640-d615dc5f-068f-44e5-9ccb-ac99bdf5356a.png">
 
 
 ### 特長
@@ -52,7 +57,7 @@ http://mahjongtaku.com
 ### 活用した技術
 <img  alt="tech" src="https://user-images.githubusercontent.com/53958213/142648267-e6ce2c95-0413-4484-b80e-707e67fb538c.png">
 
-#### フレームワーク・ライブラリ・モジュール
+#### 技術の詳細
 
 - フロントエンドアプリケーション
     - React
