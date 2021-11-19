@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./ScoreBoard.scss";
-import { selectScoreBoardState, closeScoreBoard } from "./ScoreBoardSlice";
+import { selectScoreBoardState, resetScoreBoard } from "./ScoreBoardSlice";
 import classNames from "classnames";
 import Hougaku from "../../../../_components/Hougaku/Hougaku";
 import { getKazeName } from "../CenterField/CenterField";
@@ -112,7 +112,7 @@ const ScoreBoard: React.FC = () => {
       open={scoreBoardState.open}
       contents={contents}
       onClickOk={() => {
-        dispatch(closeScoreBoard());
+        dispatch(resetScoreBoard());
         emitTabletSendOk();
       }}
     />

@@ -3,22 +3,22 @@ body {
   background-color: $color-background;
 }
 .icon {
-  display:inline-block;
+  display: inline-block;
   height: 1.5em;
-  vertical-align:middle;
-  padding-right:20px;
+  vertical-align: middle;
+  padding-right: 20px;
 }
-.Logo{
-  &__container{
-    width:100vw;
-    height:60vh;
-    display:flex;
-    position:relative;
+.Logo {
+  &__container {
+    width: 100vw;
+    height: 60vh;
+    display: flex;
+    position: relative;
     justify-content: center;
-    align-items:flex-end;
+    align-items: flex-end;
   }
-  &__image{
-    display:block;
+  &__image {
+    display: block;
     height: 90%;
   }
 }

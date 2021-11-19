@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./ResultBoard.scss";
-import { selectResultBoardState, closeResultBoard } from "./ResultBoardSlice";
+import { selectResultBoardState, resetResultBoard } from "./ResultBoardSlice";
 import classNames from "classnames";
 import ModalBoard from "../ModalBoard/ModalBoard";
 import { useHistory } from "react-router-dom";
@@ -47,7 +47,7 @@ const ResultBoard: React.FC = () => {
       open={resultBoardState.open}
       contents={contents}
       onClickOk={() => {
-        dispatch(closeResultBoard());
+        dispatch(resetResultBoard());
         history.push("/"); // 終局画面でOKボタンを押したらトップに戻る
       }}
     />
