@@ -77,6 +77,36 @@ class Game {
     this.state.transiton("開始");
 
     this.field.haipai();
+<<<<<<< Updated upstream
+=======
+    if (this.kyokuCount == 1) {
+      this.field.playerField[0].tehai = [
+        "1p",
+        "1p",
+        "2m",
+        "3m",
+        "4p",
+        "5p",
+        "6s",
+        "5s",
+        "8m",
+        "9m",
+        "4z",
+        "6p",
+        "3z",
+      ];
+      this.field.yama[0] = "5z";
+      this.field.yama[4] = "2p";
+      this.field.yama[8] = "7m";
+      this.field.yama[9] = "7s";
+      this.field.yama[12] = "7s";
+      this.field.dora[0] = "1s";
+      this.field.wanpai = ["1s"];
+    } else if (this.kyokuCount == 1) {
+      for (let i = 0; i < 66; i++) this.field.yama.pop();
+    }
+    /*
+>>>>>>> Stashed changes
     //this.field.yama = ["1m"];
     this.field.playerField[0].tehai = [
       "1m",
