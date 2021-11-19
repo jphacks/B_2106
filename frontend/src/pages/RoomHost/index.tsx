@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ReactElement } from "react";
 import { useDispatch } from "react-redux";
+import { Config } from "../../config";
 import "./RoomHost.scss";
 import classNames from "classnames";
 import { Button, Card } from "@mui/material";
@@ -58,10 +59,17 @@ export const RoomHost: React.FC<Props> = () => {
     socket.on("create-room-response", (res) => {
       console.log("create-room");
       console.log(res);
+      console.log(
+        "QR code URL:",
+        `${Config.API_URL}:${Config.API_PORT}/enter_room_client/` + res.roomID
+      );
       setRoomId(res.roomID);
       setQrCode(
         <QRCodeImg
-          value={"https://localhost:3000/enter_room_client/" + res.roomID}
+          value={
+            `${Config.API_URL}:${Config.API_PORT}/enter_room_client/` +
+            res.roomID
+          }
         />
       );
     });
