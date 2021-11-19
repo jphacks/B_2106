@@ -7,13 +7,26 @@ on:
     types:
       - closed
 
+  # jobs:
+  # deploy:
+  # runs-on: ubuntu-20.04
+  # steps:
+  # - name: Deploy
+  # run: |
+  # sshで接続する
+  # echo "${{ secrets.DEV_PRIVATE_KEY}}" > dev_private_key
+  # chmod 600 dev_private_key
+  # ssh -oStrictHostKeyChecking=no -o ServerAliveInterval=30 ${{ secrets.EC2_DEV_USER_NAME}}@${{ secrets.EC2_DEV_HOST_NAME}} -i dev_private_key "cd ~/ && sh deploy.sh"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 jobs:
-  deploy:
-    runs-on: ubuntu-20.04
+  build:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy
-        run: |
-          # sshで接続する
-          echo "${{ secrets.DEV_PRIVATE_KEY}}" > dev_private_key
-          chmod 600 dev_private_key
-          ssh -oStrictHostKeyChecking=no -o ServerAliveInterval=30 ${{ secrets.EC2_DEV_USER_NAME}}@${{ secrets.EC2_DEV_HOST_NAME}} -i dev_private_key "cd ~/ && sh deploy.sh"
+      - uses: actions/checkout@v2
+
+      - name: Run git branch
+        run: git branch
