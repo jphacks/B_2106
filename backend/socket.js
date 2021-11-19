@@ -112,10 +112,11 @@ module.exports = (io, rooms) => {
 
     // 退出するとき用の_API
     socket.on("exit-room", (req) => {
-      console.log("exit-room:" + req["roomID"] + ":" + socket.id);
-      socket.leave(req["roomID"]);
-      rooms[req["roomID"]].leavePlayer(socket.id);
-      io.in(req["roomID"]).emit("exit-room-response", {
+      const roomID = req["roomID"].toString();
+      console.log("exit-room:" + roomID + ":" + socket.id);
+      socket.leave(roomID);
+      rooms[roomID].leavePlayer(socket.id);
+      io.in(roomID).emit("exit-room-response", {
         name: req["name"],
         id: socket.id,
       });
@@ -131,7 +132,7 @@ module.exports = (io, rooms) => {
       });
       console.log("ゲームを開始");
       const playerNames = getPlayerNames(roomID(socket));
-      const config = new Config(25000, "東風戦", playerNames);
+      const config = new Config(50000, "東風戦", playerNames);
 
       const r = rooms[roomID(socket)];
       r.game = new Game(config);
@@ -161,6 +162,10 @@ module.exports = (io, rooms) => {
       game.setRiichi(true); //リーチフラグにtrueをセット
     });
 
+    socket.on("client-riichi", (req) => {
+      const game = getGame(roomID(socket));
+      game.setRiichi(true); //リーチフラグにtrueをセット
+    });
     socket.on("tablet-tsumo", (req) => {
       const game = getGame(roomID(socket));
       let arg;

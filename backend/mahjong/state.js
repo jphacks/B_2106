@@ -14,6 +14,7 @@ module.exports = class State {
   constructor() {
     this.state = 0;
   }
+
   transiton(next) {
     //遷移先チェック入れるかどうか
 

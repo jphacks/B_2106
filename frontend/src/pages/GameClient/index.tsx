@@ -9,21 +9,31 @@ import { selectClientFlag } from "./ClientFlagSlice";
 import "./style.scss";
 import { selectTehai } from "./TehaiSlice";
 import { tsumo as tsumoAction, haipai, dahai, tsumogiri } from "./TehaiSlice";
-import { setTurn, setFuro } from "./ClientFlagSlice";
+import { setTurn, setFuro, resetUI } from "./ClientFlagSlice";
 import Button from "./_components/Button";
 import {
   emitTsumogiri,
   emitDahai,
   emitRon,
   emitTsumoagari,
+  emitRiichi,
 } from "../../services/socket";
 import { KazeType } from "../../_type";
+import { useHistory } from "react-router";
 export const GameClient = () => {
   //将来的にはreduxで管理する変数
   const { kaze, tsumo, tehai } = useSelector(selectTehai);
-  const { canRon, canTsumoagari, canDahai, isMyturn } =
-    useSelector(selectClientFlag);
+  const {
+    canRon,
+    canTsumoagari,
+    canDahai,
+    isMyturn,
+    canRiichi,
+    canGoTop,
+    canTsumogiri,
+  } = useSelector(selectClientFlag);
   const [selectIdx, setSelectIdx] = useState<number>(-1);
+  const history = useHistory();
   const [orderList, setOrderList] = useState<number[]>([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   ]);
@@ -55,26 +65,44 @@ export const GameClient = () => {
     } else if (action == "tsumoagari") {
       emitTsumoagari();
       dispatch(
-        setTurn({ canDahai: false, canTsumoagari: false, isMyturn: true })
+        setTurn({
+          canDahai: false,
+          canTsumoagari: false,
+          isMyturn: true,
+          canRiichi: false,
+        })
+      );
+    } else if (action == "riichi") {
+      emitRiichi();
+      dispatch(
+        setTurn({
+          canDahai: true,
+          canTsumoagari: canTsumoagari,
+          isMyturn: true,
+          canRiichi: false,
+        })
       );
     }
   };
   const haiClick = (index: number) => {
     if (index == selectIdx) {
-      console.log("double tapped!!");
       if (isMyturn) {
         if (index == 14) {
-          emitTsumogiri();
-          dispatch(tsumogiri());
-          dispatch(
-            setTurn({ canDahai: false, canTsumoagari: false, isMyturn: false })
-          );
+          if (canTsumogiri) {
+            dispatch(tsumogiri());
+            emitTsumogiri();
+            dispatch(resetUI());
+          }
         } else if (canDahai) {
-          console.log("dahai!!!!!!!!!!");
           emitDahai(tehai[index]);
           dispatch(dahai(index));
           dispatch(
-            setTurn({ canDahai: false, canTsumoagari: false, isMyturn: false })
+            setTurn({
+              canDahai: false,
+              canTsumoagari: false,
+              isMyturn: false,
+              canRiichi: false,
+            })
           );
         }
       }
@@ -137,6 +165,26 @@ export const GameClient = () => {
               text="ツモ"
               onClick={() => {
                 buttonClick("tsumoagari");
+              }}
+            />
+          </div>
+        )}
+        {canGoTop && (
+          <div className="ClientView__Action">
+            <Button
+              text="終了"
+              onClick={() => {
+                history.push("/");
+              }}
+            />
+          </div>
+        )}
+        {canRiichi && (
+          <div className="ClientView__Action">
+            <Button
+              text="立直"
+              onClick={() => {
+                buttonClick("riichi");
               }}
             />
           </div>

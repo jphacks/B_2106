@@ -2,7 +2,10 @@ import process from "process";
 import io, { Socket } from "socket.io-client";
 import { store } from "../store";
 import { Config } from "../config";
-import { setSidebarState } from "../pages/GameHost/_components/Sidebar/SidebarSlice";
+import {
+  setSidebarState,
+  setYamaNum,
+} from "../pages/GameHost/_components/Sidebar/SidebarSlice";
 import {
   dahai,
   resetSutehaiList,
@@ -12,13 +15,19 @@ import {
   setupTsumo,
   resetButton,
   setupCenterField,
+  setScore,
 } from "../pages/GameHost/_components/CenterField/CenterFieldSlice";
 import {
   openScoreBoard,
   openRyukyokuScoreBoard,
 } from "../pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
 import { openResultBoard } from "../pages/GameHost/_components/ResultBoard/ResultBoardSlice";
-import { setTurn, setFuro } from "../pages/GameClient/ClientFlagSlice";
+import {
+  setTurn,
+  setFuro,
+  setGoTop,
+  resetUI,
+} from "../pages/GameClient/ClientFlagSlice";
 import {
   kyokuStart,
   tsumo as tsumoAction,
@@ -65,7 +74,20 @@ function setupGameHost() {
   });
 
   window.socket.on("tablet-dahai", (data) => {
-    store.dispatch(dahai(data));
+    store.dispatch(
+      dahai({
+        playerId: data.playerId,
+        pai: data.pai,
+        isRiichi: data.isRiichi,
+      })
+    );
+
+    store.dispatch(
+      setScore({
+        playerId: data.playerId,
+        score: data.score,
+      })
+    );
   });
 
   window.socket.on("tablet-riichi", (data) => {
@@ -79,6 +101,10 @@ function setupGameHost() {
 
   window.socket.on("tablet-tsumo", (data) => {
     store.dispatch(setupTsumo(data));
+  });
+
+  window.socket.on("tablet-yama", (data) => {
+    store.dispatch(setYamaNum(data));
   });
 
   window.socket.on("tablet-agari", (data) => {
@@ -122,29 +148,45 @@ function emitRon() {
 function emitTsumoagari() {
   window.socket.emit("tsumoAgari", { action: "tsumoAgari" });
 }
+function emitRiichi() {
+  window.socket.emit("client-riichi", { action: "tsumoAgari" });
+}
 
 function setupGameClient() {
   window.socket.on("client-kyokustart", (req) => {
+    store.dispatch(resetUI());
     store.dispatch(kyokuStart(req.kaze));
   });
   window.socket.on("client-haipai", (req) => {
     store.dispatch(haipai(req.tehai));
   });
   window.socket.on("client-turnstart", (req) => {
+    store.dispatch(resetUI());
     store.dispatch(tsumoAction(req.pai));
     store.dispatch(
       setTurn({
         isMyturn: req.turnplayer,
         canTsumoagari: req.canTsumoagari,
         canDahai: req.canDahai,
+        canRiichi: req.canRiichi,
       })
     );
   });
   window.socket.on("client-nextaction", (req) => {
-    console.log(req);
+    store.dispatch(resetUI());
     store.dispatch(setFuro({ canRon: req.canRon }));
   });
-  window.socket.on("client-end", (req) => {});
+  window.socket.on("client-agari", (req) => {
+    console.log("agari");
+    store.dispatch(resetUI());
+  });
+  window.socket.on("client-gameover", (req) => {
+    store.dispatch(resetUI());
+    store.dispatch(setGoTop({ canGoTop: true }));
+  });
+  window.socket.on("client-ryukyoku", (data) => {
+    store.dispatch(resetUI());
+  });
 }
 /*
 "client-kyokustart"で{oya:bool}がtrueなら方角(自風)の表示を光らせる
@@ -155,4 +197,4 @@ function setupGameClient() {
  */
 
 export { initSocket, setupGameHost, tsumo, riichi, emitTabletSendOk };
-export { emitTsumogiri, emitRon, emitDahai, emitTsumoagari };
+export { emitTsumogiri, emitRon, emitDahai, emitTsumoagari, emitRiichi };

@@ -46,8 +46,19 @@ module.exports = class Field {
     };
     all = shuffle(all.concat(all).concat(all).concat(all));
     this.yama = all.slice(14, 136);
-    this.wanpai = all.slice(0, 14);
-    this.dora = [this.wanpai[0]];
+    this.wanpai = new (class {
+      constructor(yama) {
+        this.yama = yama;
+      }
+      pop() {
+        //次の牌に送る
+        const hai = this.yama.pop();
+        const num = (Number(hai.charAt(0)) % 9) + 1;
+
+        return num + hai.charAt(1);
+      }
+    })(all.slice(0, 14));
+    this.dora = [this.wanpai.pop()];
     this.playerField = [];
     for (let i = 0; i < 4; i++) {
       this.playerField.push({
@@ -130,6 +141,7 @@ module.exports = class Field {
       this.playerField[player].tehai,
       this.playerField[player].tsumo
     );
+
     return syanten == -1;
   }
   syanten(player) {

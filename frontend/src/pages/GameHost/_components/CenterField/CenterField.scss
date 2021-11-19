@@ -25,16 +25,19 @@
       left: 0;
       width: 10vh;
       height: 10vh;
-      background-color: #FF770D;
-      border: 1px solid #555;
+      background-color: rgb(240, 100, 50);
+      box-shadow: 0 0 5px #ffd700;
+      border: 5px solid #ffd700;
+      border-radius: 1vh;
       font-size: 3vh;
       color: #fff;
-      border-radius: 1vh;
       margin: auto;
 
       &--disabled {
-        opacity: 0.2;
+        background-color: rgba(220, 220, 220, 0.5);
+        box-shadow: none;
         border: 0;
+        color: #000;
       }
 
       &--1 {
