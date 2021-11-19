@@ -22,7 +22,12 @@ import {
   openRyukyokuScoreBoard,
 } from "../pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
 import { openResultBoard } from "../pages/GameHost/_components/ResultBoard/ResultBoardSlice";
-import { setTurn, setFuro,setGoTop,resetUI } from "../pages/GameClient/ClientFlagSlice";
+import {
+  setTurn,
+  setFuro,
+  setGoTop,
+  resetUI,
+} from "../pages/GameClient/ClientFlagSlice";
 import {
   kyokuStart,
   tsumo as tsumoAction,
@@ -143,7 +148,7 @@ function emitRon() {
 function emitTsumoagari() {
   window.socket.emit("tsumoAgari", { action: "tsumoAgari" });
 }
-function emitRiichi(){
+function emitRiichi() {
   window.socket.emit("client-riichi", { action: "tsumoAgari" });
 }
 
@@ -164,7 +169,7 @@ function setupGameClient() {
         isMyturn: req.turnplayer,
         canTsumoagari: req.canTsumoagari,
         canDahai: req.canDahai,
-        canRiichi:req.canRiichi
+        canRiichi: req.canRiichi,
       })
     );
   });
@@ -174,7 +179,7 @@ function setupGameClient() {
   });
   window.socket.on("client-gameover", (req) => {
     store.dispatch(resetUI());
-    store.dispatch(setGoTop({canGoTop:true}));
+    store.dispatch(setGoTop({ canGoTop: true }));
   });
   window.socket.on("client-ryukyoku", (data) => {
     store.dispatch(resetUI());
@@ -189,4 +194,4 @@ function setupGameClient() {
  */
 
 export { initSocket, setupGameHost, tsumo, riichi, emitTabletSendOk };
-export { emitTsumogiri, emitRon, emitDahai, emitTsumoagari ,emitRiichi};
+export { emitTsumogiri, emitRon, emitDahai, emitTsumoagari, emitRiichi };

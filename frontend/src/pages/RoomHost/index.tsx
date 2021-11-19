@@ -14,7 +14,6 @@ import { QRCodeImg } from "@cheprasov/react-qrcode";
 
 const buttonStyle = {
   border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   fontSize: "4vh",
 };
@@ -23,7 +22,7 @@ const idStyle = {
   position: "absolute" as "absolute",
   top: "3%",
   left: "3%",
-  boxShadow: 24,
+  border: "2px solid #000",
   width: "25%",
   p: 3,
   fontSize: "3vh",
@@ -41,9 +40,6 @@ type Props = {
 };
 
 export const RoomHost: React.FC<Props> = () => {
-  //playersのuseState
-  //roomsのuseState
-
   const dispatch = useDispatch();
   const history = useHistory();
   const socket = React.useContext(SocketContext);
@@ -128,11 +124,14 @@ export const RoomHost: React.FC<Props> = () => {
         )}
       >
         <Hougaku text={getKazeName(i, 0)} direction="down" device="host" />
-        <Card
-          sx={{ ...playersStyle, boxShadow: players[i] ? 24 : 0 }}
-          className="roomHost__container__players__name"
-        >
-          {players[i]?.name}
+        <Card sx={playersStyle} className="roomHost__container__players__name">
+          {players[i] ? (
+            players[i].name
+          ) : (
+            <div className="roomHost__container__players__name--nologin">
+              参加待機中
+            </div>
+          )}
         </Card>
       </div>
     );
