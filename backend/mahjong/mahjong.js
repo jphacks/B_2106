@@ -202,6 +202,8 @@ class Game {
         this.playerList[this.turnPlayer].score -= 1000;
         this.senten += 1;
       }
+    } else {
+      this.riichi = false;
     }
   }
   sendNextAction() {
