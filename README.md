@@ -1,9 +1,16 @@
-# どこでも麻雀卓
+# <img style="width:50px" src="./frontend/public/logo192.png"> どこでも麻雀卓
 <div align="center"><a href="https://www.youtube.com/watch?v=FmputuHSra0">
 <img src="http://img.youtube.com/vi/FmputuHSra0/0.jpg" alt="デモ動画" title="タイトル"></a>
 </div>
 
+# どこでも麻雀卓URL
+
+http://mahjongtaku.com
+
+<br>
+
 ## 製品概要
+
 ### 背景(製品開発のきっかけ、課題等）
 
 学生の間で麻雀は広く親しまれているゲームです。
@@ -24,7 +31,7 @@
 ### 製品説明（具体的な製品の説明）
 私達のアプリケーションでは，公開情報である河などの盤面をタブレット上で、プレイヤー個人の情報である手牌をスマホ上に表示することで、アプリの手軽さとオフラインの一体感のいいとこ取りを可能とします。麻雀の複雑なルールをそのまま実装できなかったため，簡素化したルールを実装している．
 
-どこでも麻雀卓URL: http://mahjongtaku.com
+
 
 ### 特長
 
@@ -46,6 +53,7 @@
 ## 開発技術
 
 ### 活用した技術
+<img  alt="tech" src="https://user-images.githubusercontent.com/53958213/142648267-e6ce2c95-0413-4484-b80e-707e67fb538c.png">
 
 #### フレームワーク・ライブラリ・モジュール
 
