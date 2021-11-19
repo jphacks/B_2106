@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ReactElement } from "react";
 import { useDispatch } from "react-redux";
+import { Config } from "../../config";
 import "./RoomHost.scss";
 import classNames from "classnames";
 import { Button, Card } from "@mui/material";
@@ -49,18 +50,28 @@ export const RoomHost: React.FC<Props> = () => {
 
   //起動時に実行される room周りの処理
   //https://github.com/cheprasov/ts-react-qrcode
-  type RoomProps = {
-    id: string;
-  };
 
-  const [roomID, setRoomId] = useState<RoomProps>();
+  const [roomID, setRoomId] = useState<string>();
+  const [qrCode, setQrCode] = useState<ReactElement>();
 
   useEffect(() => {
     socket.emit("create-room");
     socket.on("create-room-response", (res) => {
       console.log("create-room");
       console.log(res);
+      console.log(
+        "QR code URL:",
+        `${Config.API_URL}:${Config.API_PORT}/enter_room_client/` + res.roomID
+      );
       setRoomId(res.roomID);
+      setQrCode(
+        <QRCodeImg
+          value={
+            `${Config.API_URL}:${Config.API_PORT}/enter_room_client/` +
+            res.roomID
+          }
+        />
+      );
     });
 
     return () => {
@@ -135,11 +146,7 @@ export const RoomHost: React.FC<Props> = () => {
       <div className="roomHost__container">
         {playerElements}
         {players.length < 4 ? (
-          <div className="roomHost__container__qrcode">
-            <QRCodeImg
-              value={"https://localhost:3000/enter_room_client/" + roomID}
-            />
-          </div>
+          <div className="roomHost__container__qrcode">{qrCode}</div>
         ) : (
           <Button
             // eslint-disable-next-line no-constant-condition
