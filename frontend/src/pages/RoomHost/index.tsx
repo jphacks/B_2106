@@ -151,10 +151,7 @@ export const RoomHost: React.FC<Props> = () => {
       <Card sx={idStyle} className="roomHost__id">
         ルームID <span style={bigText}>{roomHostState.roomId}</span>
       </Card>
-      <div
-        className="roomHost__container"
-        style={{ height: window.innerHeight }}
-      >
+      <div className="roomHost__container">
         {playerElements}
         {players.length < 4 ? (
           <div className="roomHost__container__qrcode">{qrCode}</div>
