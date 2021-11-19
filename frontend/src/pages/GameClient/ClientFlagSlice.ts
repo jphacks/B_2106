@@ -18,8 +18,8 @@ interface Turn {
 interface Furo {
   canRon: boolean;
 }
-interface End{
-  canGoTop:boolean;
+interface End {
+  canGoTop: boolean;
 }
 
 const initialState = {
@@ -42,13 +42,19 @@ const clientFlagSlice = createSlice({
     setGoTop(state, action: PayloadAction<End>) {
       return { ...state, ...action.payload };
     },
-    resetUI(state){
-      return { ...state, canRiichi:false,canRon:false,canTsumoAgari:false,canDahai:false }
-    }
+    resetUI(state) {
+      return {
+        ...state,
+        canRiichi: false,
+        canRon: false,
+        canTsumoAgari: false,
+        canDahai: false,
+      };
+    },
   },
 });
 
-export const { setTurn, setFuro ,setGoTop,resetUI} = clientFlagSlice.actions;
+export const { setTurn, setFuro, setGoTop, resetUI } = clientFlagSlice.actions;
 export default clientFlagSlice.reducer;
 export const selectClientFlag = (state: RootState): ClientFlagState =>
   state.clientFlag;
