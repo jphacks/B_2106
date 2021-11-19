@@ -9,6 +9,7 @@ import { Box, Modal } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { SocketContext } from "../../App";
 import { setTehaiState } from "../GameClient/TehaiSlice";
+import "./index.scss";
 
 type Inputs = { roomID: number; name: string };
 
@@ -21,7 +22,6 @@ const style = {
   height: "80%",
   bgcolor: "background.paper",
   border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   fontSize: "20px",
 };
@@ -34,7 +34,6 @@ const inputIdStyle = {
   width: 200,
   bgcolor: "background.paper",
   border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   fontSize: "20px",
 };
@@ -47,7 +46,6 @@ const inputNameStyle = {
   width: 200,
   bgcolor: "background.paper",
   border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   fontSize: "20px",
 };
@@ -57,9 +55,8 @@ const buttonStyle = {
   top: "70%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 200,
+  width: 250,
   border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   fontSize: "20px",
 };
@@ -180,6 +177,7 @@ export const EnterRoomClient: React.FC = () => {
           type="submit"
           variant="contained"
         >
+          <img className="icon" src="./images/enter.png" alt="" />
           ルームに入る
         </Button>
 

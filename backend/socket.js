@@ -43,9 +43,7 @@ module.exports = (io, rooms) => {
         if (r.existPlayerWithName(name)) {
           // gameがまだ始まっていないとき
           if (!rooms[roomID].game) {
-            throw Error(
-              "Same name player already join and game haven't started yet."
-            );
+            throw Error("Same name player already join and game haven't started yet.");
           }
 
           const res = reconnectRoom(socket, roomID, name);
@@ -115,10 +113,11 @@ module.exports = (io, rooms) => {
 
     // 退出するとき用の_API
     socket.on("exit-room", (req) => {
-      console.log("exit-room:" + req["roomID"] + ":" + socket.id);
-      socket.leave(req["roomID"]);
-      rooms[req["roomID"]].leavePlayer(socket.id);
-      io.in(req["roomID"]).emit("exit-room-response", {
+      const roomID = req["roomID"].toString();
+      console.log("exit-room:" + roomID + ":" + socket.id);
+      socket.leave(roomID);
+      rooms[roomID].leavePlayer(socket.id);
+      io.in(roomID).emit("exit-room-response", {
         name: req["name"],
         id: socket.id,
       });

@@ -162,7 +162,6 @@ function setupGameClient() {
   });
   window.socket.on("client-turnstart", (req) => {
     store.dispatch(resetUI());
-    console.log("ron-kesu");
     store.dispatch(tsumoAction(req.pai));
     store.dispatch(
       setTurn({
@@ -176,6 +175,10 @@ function setupGameClient() {
   window.socket.on("client-nextaction", (req) => {
     store.dispatch(resetUI());
     store.dispatch(setFuro({ canRon: req.canRon }));
+  });
+  window.socket.on("client-agari", (req) => {
+    console.log("agari");
+    store.dispatch(resetUI());
   });
   window.socket.on("client-gameover", (req) => {
     store.dispatch(resetUI());
