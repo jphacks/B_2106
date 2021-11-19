@@ -25,7 +25,7 @@ export const App: React.FC<Prop> = () => {
     <div className="App">
       <div className="Blocker">
         <img className="Blocker__icon" src="./images/rotate.png" alt="" />
-        <span className="Blocker__text">スマホを縦に向けてください</span>
+        <span className="Blocker__text">端末を横に向けてください</span>
       </div>
       <SocketContext.Provider value={socket}>
         <BrowserRouter>
