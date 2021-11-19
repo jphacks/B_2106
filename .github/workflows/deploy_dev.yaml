@@ -32,7 +32,15 @@ jobs:
           node-version: "16"
           cache: "yarn"
           cache-dependency-path: frontend/yarn.lock
-      - run: |
-          cd frontend
-          yarn install
-      - run: ls
+
+      - name: Install
+        run: yarn install
+        working-directory: frontend
+
+      - name: Build
+        run: yarn build
+        working-directory: frontend
+        env:
+          CI: false
+          REACT_APP_API_URL: ${{ secrets.DEV_API_URL}}
+          REACT_APP_API_PORT: ${{ secrets.DEV_API_PORT}}
