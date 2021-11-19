@@ -34,8 +34,5 @@ jobs:
           cache-dependency-path: frontend/yarn.lock
       - run: |
           cd frontend
-          ls
           yarn install
-          ls
-          yarn build
-          ls
+      - run: ls
