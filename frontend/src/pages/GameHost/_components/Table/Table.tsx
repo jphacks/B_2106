@@ -27,7 +27,10 @@ const Table: React.FC = () => {
   }
 
   const table = (
-    <div className="table">
+    <div
+      className="table"
+      style={{ width: window.innerHeight, height: window.innerHeight }}
+    >
       <CenterField />
       {kawaList}
       <ScoreBoard />

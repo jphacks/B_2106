@@ -5,7 +5,7 @@ import Sidebar from "./_components/Sidebar/Sidebar";
 
 export const GameHost: React.FC = () => {
   return (
-    <div className="game-host">
+    <div className="game-host" style={{ height: window.innerHeight }}>
       <Table />
       <Sidebar />
     </div>
