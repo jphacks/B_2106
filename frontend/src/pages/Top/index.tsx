@@ -1,41 +1,33 @@
 import React from "react";
 import "./index.scss";
-import { Card, Grid, Typography, Button } from "@mui/material";
+import { Card, Box, Grid, Typography, Button } from "@mui/material";
 
 type Prop = {};
-
-const cardStyle = {
+const logoStyle = {
   position: "absolute" as "absolute",
   top: "20%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
+  width: "100%",
 };
-
 const lButtonStyle = {
   position: "absolute" as "absolute",
-  top: "70%",
+  top: "80%",
   left: "70%",
   transform: "translate(-50%, -50%)",
-  width: 200,
+  width: 250,
   border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   fontSize: "20px",
 };
 
 const rButtonStyle = {
   position: "absolute" as "absolute",
-  top: "70%",
+  top: "80%",
   left: "30%",
   transform: "translate(-50%, -50%)",
-  width: 200,
+  width: 250,
   border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   fontSize: "20px",
 };
@@ -51,9 +43,9 @@ export const Top: React.FC<Prop> = () => {
   return (
     <Grid container spacing={2} justifyContent="center">
       <Grid item>
-        <Card sx={cardStyle}>
-          <Typography sx={titleStyle}>どこでも麻雀卓</Typography>
-        </Card>
+        <div className="Logo__container">
+          <img className="Logo__image" src="./logo512.png" alt="" />
+        </div>
       </Grid>
       <Grid item xs={12}>
         <Button
@@ -62,6 +54,7 @@ export const Top: React.FC<Prop> = () => {
           sx={lButtonStyle}
           href="/room_host"
         >
+          <img className="icon" src="./images/home.png" alt="" />
           ルームを作る
         </Button>
         <Button
@@ -70,6 +63,7 @@ export const Top: React.FC<Prop> = () => {
           sx={rButtonStyle}
           href="/enter_room_client"
         >
+          <img className="icon" src="./images/enter.png" alt="" />
           ルームに入る
         </Button>
       </Grid>

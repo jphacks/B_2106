@@ -9,7 +9,7 @@ import { selectClientFlag } from "./ClientFlagSlice";
 import "./style.scss";
 import { selectTehai } from "./TehaiSlice";
 import { tsumo as tsumoAction, haipai, dahai, tsumogiri } from "./TehaiSlice";
-import { setTurn, setFuro } from "./ClientFlagSlice";
+import { setTurn, setFuro, resetUI } from "./ClientFlagSlice";
 import Button from "./_components/Button";
 import {
   emitTsumogiri,
@@ -23,8 +23,15 @@ import { useHistory } from "react-router";
 export const GameClient = () => {
   //将来的にはreduxで管理する変数
   const { kaze, tsumo, tehai } = useSelector(selectTehai);
-  const { canRon, canTsumoagari, canDahai, isMyturn, canRiichi, canGoTop } =
-    useSelector(selectClientFlag);
+  const {
+    canRon,
+    canTsumoagari,
+    canDahai,
+    isMyturn,
+    canRiichi,
+    canGoTop,
+    canTsumogiri,
+  } = useSelector(selectClientFlag);
   const [selectIdx, setSelectIdx] = useState<number>(-1);
   const history = useHistory();
   const [orderList, setOrderList] = useState<number[]>([
@@ -79,19 +86,13 @@ export const GameClient = () => {
   };
   const haiClick = (index: number) => {
     if (index == selectIdx) {
-      console.log("double tapped!!");
       if (isMyturn) {
         if (index == 14) {
-          emitTsumogiri();
-          dispatch(tsumogiri());
-          dispatch(
-            setTurn({
-              canDahai: false,
-              canTsumoagari: false,
-              isMyturn: false,
-              canRiichi: false,
-            })
-          );
+          if (canTsumogiri) {
+            dispatch(tsumogiri());
+            emitTsumogiri();
+            dispatch(resetUI());
+          }
         } else if (canDahai) {
           emitDahai(tehai[index]);
           dispatch(dahai(index));
