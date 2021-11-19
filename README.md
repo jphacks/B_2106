@@ -4,7 +4,7 @@
 </div>
 
 ## どこでも麻雀卓URL
-
+実際に下記URLでゲームを遊ぶことが可能です。  
 http://mahjongtaku.com
 
 <br>
@@ -93,8 +93,4 @@ http://mahjongtaku.com
 ### 独自技術
 - 麻雀の複雑なルールの一部をReactベースで実装した
 - 麻雀の複雑なゲーム画面をReactで実装した
-
-#### ハッカソンで開発した独自機能・技術
-
 - [タブレット側のゲーム画面](https://github.com/jphacks/B_2106/tree/main/frontend/src/pages/GameHost)を実装することが特に大変だった
-- 特に力を入れた部分をファイルリンク、または commit_id を記載してください。
