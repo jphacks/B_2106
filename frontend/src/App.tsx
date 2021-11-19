@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./App.scss";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Top } from "./pages/Top";
 import { GameClient } from "./pages/GameClient";
@@ -23,6 +23,10 @@ export const App: React.FC<Prop> = () => {
 
   return (
     <div className="App">
+      <div className="Blocker">
+        <img className="Blocker__icon" src="./images/rotate.png" alt="" />
+        <span className="Blocker__text">スマホを縦に向けてください</span>
+      </div>
       <SocketContext.Provider value={socket}>
         <BrowserRouter>
           <Switch>
