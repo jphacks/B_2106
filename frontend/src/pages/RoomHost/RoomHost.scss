@@ -25,6 +25,7 @@
       align-self: center;
       justify-self: center;
       width: 30vw;
+      max-width: 60vmin;
 
       &--0 {
         grid-row: 6 / 7;
@@ -46,20 +47,27 @@
         grid-column: 1 / 2;
       }
 
-      .Hougaku {
-        position: absolute;
-        top: 0;
-        left: 10px;
-        bottom: 0;
-        margin: auto;
-      }
-
       &__name {
         display: flex;
         align-items: center;
         width: 100%;
         height: 15vh;
-        padding-left: calc(4vh + 30px);
+
+        &--1 {
+          transform: rotate(-90deg);
+        }
+
+        &--2 {
+          transform: rotate(180deg);
+        }
+
+        &--3 {
+          transform: rotate(90deg);
+        }
+
+        .Hougaku {
+          margin: 0 20px;
+        }
 
         &--nologin {
           color: #bbb;

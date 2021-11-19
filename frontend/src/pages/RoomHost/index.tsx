@@ -126,8 +126,14 @@ export const RoomHost: React.FC<Props> = () => {
           `roomHost__container__players--${i}`
         )}
       >
-        <Hougaku text={getKazeName(i, 0)} direction="down" device="host" />
-        <Card sx={playersStyle} className="roomHost__container__players__name">
+        <Card
+          sx={playersStyle}
+          className={classNames(
+            "roomHost__container__players__name",
+            `roomHost__container__players__name--${i}`
+          )}
+        >
+          <Hougaku text={getKazeName(i, 0)} direction="down" device="host" />
           {players[i] ? (
             players[i].name
           ) : (
