@@ -49,11 +49,9 @@ export const RoomHost: React.FC<Props> = () => {
 
   //起動時に実行される room周りの処理
   //https://github.com/cheprasov/ts-react-qrcode
-  type RoomProps = {
-    id: string;
-  };
 
-  const [roomID, setRoomId] = useState<RoomProps>();
+  const [roomID, setRoomId] = useState<string>();
+  const [qrCode, setQrCode] = useState<ReactElement>();
 
   useEffect(() => {
     socket.emit("create-room");
@@ -61,6 +59,11 @@ export const RoomHost: React.FC<Props> = () => {
       console.log("create-room");
       console.log(res);
       setRoomId(res.roomID);
+      setQrCode(
+        <QRCodeImg
+          value={"https://localhost:3000/enter_room_client/" + res.roomID}
+        />
+      );
     });
 
     return () => {
@@ -135,11 +138,7 @@ export const RoomHost: React.FC<Props> = () => {
       <div className="roomHost__container">
         {playerElements}
         {players.length < 4 ? (
-          <div className="roomHost__container__qrcode">
-            <QRCodeImg
-              value={"https://localhost:3000/enter_room_client/" + roomID}
-            />
-          </div>
+          <div className="roomHost__container__qrcode">{qrCode}</div>
         ) : (
           <Button
             // eslint-disable-next-line no-constant-condition
