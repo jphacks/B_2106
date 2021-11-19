@@ -28,7 +28,7 @@ http://mahjongtaku.com
 ### 製品説明
 公開情報である河などの盤面をタブレット上で、プレイヤー個人の情報である手牌をスマホ上に表示することで、アプリの手軽さとオフラインの一体感のいいとこ取りを可能とします。麻雀の複雑なルールをそのまま実装できなかったため，簡素化したルールを実装している． 
 
-より詳しい説明は[docs](https://github.com/jphacks/B_2106/blob/main/docs/setup.md)を参照
+セットアップの仕方は[docs](https://github.com/jphacks/B_2106/blob/main/docs/setup.md)を参照
 
 
 #### タブレットの画面
