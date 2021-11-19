@@ -43,12 +43,18 @@ module.exports = (io, rooms) => {
         if (r.existPlayerWithName(name)) {
           // gameがまだ始まっていないとき
           if (!rooms[roomID].game) {
-            throw Error("Same name player already join and game haven't started yet.");
+            throw Error(
+              "Same name player already join and game haven't started yet."
+            );
           }
 
           const res = reconnectRoom(socket, roomID, name);
           console.log(res);
-          socket.emit("enter-room-response", res);
+          socket.emit("reconnect-response", res);
+          resendMessageToPlayer(
+            roomID,
+            r.getPlayerIndexWithPlayerID(socket.id)
+          );
           return;
         }
 
@@ -105,6 +111,7 @@ module.exports = (io, rooms) => {
         id: socket.id,
         tehai: game.getTehaiWithPlayerIndex(indexOfPlayer),
         tsumo: game.getTsumoWithPlayerIndex(indexOfPlayer),
+        kaze: game.getKaze(indexOfPlayer),
       };
 
       return res;
@@ -132,7 +139,7 @@ module.exports = (io, rooms) => {
       });
       console.log("ゲームを開始");
       const playerNames = getPlayerNames(roomID(socket));
-      const config = new Config(50000, "東風戦", playerNames);
+      const config = new Config(25000, "東風戦", playerNames);
 
       const r = rooms[roomID(socket)];
       r.game = new Game(config);
@@ -271,7 +278,20 @@ module.exports = (io, rooms) => {
     const id = Array.from(socket.rooms)[1];
     return id;
   }
-
+  function resendMessageToPlayer(roomID, playerId) {
+    const room = rooms[roomID];
+    if (!room) {
+      console.log("no such room");
+      console.log(`room : ${room}`);
+      return;
+    }
+    const players = room["prevMessage"]["players"];
+    const player = players[playerId];
+    io.to(room["players"][playerId]["id"]).emit(
+      player["endpoint"],
+      player["arg"]
+    );
+  }
   function sendMessage(roomID, clients) {
     console.log(JSON.stringify({ roomID, clients }, null, "\t"));
     const room = rooms[roomID];
@@ -280,7 +300,7 @@ module.exports = (io, rooms) => {
       console.log(`room : ${room}`);
       return;
     }
-
+    room["prevMessage"] = clients;
     const tablet = clients["tablet"];
 
     if (Array.isArray(tablet)) {

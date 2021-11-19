@@ -13,7 +13,7 @@ class Game {
       new Player(config.score, config.playerNames[3]),
     ];
     this.kyokuCount = 1;
-    this.honbaCount = 1;
+    this.honbaCount = 0;
     this.isFinished = false;
     this.config = config;
     this.state = new State();
@@ -77,6 +77,7 @@ class Game {
     this.state.transiton("開始");
 
     this.field.haipai();
+    /*
     //this.field.yama = ["1m"];
     this.field.playerField[0].tehai = [
       "1m",
@@ -93,7 +94,7 @@ class Game {
       "9m",
       "9m",
     ];
-
+*/
     const ret = { players: [], tablet: undefined };
     ret.tablet = {
       endpoint: "tablet-haipai",
@@ -397,5 +398,9 @@ class Game {
     }
     return ret;
   }
+  getKaze(player) {
+    return (player - this.oyaPlayer + 4) % 4;
+  }
 }
+
 module.exports = Game;
