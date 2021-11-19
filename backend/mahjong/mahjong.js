@@ -162,7 +162,7 @@ class Game {
           arg: {
             turnplayer: true,
             canTsumoagari: tsumoAgariFlag,
-            canRiichi: true,
+            canRiichi: riichiFlag,
             canDahai: dahaiFlag,
             pai: tsumo,
           },
@@ -251,7 +251,9 @@ class Game {
   ryukyokuFinish() {
     const ret = { players: [], tablet: undefined };
     let score = this.playerList.map((p, index) => p.score);
-    const syanten = this.playerList.map((p, index) => this.field.syanten(index));
+    const syanten = this.playerList.map((p, index) =>
+      this.field.syanten(index)
+    );
     const tenpaiCount = syanten.filter(function (x) {
       return x === 0;
     }).length;

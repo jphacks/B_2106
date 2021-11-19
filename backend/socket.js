@@ -34,7 +34,7 @@ module.exports = (io, rooms) => {
         socket.emit("enter-room-response", { error: "no such roomID" });
         return;
       }
-      
+
       try {
         const r = rooms[roomID];
         const name = req.name;
@@ -43,7 +43,9 @@ module.exports = (io, rooms) => {
         if (r.existPlayerWithName(name)) {
           // gameがまだ始まっていないとき
           if (!rooms[roomID].game) {
-            throw Error("Same name player already join and game haven't started yet.");
+            throw Error(
+              "Same name player already join and game haven't started yet."
+            );
           }
 
           const res = reconnectRoom(socket, roomID, name);
@@ -161,6 +163,10 @@ module.exports = (io, rooms) => {
       game.setRiichi(true); //リーチフラグにtrueをセット
     });
 
+    socket.on("client-riichi", (req) => {
+      const game = getGame(roomID(socket));
+      game.setRiichi(true); //リーチフラグにtrueをセット
+    });
     socket.on("tablet-tsumo", (req) => {
       const game = getGame(roomID(socket));
       let arg;

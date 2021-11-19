@@ -40,19 +40,7 @@ const exec = (obj, oyaPlayer, player, scoreOrg, dora, uradora, senten) => {
     );
   }
   scoreOrg = scoreOrg.map((i, index) => i + diff[index]);
-  const details =
-    obj.yakuman == 0
-      ? obj.fu + "符" + obj.han + "翻"
-      : [
-          "",
-          "役満",
-          "ダブル役満",
-          "3倍役満",
-          "4倍役満",
-          "5倍役満",
-          "6倍役満",
-          "7倍役満",
-        ][obj.yakuman];
+  const details = obj.yakuman == 0 ? obj.fu + "符" + obj.han + "翻" : "";
   const ret = {
     yaku: obj.yaku,
     details,
@@ -90,7 +78,7 @@ const calclate = (
 };
 
 module.exports = calclate;
-
+/*
 //test
 player = ["ツモ", null, null, null];
 list = [
@@ -121,3 +109,4 @@ console.log(
     0
   )
 );
+*/
