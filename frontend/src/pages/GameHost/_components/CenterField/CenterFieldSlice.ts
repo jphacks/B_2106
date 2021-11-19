@@ -27,11 +27,8 @@ export const centerFieldSlice = createSlice({
   name: "centerField",
   initialState,
   reducers: {
-    resetCenterFieldState: (state) => {
+    resetCenterField: (state) => {
       return Object.assign({}, state, initialState);
-    },
-    setCenterFieldState: (state, action: PayloadAction<CenterFieldState>) => {
-      return Object.assign({}, state, action.payload);
     },
     setRiichiPlayer: (state, action) => {
       state.shouldDisableRiichi = false;
@@ -67,8 +64,7 @@ export const centerFieldSlice = createSlice({
 });
 
 export const {
-  resetCenterFieldState,
-  setCenterFieldState,
+  resetCenterField,
   setRiichiPlayer,
   setupTsumo,
   resetButton,

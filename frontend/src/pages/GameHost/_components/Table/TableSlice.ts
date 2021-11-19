@@ -32,13 +32,13 @@ export const tableSlice = createSlice({
         isRiichi: payload.isRiichi,
       });
     },
-    resetSutehaiList: (state) => {
-      state.sutehaiList = [[], [], [], []];
+    resetTable: (state: TableState) => {
+      return Object.assign({}, state, initialState);
     },
   },
 });
 
-export const { dahai, resetSutehaiList } = tableSlice.actions;
+export const { dahai, resetTable } = tableSlice.actions;
 
 export const selectTableState = (state: RootState): TableState => state.table;
 

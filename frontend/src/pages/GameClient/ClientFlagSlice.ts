@@ -8,7 +8,7 @@ interface ClientFlagState {
   canRiichi: boolean;
   canGoTop: boolean;
   isMyturn: boolean;
-  canTsumogiri:boolean;
+  canTsumogiri: boolean;
 }
 interface Turn {
   canTsumoagari: boolean;
@@ -30,7 +30,7 @@ const initialState = {
   canDahai: false,
   canRiichi: false,
   canGoTop: false,
-  canTsumogiri:true
+  canTsumogiri: true,
 } as ClientFlagState;
 
 const clientFlagSlice = createSlice({
@@ -38,7 +38,7 @@ const clientFlagSlice = createSlice({
   initialState,
   reducers: {
     setTurn(state, action: PayloadAction<Turn>) {
-      return { ...state, ...action.payload ,canTsumogiri:true};
+      return { ...state, ...action.payload, canTsumogiri: true };
     },
     setFuro(state, action: PayloadAction<Furo>) {
       return { ...state, ...action.payload };
@@ -46,10 +46,16 @@ const clientFlagSlice = createSlice({
     setGoTop(state, action: PayloadAction<End>) {
       return { ...state, ...action.payload };
     },
-    resetUI(state){
-      return { ...state, canRiichi:false,canRon:false,canTsumoAgari:false,canDahai:false,canTsumogiri:false }
-    }
-
+    resetUI(state) {
+      return {
+        ...state,
+        canRiichi: false,
+        canRon: false,
+        canTsumoAgari: false,
+        canDahai: false,
+        canTsumogiri: false,
+      };
+    },
   },
 });
 

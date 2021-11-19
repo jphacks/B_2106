@@ -32,13 +32,13 @@ export const resultBoardSlice = createSlice({
       state.ranking = action.payload.ranking;
       state.open = true;
     },
-    closeResultBoard: (state: ResultBoardState) => {
-      state.open = false;
+    resetResultBoard: (state: ResultBoardState) => {
+      return Object.assign({}, state, initialState);
     },
   },
 });
 
-export const { openResultBoard, closeResultBoard } = resultBoardSlice.actions;
+export const { openResultBoard, resetResultBoard } = resultBoardSlice.actions;
 
 export const selectResultBoardState = (state: RootState): ResultBoardState =>
   state.resultBoard;

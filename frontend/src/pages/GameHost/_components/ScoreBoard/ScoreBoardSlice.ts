@@ -60,13 +60,13 @@ export const scoreBoardSlice = createSlice({
       state.isRyukyoku = true;
       state.open = true;
     },
-    closeScoreBoard: (state: ScoreBoardState) => {
-      state.open = false;
+    resetScoreBoard: (state: ScoreBoardState) => {
+      return Object.assign({}, state, initialState);
     },
   },
 });
 
-export const { openScoreBoard, openRyukyokuScoreBoard, closeScoreBoard } =
+export const { openScoreBoard, openRyukyokuScoreBoard, resetScoreBoard } =
   scoreBoardSlice.actions;
 
 export const selectScoreBoardState = (state: RootState): ScoreBoardState =>

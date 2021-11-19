@@ -5,12 +5,14 @@ import { Config } from "../config";
 import {
   setSidebarState,
   setYamaNum,
+  resetSidebar,
 } from "../pages/GameHost/_components/Sidebar/SidebarSlice";
 import {
   dahai,
-  resetSutehaiList,
+  resetTable,
 } from "../pages/GameHost/_components/Table/TableSlice";
 import {
+  resetCenterField,
   setRiichiPlayer,
   setupTsumo,
   resetButton,
@@ -20,8 +22,12 @@ import {
 import {
   openScoreBoard,
   openRyukyokuScoreBoard,
+  resetScoreBoard,
 } from "../pages/GameHost/_components/ScoreBoard/ScoreBoardSlice";
-import { openResultBoard } from "../pages/GameHost/_components/ResultBoard/ResultBoardSlice";
+import {
+  openResultBoard,
+  resetResultBoard,
+} from "../pages/GameHost/_components/ResultBoard/ResultBoardSlice";
 import {
   setTurn,
   setFuro,
@@ -56,6 +62,8 @@ function initSocket() {
 
 function setupGameHost() {
   window.socket.on("tablet-kyokustart", (data) => {
+    resetGameHost();
+
     store.dispatch(
       setSidebarState({
         kyoku: data.kyoku,
@@ -70,7 +78,7 @@ function setupGameHost() {
         turnPlayer: data.turnPlayer,
       })
     );
-    store.dispatch(resetSutehaiList());
+    store.dispatch(resetTable());
   });
 
   window.socket.on("tablet-dahai", (data) => {
@@ -119,6 +127,14 @@ function setupGameHost() {
     console.log(data);
     store.dispatch(openResultBoard(data));
   });
+}
+
+function resetGameHost() {
+  resetTable();
+  resetSidebar();
+  resetCenterField();
+  resetScoreBoard();
+  resetResultBoard();
 }
 
 function tsumo() {

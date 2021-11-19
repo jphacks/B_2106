@@ -33,10 +33,14 @@ export const sidebarSlice = createSlice({
     ) => {
       state.yamaNum = action.payload.length;
     },
+    resetSidebar: (state: SidebarState) => {
+      return Object.assign({}, state, initialState);
+    },
   },
 });
 
-export const { setSidebarState, setYamaNum } = sidebarSlice.actions;
+export const { setSidebarState, setYamaNum, resetSidebar } =
+  sidebarSlice.actions;
 
 export const selectSidebarState = (state: RootState): SidebarState =>
   state.sidebar;
