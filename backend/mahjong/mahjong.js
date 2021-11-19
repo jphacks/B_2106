@@ -13,7 +13,7 @@ class Game {
       new Player(config.score, config.playerNames[3]),
     ];
     this.kyokuCount = 1;
-    this.honbaCount = 1;
+    this.honbaCount = 0;
     this.isFinished = false;
     this.config = config;
     this.state = new State();
@@ -45,6 +45,12 @@ class Game {
     this.state.transiton("配牌");
     this.field = new Field();
     this.turnPlayer = this.oyaPlayer;
+
+    if (this.kyokuCount == 1) {
+      this.field.dora[0] = "1s";
+      this.field.wanpai = ["1s"];
+    }
+
     const ret = { players: [], tablet: undefined };
     console.log(this.playerList);
     ret.tablet = {
@@ -77,8 +83,6 @@ class Game {
     this.state.transiton("開始");
 
     this.field.haipai();
-<<<<<<< Updated upstream
-=======
     if (this.kyokuCount == 1) {
       this.field.playerField[0].tehai = [
         "1p",
@@ -95,18 +99,33 @@ class Game {
         "6p",
         "3z",
       ];
-      this.field.yama[0] = "5z";
-      this.field.yama[4] = "2p";
-      this.field.yama[8] = "7m";
-      this.field.yama[9] = "7s";
-      this.field.yama[12] = "7s";
+      this.field.yama[69] = "5z";
+      this.field.yama[65] = "4m";
+      this.field.yama[61] = "7m";
+      this.field.yama[57] = "7s";
+      this.field.yama[60] = "7s";
       this.field.dora[0] = "1s";
-      this.field.wanpai = ["1s"];
-    } else if (this.kyokuCount == 1) {
+      this.field.wanpai = ["7s"];
+    } else if (this.kyokuCount == 2) {
       for (let i = 0; i < 66; i++) this.field.yama.pop();
+      this.field.playerField[0].tehai = [
+        "1m",
+        "2m",
+        "3m",
+        "4p",
+        "5p",
+        "6p",
+        "7s",
+        "8s",
+        "9s",
+        "1z",
+        "1z",
+        "1z",
+        "2z",
+      ];
     }
-    /*
->>>>>>> Stashed changes
+
+    /*develop
     //this.field.yama = ["1m"];
     this.field.playerField[0].tehai = [
       "1m",
@@ -123,7 +142,7 @@ class Game {
       "9m",
       "9m",
     ];
-
+*/
     const ret = { players: [], tablet: undefined };
     ret.tablet = {
       endpoint: "tablet-haipai",
@@ -427,5 +446,9 @@ class Game {
     }
     return ret;
   }
+  getKaze(player) {
+    return (player - this.oyaPlayer + 4) % 4;
+  }
 }
+
 module.exports = Game;
