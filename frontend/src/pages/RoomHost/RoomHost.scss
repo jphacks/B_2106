@@ -60,15 +60,23 @@
         width: 100%;
         height: 15vh;
         padding-left: calc(4vh + 30px);
+
+        &--nologin {
+          color: #bbb;
+        }
       }
     }
 
     &__qrcode {
       grid-row: 4 / 5;
       grid-column: 2 / 3;
+      border: 2px solid #000;
+      border-radius: 4px;
+      background-color: #fff;
 
       img {
         width: 100%;
+        border-radius: 4px;
       }
     }
 
