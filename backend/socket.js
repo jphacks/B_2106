@@ -50,7 +50,7 @@ module.exports = (io, rooms) => {
 
           const res = reconnectRoom(socket, roomID, name);
           console.log(res);
-          socket.emit("enter-room-response", res);
+          socket.emit("reconnect-response", res);
           return;
         }
 
@@ -107,6 +107,7 @@ module.exports = (io, rooms) => {
         id: socket.id,
         tehai: game.getTehaiWithPlayerIndex(indexOfPlayer),
         tsumo: game.getTsumoWithPlayerIndex(indexOfPlayer),
+        kaze: 2,
       };
 
       return res;

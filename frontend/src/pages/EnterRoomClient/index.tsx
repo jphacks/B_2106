@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
@@ -7,6 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { Box, Modal } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { SocketContext } from "../../App";
+import { setTehaiState } from "../GameClient/TehaiSlice";
 
 type Inputs = { roomID: number; name: string };
 
@@ -101,6 +103,7 @@ export const EnterRoomClient: React.FC = () => {
   //socket周り
   const [isWaiting, setIsWaiting] = React.useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     socket.on("enter-room-response", (res) => {
@@ -115,14 +118,28 @@ export const EnterRoomClient: React.FC = () => {
         setIsWaiting(true);
       }
     });
+
     socket.on("start-game-response", (res) => {
       console.log("start-game-response" + res);
+      history.push("/game_client");
+    });
+
+    socket.on("reconnect-response", (res) => {
+      console.log("reconnect-response" + res);
+      dispatch(
+        setTehaiState({
+          tehai: res.tehai,
+          tsumo: res.tsumo,
+          kaze: res.kaze,
+        })
+      );
       history.push("/game_client");
     });
 
     return () => {
       socket.off("enter-room-response");
       socket.off("start-game-response");
+      socket.off("reconnect-response");
     };
   }, []);
 
