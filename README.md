@@ -6,8 +6,9 @@
 ## どこでも麻雀卓URL
 実際に下記URLでゲームを遊ぶことが可能です。  
 
-http://mahjongtaku.com
 
+http://mahjongtaku.com
+(今は停止しています)
 
 ## 製品概要
 
